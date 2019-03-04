@@ -1,13 +1,9 @@
 import json
-import os
-import sys
 import unittest
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)) + '/../')
 
-from mayday.constants import Query, Ticket
 # from mayday.utils import query_util, ticket_util
 from mayday import helpers
-
+from mayday.constants import Query, Ticket
 
 USER_ID = 12345678
 USERNAME = 'Mayday'

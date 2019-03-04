@@ -59,41 +59,38 @@ class Config:
         return dict(token=self.telegram_token)
 
 
-class Logger:
+STAGE = os.environ.get('stage', 'test').upper()
+LOG_JSON_FORMAT = dict(
+    ts='%(asctime)s',
+    level='%(levelname)s',
+    module='%(module)s.%(funcName)s',
+    line_num='%(lineno)s',
+    message='%(message)s'
+)
 
-    def __init__(self):
 
-        self.stage = os.environ.get('stage', 'test').upper()
-        self.json_format = dict(
-            ts='%(asctime)s',
-            level='%(levelname)s',
-            module='%(module)s.%(funcName)s',
-            line_num='%(lineno)s',
-            message='%(message)s'
-        )
+def default_formatter() -> logging.Formatter:
+    return logging.Formatter(
+        fmt=json.dumps(LOG_JSON_FORMAT, ensure_ascii=False, sort_keys=True),
+        datefmt='%Y-%m-%d %H:%M:%S'
+    )
 
-    @property
-    def default_formatter(self) -> logging.Formatter:
-        return logging.Formatter(
-            fmt=json.dumps(self.json_format, ensure_ascii=False, sort_keys=True),
-            datefmt='%Y-%m-%d %H:%M:%S'
-        )
 
-    @property
-    def console_handler(self) -> logging.Handler:
-        handler = logging.StreamHandler()
-        handler.setFormatter(self.default_formatter)
-        return handler
+def console_handler() -> logging.Handler:
+    handler = logging.StreamHandler()
+    handler.setFormatter(LOG_JSON_FORMAT)
+    return handler
 
-    @property
-    def fluentd_handler(self) -> logging.Handler:
-        # FIXME: add fluentd handler
-        pass
 
-    def get_default_logger(self, log_name: str, log_level: int = logging.DEBUG) -> logging.Logger:
-        logger = logging.getLogger(log_name)
-        if self.stage == 'PRODUCTION':
-            log_level = logging.INFO
-        logger.setLevel(log_level)
-        logger.addHandler(self.console_handler)
-        return logger
+def fluentd_handler() -> logging.Handler:
+    # FIXME: add fluentd handler
+    pass
+
+
+def get_default_logger(log_name: str, log_level: int = logging.DEBUG) -> logging.Logger:
+    logger = logging.getLogger(log_name)
+    if STAGE == 'PRODUCTION':
+        log_level = logging.INFO
+    logger.setLevel(log_level)
+    logger.addHandler(console_handler)
+    return logger

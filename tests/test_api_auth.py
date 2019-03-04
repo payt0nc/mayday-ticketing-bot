@@ -1,0 +1,25 @@
+import unittest
+
+import pytest
+from mayday.helpers.request import RequestHelper
+from requests_mock import Mocker
+
+BASE_URL = 'mock://test.com/'
+
+
+@pytest.mark.usefixtures()
+class TestAuth(unittest.TestCase):
+
+    @pytest.fixture(autouse=True, scope='function')
+    def before_all(self):
+        pass
+
+    @Mocker()
+    def test_auth(self, mock: Mocker):
+        helper = RequestHelper(BASE_URL)
+        mock.post(
+            url='{}{}'.format(BASE_URL, 'auth'),
+            json=dict(is_banned=False, is_admin=False),
+            status_code=200
+        )
+        self.assertDictEqual(helper.auth(profile={}), dict(is_banned=False, is_admin=False))

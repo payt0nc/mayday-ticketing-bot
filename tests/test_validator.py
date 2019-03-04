@@ -1,7 +1,3 @@
-__author__ = 'Comma'
-
-import os
-import sys
 import unittest
 
 from mayday.constants import Ticket

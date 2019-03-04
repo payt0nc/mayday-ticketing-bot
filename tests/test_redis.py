@@ -2,7 +2,6 @@ import unittest
 
 import pytest
 from fakeredis import FakeStrictRedis
-
 from mayday.helpers.redis import RedisHelper
 
 
