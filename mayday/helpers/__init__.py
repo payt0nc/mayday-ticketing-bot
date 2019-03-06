@@ -1,9 +1,9 @@
 import logging
 
 from mayday.constants import (CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING,
-                              STATUS_MAPPING, Query, Ticket, conversations)
+                              STATUS_MAPPING, conversations)
 from mayday.helpers.redis import RedisHelper
-from mayday.validators import authenticator
+from mayday.objects import Query, Ticket
 
 logger = logging.getLogger()
 
@@ -60,8 +60,9 @@ class Helper:
             action=self._last_choice,
             value=content))
 
-    def get_lastest_auth(self, telegram_info):
-        return authenticator.auth(telegram_info).is_banned
+    # def get_lastest_auth(self, telegram_info):
+        # FIXME: removed
+        # return authenticator.auth(telegram_info).is_banned
 
     def generate_tickets_traits(self, tickets):
         trait = []
@@ -89,9 +90,9 @@ class Helper:
         result = {}
         for key, value in content.items():
             if value:
-                if key == 'category_id':
+                if key == 'category':
                     value = CATEGORY_MAPPING.get(value)
-                if key == 'status_id':
+                if key == '':
                     value = STATUS_MAPPING.get(value)
                 if key == 'date':
                     if isinstance(value, list) or isinstance(value, set):
@@ -100,7 +101,7 @@ class Helper:
                         value = DATE_MAPPING.get(value)
                     else:
                         value = ''
-                if key == 'price_id':
+                if key == 'price':
                     if isinstance(value, list) or isinstance(value, set):
                         value = ', '.join(map(PRICE_MAPPING.get, sorted(value)))
                     elif isinstance(value, int):
@@ -122,7 +123,7 @@ class Helper:
                     else:
                         value = ''
 
-                if key == 'wish_price_id':
+                if key == 'wish_price':
                     if isinstance(value, str) and value:
                         value = ', '.join(map(PRICE_MAPPING.get, sorted(map(int, value.split(',')))))
                     elif isinstance(value, list) or isinstance(value, set):

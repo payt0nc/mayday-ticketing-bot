@@ -4,6 +4,7 @@ import requests
 import mayday
 from mayday import Config
 
+
 logger = mayday.get_default_logger(__name__)
 
 
@@ -11,8 +12,12 @@ class RequestHelper:
 
     HEADER = {'Content-Type': 'application/json'}
 
-    def __init__(self, base_url: str):
-        self.base_url = base_url + '{endpoint}'
+    def __init__(self, base_url: str = None):
+        config = Config().api_config
+        if base_url:
+            self.base_url = base_url + '{endpoint}'
+        else:
+            self.base_url = 'http://{host}:{port}'.format_map(config) + '/{endpoint}'
 
     # Auth and Admin
 
@@ -41,7 +46,7 @@ class RequestHelper:
             user_id {int} -- user's telegram id
 
         Returns:
-            tickets {list of dict}-- the ticket match user's wish sorted by created ts desc. 
+            tickets {list of dict}-- the ticket match user's wish sorted by created ts desc.
         '''
         response = requests.get(
             url=self.base_url.format(endpoint='matching'),
@@ -123,7 +128,7 @@ class RequestHelper:
         return response
 
     def get_ticket_by_ticket_id(self, ticket_id: int) -> dict:
-        '''Search Ticket By Ticket Id 
+        '''Search Ticket By Ticket Id
 
         Arguments:
             ticket_id {int} -- ticket id
