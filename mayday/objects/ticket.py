@@ -129,7 +129,7 @@ class Ticket:
             section=self.section,
             row=self.row,
             seat=self.seat,
-            status_id=self.status,
+            status=self.status,
             remarks=self.remarks,
             wish_date=self.wish_date,
             wish_price=self.wish_price,

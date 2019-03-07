@@ -18,7 +18,6 @@ class Test(unittest.TestCase):
         ticket['status'] = 1
         validator = ItemValidator(ticket)
         result = validator.check_ticket()
-        print(result)
         self.assertTrue(result.get('status'))
 
     def test_validator_missing_category(self):
@@ -65,7 +64,7 @@ class Test(unittest.TestCase):
         ticket = Ticket(username=USERNAME, user_id=USER_ID).to_dict()
         validator = ItemValidator(ticket)
         result = validator.check_ticket()
-        expected = '門票類別未填喔\n門票狀態未填喔\n日期未填喔\n價錢未填喔\n數量未填喔'
+        expected = '門票類別未填喔\n日期未填喔\n價錢未填喔\n數量未填喔'
         self.assertEqual(expected, result['info'])
 
 

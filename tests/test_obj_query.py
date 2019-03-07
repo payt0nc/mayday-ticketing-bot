@@ -2,8 +2,6 @@ import unittest
 
 from mayday.objects import Query
 
-# @pytest.mark.usefixtures()
-
 
 class Test(unittest.TestCase):
 

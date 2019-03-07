@@ -115,6 +115,10 @@ class Helper:
                         value = str(value)
                     else:
                         value = ''
+
+                if key == 'status':
+                    value = STATUS_MAPPING.get(value)
+
                 if key == 'wish_date':
                     if isinstance(value, str) and value:
                         value = ', '.join(map(DATE_MAPPING.get, sorted(map(int, value.split(',')))))

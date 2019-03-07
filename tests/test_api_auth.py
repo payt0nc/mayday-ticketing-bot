@@ -18,10 +18,10 @@ class TestAuth(unittest.TestCase):
     @Mocker()
     def test_auth(self, mock: Mocker):
         helper = RequestHelper(BASE_URL)
-        profile = User(id=123456789, username='testing_account')
+        profile = User(dict(id=123456789, username='testing_account'))
         mock.post(
             url='{}{}'.format(BASE_URL, 'auth'),
             json=dict(is_banned=False, is_admin=False),
             status_code=200
         )
-        self.assertDictEqual(helper.auth(profile={}), dict(is_banned=False, is_admin=False))
+        self.assertDictEqual(helper.auth(profile=profile), dict(is_banned=False, is_admin=False))

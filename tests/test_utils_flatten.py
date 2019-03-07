@@ -56,27 +56,12 @@ class Test(unittest.TestCase):
         )
         self.assertDictEqual(result, expect)
 
-    def test_init_query(self):
-        query = Query(user_id=USER_ID, username=USERNAME).to_dict()
-        helper = helpers.Helper('test')
-        result = helper.flatten(query)
-        expect = dict(
-            category='',
-            date='',
-            price='',
-            quantity='',
-            status='',
-            user_id=int(USER_ID),
-            username=str(USERNAME),
-        )
-        self.assertDictEqual(result, expect)
-
     def test_flatten_query_category(self):
         source = dict(
             category=1,
-            date=[],
-            price=[],
-            quantity=[],
+            date=set(),
+            price=set(),
+            quantity=set(),
             status='',
             user_id=int(USER_ID),
             username=str(USERNAME),
