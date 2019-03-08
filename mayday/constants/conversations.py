@@ -7,10 +7,10 @@ TYPE_IN_ERROR = '輸入錯誤，請重新輸入'
 TYPE_IN_WARNING = '瑪莎說：這樣不行哦\n{error_message}'
 TICKET = '''
 Telegram Username: @{username}
-門票狀態: {status_id}
-門票類型: {category_id}
+門票狀態: {status}
+門票類型: {category}
 日期: {date}
-票面價格: {price_id}
+票面價格: {price}
 數量: {quantity}
 座位區域: {section}
 座位行數: {row}
@@ -19,7 +19,7 @@ Telegram Username: @{username}
 
 == 換票部分 ==
 希望交換的日期: {wish_date}
-希望交換的價格種類: {wish_price_id}
+希望交換的價格種類: {wish_price}
 希望交換的數量: {wish_quantity}
 '''
 
@@ -68,10 +68,10 @@ POST_TICKET_ERROR = '系統錯誤 請稍後再試'
 POST_TICKET_CHECK = '''請再一次確認你的門票
 
 Telegram Username: @{username}
-門票類型: {category_id}
-門票狀態: {status_id}
+門票類型: {category}
+門票狀態: {status}
 日期: {date}
-票面價格: {price_id}
+票面價格: {price}
 數量: {quantity}
 座位區域: {section}
 座位行數: {row}
@@ -79,7 +79,7 @@ Telegram Username: @{username}
 
 == 換票部分 ==
 希望交換的日期: {wish_date}
-希望交換的價格種類: {wish_price_id}
+希望交換的價格種類: {wish_price}
 希望交換的數量: {wish_quantity}
 '''
 POST_TICKET_INFO = '{message}係?'
@@ -88,10 +88,10 @@ POST_TICKET_RESET = '重置完成'
 POST_TICKET_START = '''如果你想放張票上來，請填寫一下內容。
 (⚠️為必填項)
 Telegram Username: @{username}
-門票狀態: {status_id}
-⚠️門票類型: {category_id}
+門票狀態: {status}
+⚠️門票類型: {category}
 ⚠️日期: {date}
-⚠️票面價格: {price_id}
+⚠️票面價格: {price}
 ⚠️數量: {quantity}
 座位區域: {section}
 座位行數: {row}
@@ -100,7 +100,7 @@ Telegram Username: @{username}
 == 僅限換票填寫(供配對使用) ==
 若為欄位不填寫 則表示可交換任意條件
 希望交換的日期: {wish_date}
-希望交換的價格種類: {wish_price_id}
+希望交換的價格種類: {wish_price}
 希望交換的數量: {wish_quantity}
 '''
 POST_TICKET_SECTION = '''請先填寫票面價格再輸入座位區域'''
@@ -113,10 +113,10 @@ SEARCH_AND_THEN = '之後?'
 SEARCH_CONDITION = '話畀我知你想要咩門票,介紹返'
 SEARCH_CHECK = '''請再一次確認你查詢的條件.
 (⚠️為必填項)
-⚠️門票類別: {category_id}
-門票狀態: {status_id}
+⚠️門票類別: {category}
+門票狀態: {status}
 日期: {date}
-票面價格: {price_id}
+票面價格: {price}
 數量: {quantity}
 '''
 SEARCH_TICKET_ERROR = '系統錯誤 請稍後再試'
@@ -126,10 +126,10 @@ SEARCH_WITHOUT_TICKETS = '暫時冇喔～不如改一改你要搵嘅條件?'
 SEARCH_TOO_MUCH_TICKETS = '搵到的門票太多，請縮小範圍搜索'
 SEARCH_TICKET_START = '''查詢的條件:
 (⚠️為必填項)
-⚠️門票類別: {category_id}
-門票狀態: {status_id}
+⚠️門票類別: {category}
+門票狀態: {status}
 日期: {date}
-票面價格: {price_id}
+票面價格: {price}
 數量: {quantity}
 '''
 
@@ -152,10 +152,10 @@ QUICK_SEARCH_START = '''
 
 QUICK_SEARCH_INSERT_SUCESS = '''搜索條件已被紀錄
 當前搜索條件
-門票類別: {category_id}
-門票狀態: {status_id}
+門票類別: {category}
+門票狀態: {status}
 日期: {date}
-票面價格: {price_id}
+票面價格: {price}
 數量: {quantity}
 '''
 QUICK_SEARCH_NULL = '''冇快速搜索的紀錄
@@ -164,10 +164,10 @@ QUICK_SEARCH_NULL = '''冇快速搜索的紀錄
 QUICK_SEARCH_INSERT_FAIL = '系統錯誤 請稍後再試'
 QUICK_SEARCH_LIST_QUERY = '''
 儲存的快速搜索條件:
-門票類別: {category_id}
-門票狀態: {status_id}
+門票類別: {category}
+門票狀態: {status}
 日期: {date}
-票面價格: {price_id}
+票面價格: {price}
 數量: {quantity}
 '''
 
@@ -215,10 +215,10 @@ SUPPORT_EVENT_BACK = '''
 UPDATE_CHECK = '''請再一次確認你的門票
 門票編號: {id}
 Telegram Username: @{username}
-門票類型: {category_id}
-門票狀態: {status_id}
+門票類型: {category}
+門票狀態: {status}
 日期: {date}
-票面價格: {price_id}
+票面價格: {price}
 數量: {quantity}
 座位區域: {section}
 座位行數: {row}
@@ -231,10 +231,10 @@ UPDATE_RESET = '重置完成'
 UPDATE_START = '''請選擇要更新的門票'''
 UPDATE_YOURS = '''
 門票編號: {id}
-門票狀態: {status_id}
-門票類型: {category_id}
+門票狀態: {status}
+門票類型: {category}
 日期: {date}
-票面價格: {price_id}
+票面價格: {price}
 數量: {quantity}
 座位區域: {section}
 座位行數: {row}
@@ -251,9 +251,12 @@ INFO = '''
 HONG KONG 無限放大版
 
 地點：*香港迪士尼樂園幻想道露天場地*
-日期：May 4,5,6,11,12 
+日期：May 3,4,5,10,11
 時間：*19:15開始*
-票價：HK$1180座位 / HK$880座位 / HK$680座位 / HK$680企位 / HK$480座位/ 
+門票售價：
+（座位門票）HK$1,180/ HK$880/ HK$680/ HK$480
+（企位門票）HK$680 
+（無障礙通道座位門票*）HK$1,180/ HK$880
 [點擊查看座位圖](https://scontent.ftpe7-1.fna.fbcdn.net/v/t31.0-8/29060300_1123900231085500_5867832487083384930_o.jpg?_nc_fx=ftpe7-1&_nc_eui2=v1%3AAeHchup0xs6C6r4Frl8DxkjPp3lbPcGsWnvrEucYybvDM50CjQ-RKt568ySOmUZEXt7QT1YrfQl2RSOkqOq0pEILN5op2owZnF9XdW3jetzf-Q&oh=c4b84828c669690aec199cc69cfea1e9&oe=5B33FAFC)
 '''
 
@@ -271,5 +274,5 @@ STATS = '''
 {ticket_distribution}
 
 '''
-STATUS_STAT = '{status_id} : {amount}'
-TICKET_STAT = '*{category_id}* {date} {price_id} 的門票有 {amount} 筆紀錄'
+STATUS_STAT = '{status} : {amount}'
+TICKET_STAT = '*{category}* {date} {price} 的門票有 {amount} 筆紀錄'

@@ -1,16 +1,8 @@
-'''
-Created on 5 Mar 2017
-
-@author: Comma
-'''
-from telegram import (InlineKeyboardButton, InlineKeyboardMarkup,
-                      ReplyKeyboardMarkup)
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, ReplyKeyboardMarkup
+from mayday.constants import DATE_MAPPING, PRICE_MAPPING
 
 
-class ReplyKeyboards(object):
-    '''
-    classdocs
-    '''
+class ReplyKeyboards:
 
     def __init__(self):
 
@@ -36,20 +28,21 @@ class ReplyKeyboards(object):
 
         self._conditions_keyboard_mapping = {
             'date': InlineKeyboardMarkup([
-                [InlineKeyboardButton('5.4(Fri)', callback_data=504),
-                 InlineKeyboardButton('5.5(Sat)', callback_data=505),
-                 InlineKeyboardButton('5.6(Sun)', callback_data=506)],
-                [InlineKeyboardButton('5.11(Fri)', callback_data=511),
-                 InlineKeyboardButton('5.12(Sat)', callback_data=512),
-                 InlineKeyboardButton('5.13(Sun)', callback_data=513)],
+                [InlineKeyboardButton('5.3(Fri)', callback_data=504),
+                 InlineKeyboardButton('5.4(Sat)', callback_data=505),
+                 InlineKeyboardButton('5.5(Sun)', callback_data=506)],
+                [InlineKeyboardButton('5.10(Fri)', callback_data=511),
+                 InlineKeyboardButton('5.11(Sat)', callback_data=512)],
             ], one_time_keyboard=True),
 
-            'price_id': InlineKeyboardMarkup([
-                [InlineKeyboardButton('$1180座位', callback_data=1)],
-                [InlineKeyboardButton('$880座位', callback_data=2)],
+            'price': InlineKeyboardMarkup([
+                [InlineKeyboardButton('$1180座位', callback_data=1),
+                 InlineKeyboardButton('$880座位', callback_data=2)],
                 [InlineKeyboardButton('$680座位', callback_data=3),
-                 InlineKeyboardButton('$680企位', callback_data=4)],
-                [InlineKeyboardButton('$480座位', callback_data=5)]
+                 InlineKeyboardButton('$480座位', callback_data=4)],
+                [InlineKeyboardButton('$680企位', callback_data=5)],
+                [InlineKeyboardButton('$480座位', callback_data=6),
+                 InlineKeyboardButton('$480座位', callback_data=7)]
             ], one_time_keyboard=True),
 
             'quantity': InlineKeyboardMarkup([
@@ -60,20 +53,21 @@ class ReplyKeyboards(object):
             ], one_time_keyboard=True),
 
             'wish_date': InlineKeyboardMarkup([
-                [InlineKeyboardButton('5.4(Fri)', callback_data=504),
-                 InlineKeyboardButton('5.5(Sat)', callback_data=505),
-                 InlineKeyboardButton('5.6(Sun)', callback_data=506)],
-                [InlineKeyboardButton('5.11(Fri)', callback_data=511),
-                 InlineKeyboardButton('5.12(Sat)', callback_data=512),
-                 InlineKeyboardButton('5.13(Sun)', callback_data=513)],
+                [InlineKeyboardButton('5.3(Fri)', callback_data=504),
+                 InlineKeyboardButton('5.4(Sat)', callback_data=505),
+                 InlineKeyboardButton('5.5(Sun)', callback_data=506)],
+                [InlineKeyboardButton('5.10(Fri)', callback_data=511),
+                 InlineKeyboardButton('5.11(Sat)', callback_data=512)],
             ], one_time_keyboard=True),
 
             'wish_price_id': InlineKeyboardMarkup([
-                [InlineKeyboardButton('$1180座位', callback_data=1)],
-                [InlineKeyboardButton('$880座位', callback_data=2)],
+                [InlineKeyboardButton('$1180座位', callback_data=1),
+                 InlineKeyboardButton('$880座位', callback_data=2)],
                 [InlineKeyboardButton('$680座位', callback_data=3),
-                 InlineKeyboardButton('$680企位', callback_data=4)],
-                [InlineKeyboardButton('$480座位', callback_data=5)]
+                 InlineKeyboardButton('$480座位', callback_data=4)],
+                [InlineKeyboardButton('$680企位', callback_data=5)],
+                [InlineKeyboardButton('$480座位', callback_data=6),
+                 InlineKeyboardButton('$480座位', callback_data=7)]
             ], one_time_keyboard=True),
 
             'wish_quantity': InlineKeyboardMarkup([
@@ -126,7 +120,7 @@ class ReplyKeyboards(object):
                 ]),
             },
 
-            'category_id': InlineKeyboardMarkup([
+            'category': InlineKeyboardMarkup([
                 [InlineKeyboardButton('原價轉讓', callback_data=1),
                  InlineKeyboardButton('換飛', callback_data=2)]
             ],  one_time_keyboard=True)
@@ -134,12 +128,12 @@ class ReplyKeyboards(object):
 
         self._search_ticket_keyboard = [
             [
-                InlineKeyboardButton('門票類別', callback_data='category_id'),
-                InlineKeyboardButton('門票狀態', callback_data='status_id')
+                InlineKeyboardButton('門票類別', callback_data='category'),
+                InlineKeyboardButton('門票狀態', callback_data='status')
             ],
             [
                 InlineKeyboardButton('日期', callback_data='date'),
-                InlineKeyboardButton('票面價格', callback_data='price_id'),
+                InlineKeyboardButton('票面價格', callback_data='price'),
                 InlineKeyboardButton('數量', callback_data='quantity')
             ],
             [
@@ -153,11 +147,11 @@ class ReplyKeyboards(object):
 
         self._update_ticket_keyboard = [
             [
-                InlineKeyboardButton('門票狀態', callback_data='status_id'),
+                InlineKeyboardButton('門票狀態', callback_data='status'),
             ],
             [
                 InlineKeyboardButton('日期', callback_data='date'),
-                InlineKeyboardButton('票面價格', callback_data='price_id'),
+                InlineKeyboardButton('票面價格', callback_data='price'),
                 InlineKeyboardButton('數量', callback_data='quantity')
             ],
             [
@@ -176,11 +170,11 @@ class ReplyKeyboards(object):
             1: InlineKeyboardMarkup(
                 [
                     [
-                        InlineKeyboardButton('門票類別', callback_data='category_id')
+                        InlineKeyboardButton('門票類別', callback_data='category')
                     ],
                     [
                         InlineKeyboardButton('日期', callback_data='date'),
-                        InlineKeyboardButton('票面價格', callback_data='price_id'),
+                        InlineKeyboardButton('票面價格', callback_data='price'),
                         InlineKeyboardButton('數量', callback_data='quantity')
                     ],
                     [
@@ -200,11 +194,11 @@ class ReplyKeyboards(object):
             2: InlineKeyboardMarkup(
                 [
                     [
-                        InlineKeyboardButton('門票類別', callback_data='category_id')
+                        InlineKeyboardButton('門票類別', callback_data='category')
                     ],
                     [
                         InlineKeyboardButton('日期', callback_data='date'),
-                        InlineKeyboardButton('票面價格', callback_data='price_id'),
+                        InlineKeyboardButton('票面價格', callback_data='price'),
                         InlineKeyboardButton('數量', callback_data='quantity')
                     ],
                     [
@@ -213,9 +207,9 @@ class ReplyKeyboards(object):
                         InlineKeyboardButton('備註', callback_data='remarks')
                     ],
                     [
-                        InlineKeyboardButton('交換日期', callback_data='wish_date'),
-                        InlineKeyboardButton('交換價格類別', callback_data='wish_price_id'),
-                        InlineKeyboardButton('交換數量', callback_data='wish_quantity')
+                        InlineKeyboardButton('交換日期', callback_data='wish_dates'),
+                        InlineKeyboardButton('交換價格類別', callback_data='wish_price'),
+                        InlineKeyboardButton('交換數量', callback_data='wish_quantities')
                     ],
                     [
                         InlineKeyboardButton('重置', callback_data='reset'),
