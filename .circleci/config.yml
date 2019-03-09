@@ -50,7 +50,7 @@ jobs:
             CODECOV_TOKEN: 
           command: |
             . venv/bin/activate
-            pytest  --cov=./ tests/
+            pytest --cov=./mayday/ tests/
             codecov --token=$CODECOV_TOKEN
 
       - store_artifacts:
