@@ -50,9 +50,15 @@ jobs:
             CODECOV_TOKEN: 
           command: |
             . venv/bin/activate
-            pytest --cov=./mayday/ tests/
-            codecov --token=$CODECOV_TOKEN
+            pytest tests/ -v
 
       - store_artifacts:
           path: test-reports
           destination: test-reports
+orbs:
+  codecov: codecov/codecov@1.0.2
+jobs:
+  build:
+    steps:
+      - codecov/upload:
+          file: {{ coverage_report_filepath }}
