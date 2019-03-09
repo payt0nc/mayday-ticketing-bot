@@ -52,11 +52,12 @@ jobs:
             CODECOV_TOKEN: 
           command: |
             . venv/bin/activate
-            pytest tests/ -v
+            pytest -v --cov=./mayday/ tests/ 
+      
+      - codecov/upload:
+          file: .coverage
 
       - store_artifacts:
           path: test-reports
           destination: test-reports
 
-      - codecov/upload:
-          file: .coverage
