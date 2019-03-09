@@ -2,7 +2,7 @@ import logging
 
 from mayday.constants import (CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING,
                               STATUS_MAPPING, conversations)
-from mayday.helpers.redis import RedisHelper
+from mayday.controllers.redis import RedisHelper
 from mayday.objects import Query, Ticket
 
 logger = logging.getLogger()

@@ -138,6 +138,17 @@ class Ticket:
             username=self._username
         )
 
+    def update_field(self, field_name: str, field_value: str) -> bool:
+        if isinstance(self.__getattribute__(field_name), (str, int, bool)):
+            self.__setattr__(field_name, field_value)
+        elif isinstance(self.__getattribute__(field_name), set):
+            source = self.__getattribute__(field_name)
+            self.__setattr__(field_name, source.add(field_value))
+        elif isinstance(self.__getattribute__(field_name), list):
+            source = self.__getattribute__(field_name)
+            self.__setattr__(field_name, source.append(field_value))
+        return self
+
     def validate(self) -> dict:
         validator = ItemValidator(self.to_dict())
         if self.category == 2:  # For Excahnge Ticket

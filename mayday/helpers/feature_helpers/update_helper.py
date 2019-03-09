@@ -1,11 +1,11 @@
+import logging
+
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
-from mayday import LogConfig
-from mayday.constants import (CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING,
-                              STATUS_MAPPING, conversations)
+from mayday.constants import conversations
 from mayday.helpers import Helper
 
-logger = LogConfig.flogger
+logger = logging.getLogger(__name__)
 
 
 class UpdateHelper(Helper):

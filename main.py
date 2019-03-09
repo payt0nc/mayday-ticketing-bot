@@ -3,19 +3,18 @@ from telegram.ext import (CallbackQueryHandler, CommandHandler, ConversationHand
 
 
 import mayday
-from mayday import AppConfig, LogConfig
+from mayday import Config
 from mayday.constants import stages
 from mayday.constants.replykeyboards import ReplyKeyboards
 from mayday.features import (mainpanel, post_ticket, search, support,
                              update_ticket, quick_search, platform_stats)
 
-logger = LogConfig.flogger
 keyboards = ReplyKeyboards()
-token = AppConfig.token
+config = Config()
 
 
 def main():
-    updater = Updater(token, workers=64, request_kwargs={'read_timeout': 30, 'connect_timeout': 60})
+    updater = Updater(config.telegram_token, workers=64, request_kwargs={'read_timeout': 30, 'connect_timeout': 60})
     dp = updater.dispatcher
 
     # Main Panel Handler

@@ -21,6 +21,10 @@ class Config:
         self.fluentd_host = os.environ.get('fluentd_host', 'fluentd.cooomma.info')
         self.fluentd_port = os.environ.get('fluentd_port', 24224)
 
+        # Mongo
+        self.mongo_host = os.environ.get('MONGO_HOST', 'localhost')
+        self.mongo_port = os.environ.get('MONGO_port', 27017)
+
         # Redis
         self.redis_host = os.environ.get('REDIS_HOST', 'localhost')
         self.redis_port = os.environ.get('REDIS_PORT', 6627)
@@ -43,16 +47,16 @@ class Config:
         return dict(host=self.api_host, port=self.api_port)
 
     @property
-    def redis_config(self) -> dict:
-        return dict(
-            host=self.redis_host,
-            port=self.redis_port,
-            db=self.redis_db
-        )
+    def fluentd_config(self) -> dict:
+        return dict(hos=self.fluentd_host, port=self.fluentd_port)
 
     @property
     def mongo_config(self) -> dict:
-        return dict(hos=self.fluentd_host, port=self.fluentd_port)
+        return dict(host=self.mongo_host, port=self.mongo_port)
+
+    @property
+    def redis_config(self) -> dict:
+        return dict(host=self.redis_host, port=self.redis_port, db=self.redis_db)
 
     @property
     def telegram_config(self) -> dict:
@@ -60,6 +64,7 @@ class Config:
 
 
 STAGE = os.environ.get('stage', 'test').upper()
+
 LOG_JSON_FORMAT = dict(
     ts='%(asctime)s',
     level='%(levelname)s',
@@ -69,7 +74,7 @@ LOG_JSON_FORMAT = dict(
 )
 
 
-def default_formatter() -> logging.Formatter:
+def json_formatter() -> logging.Formatter:
     return logging.Formatter(
         fmt=json.dumps(LOG_JSON_FORMAT, ensure_ascii=False, sort_keys=True),
         datefmt='%Y-%m-%d %H:%M:%S'
@@ -78,19 +83,16 @@ def default_formatter() -> logging.Formatter:
 
 def console_handler() -> logging.Handler:
     handler = logging.StreamHandler()
-    handler.setFormatter(LOG_JSON_FORMAT)
+    handler.setFormatter(json_formatter())
     return handler
-
-
-def fluentd_handler() -> logging.Handler:
-    # FIXME: add fluentd handler
-    pass
 
 
 def get_default_logger(log_name: str, log_level: int = logging.DEBUG) -> logging.Logger:
     logger = logging.getLogger(log_name)
     if STAGE == 'PRODUCTION':
         log_level = logging.INFO
+    else:
+        log_level = logging.DEBUG
     logger.setLevel(log_level)
-    logger.addHandler(console_handler)
+    logger.addHandler(console_handler())
     return logger

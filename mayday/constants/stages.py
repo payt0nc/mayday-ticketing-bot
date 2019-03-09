@@ -1,5 +1,3 @@
-__author__ = 'Comma'
-
 END = -1
 MAIN_PANEL = 1
 
