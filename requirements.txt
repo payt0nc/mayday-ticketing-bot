@@ -6,6 +6,7 @@ cryptography==2.6.1
 future==0.17.1
 idna==2.8
 pycparser==2.19
+pymongo==3.7.2
 python-telegram-bot==11.1.0
 redis==3.2.0
 requests==2.21.0
