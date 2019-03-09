@@ -1,4 +1,5 @@
 from mayday.item_validator import ItemValidator
+from mayday.constants import CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING, STATUS_MAPPING
 
 
 class Ticket:
@@ -138,12 +139,30 @@ class Ticket:
             username=self._username
         )
 
-    def to_obj(self, query_dict: dict):
-        for key, value in query_dict.items():
+    def to_obj(self, ticket_dict: dict):
+        for key, value in ticket_dict.items():
             if isinstance(value, list):
                 value = set(value)
             self.__setattr__('_{}'.format(key), value)
         return self
+
+    def to_human_readable(self) -> dict:
+        return dict(
+            category=CATEGORY_MAPPING.get(self.category),
+            date=DATE_MAPPING.get(self.date),
+            price=PRICE_MAPPING.get(self.price),
+            quantity=self.quantity,
+            section=self.section,
+            row=self.row,
+            seat=self.seat,
+            status=STATUS_MAPPING.get(self.status),
+            remarks=self.remarks,
+            wish_dates=', '.join(sorted(set(map(DATE_MAPPING.get, self.wish_dates)))),
+            wish_prices=', '.join(sorted(set(map(PRICE_MAPPING.get, self.wish_prices)))),
+            wish_quantities=', '.join(sorted(map(str, self.wish_quantities))),
+            user_id=self._user_id,
+            username=self._username
+        )
 
     def update_field(self, field_name: str, field_value: (str, int), remove=False) -> bool:
         field_name = '_{}'.format(field_name)

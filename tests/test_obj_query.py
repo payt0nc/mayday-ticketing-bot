@@ -8,17 +8,17 @@ class Test(unittest.TestCase):
     def test_query_init(self):
         user_id = 123456789
         username = 'testcase'
-        category_id = 0
+        category_id = 1
 
         query = Query(user_id, username, category_id)
         self.assertDictEqual(
             query.to_dict(),
             dict(
-                category=0,
+                category=1,
                 dates=list(),
                 prices=list(),
                 quantities=list(),
-                status=0,
+                status=1,
                 username='testcase',
                 user_id=123456789
             )
@@ -27,14 +27,14 @@ class Test(unittest.TestCase):
     def test_query_dict_to_obj(self):
         user_id = 123456789
         username = 'testcase'
-        category_id = 0
+        category_id = 1
 
         query = dict(
-            category=0,
+            category=1,
             dates=[503, 504],
             prices=[1, 2],
             quantities=[2, 3],
-            status=0,
+            status=1,
             username='testcase',
             user_id=123456789
         )
@@ -110,13 +110,13 @@ class Test(unittest.TestCase):
         assert isinstance(query.quantities, set)
         assert query.quantities == {1, 2, 3, 4}
 
-        query.update_field('status', 0)
-        assert isinstance(query.status, int)
-        assert query.status == 0
-
         query.update_field('status', 1)
         assert isinstance(query.status, int)
         assert query.status == 1
+
+        query.update_field('status', 2)
+        assert isinstance(query.status, int)
+        assert query.status == 2
 
         # Remove
         query.update_field('quantities', 4, remove=True)
@@ -166,3 +166,25 @@ class Test(unittest.TestCase):
         query.update_field('prices', 1, remove=True)
         assert isinstance(query.prices, set)
         assert query.prices == set()
+
+    def test_ticket_to_human_readable(self):
+        user_id = 123456789
+        username = 'testcase'
+        category_id = 1
+        sample_query = dict(
+            category=1,
+            dates=[503, 504],
+            prices=[1, 2],
+            quantities=[2, 3],
+            status=1,
+            username='testcase',
+            user_id=123456789
+        )
+        query = Query(user_id, username, category_id).to_obj(sample_query)
+        query_string = query.to_human_readable()
+
+        assert query_string['category'] == '原價轉讓'
+        assert query_string['dates'] == '5.3(Fri), 5.4(Sat)'
+        assert query_string['prices'] == '$1180座位, $880座位'
+        assert query_string['quantities'] == '2, 3'
+        assert query_string['status'] == '待交易'

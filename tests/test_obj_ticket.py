@@ -195,3 +195,37 @@ class Test(unittest.TestCase):
         ticket.update_field('wish_prices', 1, remove=True)
         assert isinstance(ticket.wish_prices, set)
         assert ticket.wish_prices == set()
+
+    def test_ticket_to_human_readable(self):
+        user_id = 123456789
+        username = 'testcase'
+        sample_ticket = dict(
+            category=1,
+            date=503,
+            price=1,
+            quantity=2,
+            section='Yellow',
+            row='32',
+            seat='59',
+            wish_dates={504, 505},
+            wish_prices={1},
+            wish_quantities={1, 2},
+            remarks='',
+            status=1,
+            username='testcase',
+            user_id=123456789
+        )
+        ticket = Ticket(user_id, username).to_obj(sample_ticket)
+        ticket_string = ticket.to_human_readable()
+        assert ticket_string['category'] == '原價轉讓'
+        assert ticket_string['date'] == '5.3(Fri)'
+        assert ticket_string['price'] == '$1180座位'
+        assert ticket_string['quantity'] == 2
+        assert ticket_string['section'] == 'Yellow'
+        assert ticket_string['row'] == '32'
+        assert ticket_string['seat'] == '59'
+        assert ticket_string['wish_dates'] == '5.4(Sat), 5.5(Sun)'
+        assert ticket_string['wish_prices'] == '$1180座位'
+        assert ticket_string['wish_quantities'] == '1, 2'
+        assert ticket_string['status'] == '待交易'
+        assert ticket_string['remarks'] == ''

@@ -1,3 +1,4 @@
+from mayday.constants import CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING, STATUS_MAPPING
 from mayday.item_validator import ItemValidator
 
 
@@ -14,7 +15,7 @@ class Query:
         self._dates = set()
         self._prices = set()
         self._quantities = set()
-        self._status = int()
+        self._status = 1
 
     @property
     def category(self) -> int:
@@ -63,6 +64,17 @@ class Query:
             prices=sorted(self.prices),
             quantities=sorted(self.quantities),
             status=self.status,
+            username=self._username,
+            user_id=self._user_id
+        )
+
+    def to_human_readable(self) -> dict:
+        return dict(
+            category=CATEGORY_MAPPING.get(self.category),
+            dates=', '.join(sorted(set(map(DATE_MAPPING.get, self.dates)))),
+            prices=', '.join(sorted(set(map(PRICE_MAPPING.get, self.prices)))),
+            quantities=', '.join(sorted(map(str, self.quantities))),
+            status=STATUS_MAPPING.get(self.status),
             username=self._username,
             user_id=self._user_id
         )
