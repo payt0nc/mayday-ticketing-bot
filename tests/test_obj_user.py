@@ -23,8 +23,15 @@ class Test(unittest.TestCase):
             is_bot=False,
             language_code='ZH'
         )
-        profile = User(telegram_info)
-        self.assertDictEqual(telegram_info, profile.to_dict())
+        profile = User(telegram_info).to_dict()
+        assert profile['user_id'] == telegram_info['id']
+        assert profile['username'] == telegram_info['username']
+        assert profile['last_name'] == telegram_info['last_name']
+        assert profile['first_name'] == telegram_info['first_name']
+        assert profile['is_bot'] == telegram_info['is_bot']
+        assert profile['language_code'] == telegram_info['language_code']
+        assert profile['is_admin'] is False
+        assert profile['is_blacklist'] is False
 
     def test_username_blank(self):
         telegram_info = dict(
@@ -36,8 +43,8 @@ class Test(unittest.TestCase):
             language_code='ZH'
         )
         profile = User(telegram_info)
-        self.assertFalse(profile.is_username_blank())
+        assert profile.is_username_blank() is False
 
         telegram_info.update(dict(username='testcase'))
         profile = User(telegram_info)
-        self.assertTrue(profile.is_username_blank())
+        assert profile.is_username_blank()
