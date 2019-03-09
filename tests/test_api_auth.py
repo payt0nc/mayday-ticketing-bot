@@ -1,7 +1,7 @@
 import unittest
 
 import pytest
-from mayday.helpers.request import RequestHelper
+from mayday.controllers.request import RequestHelper
 from mayday.objects import User
 from requests_mock import Mocker
 

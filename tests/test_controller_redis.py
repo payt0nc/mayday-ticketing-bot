@@ -2,7 +2,7 @@ import unittest
 
 import pytest
 from fakeredis import FakeStrictRedis
-from mayday.helpers.redis import RedisHelper
+from mayday.controllers.redis import RedisHelper
 
 
 class TestCase(unittest.TestCase):
