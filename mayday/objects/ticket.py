@@ -17,9 +17,9 @@ class Ticket:
         self._row = ''
         self._seat = ''
         # WishList
-        self._wish_date = set()
-        self._wish_price = set()
-        self._wish_quantity = set()
+        self._wish_dates = set()
+        self._wish_prices = set()
+        self._wish_quantities = set()
         # Status
         self._status = 1
         self._remarks = ''
@@ -81,28 +81,28 @@ class Ticket:
         self._seat = value
 
     @property
-    def wish_date(self) -> int:
-        return sorted(self._wish_date)
+    def wish_dates(self) -> set:
+        return self._wish_dates
 
-    @wish_date.setter
-    def wish_date(self, value: int):
-        self.wish_date.add(value)
-
-    @property
-    def wish_price(self) -> int:
-        return sorted(self._wish_price)
-
-    @wish_price.setter
-    def wish_price(self, value: int):
-        self.wish_price.add(value)
+    @wish_dates.setter
+    def wish_dates(self, value: int):
+        self._wish_dates.add(value)
 
     @property
-    def wish_quantity(self) -> int:
-        return sorted(self._wish_quantity)
+    def wish_prices(self) -> int:
+        return self._wish_prices
 
-    @wish_quantity.setter
-    def wish_quantity(self, value: int):
-        self.wish_quantity.add(value)
+    @wish_prices.setter
+    def wish_prices(self, value: int):
+        self._wish_prices.add(value)
+
+    @property
+    def wish_quantities(self) -> int:
+        return self._wish_quantities
+
+    @wish_quantities.setter
+    def wish_quantities(self, value: int):
+        self._wish_quantities.add(value)
 
     @property
     def status(self) -> int:
@@ -131,22 +131,31 @@ class Ticket:
             seat=self.seat,
             status=self.status,
             remarks=self.remarks,
-            wish_date=self.wish_date,
-            wish_price=self.wish_price,
-            wish_quantity=self.wish_quantity,
+            wish_dates=self.wish_dates,
+            wish_prices=self.wish_prices,
+            wish_quantities=self.wish_quantities,
             user_id=self._user_id,
             username=self._username
         )
 
-    def update_field(self, field_name: str, field_value: str) -> bool:
-        if isinstance(self.__getattribute__(field_name), (str, int, bool)):
+    def to_obj(self, query_dict: dict):
+        for key, value in query_dict.items():
+            if isinstance(value, list):
+                value = set(value)
+            self.__setattr__('_{}'.format(key), value)
+        return self
+
+    def update_field(self, field_name: str, field_value: (str, int), remove=False) -> bool:
+        field_name = '_{}'.format(field_name)
+        if isinstance(self.__getattribute__(field_name), set):
+            source = self.__getattribute__(field_name)
+            if remove:
+                source.remove(field_value)
+            else:
+                source.add(field_value)
+            self.__setattr__(field_name, source)
+        else:
             self.__setattr__(field_name, field_value)
-        elif isinstance(self.__getattribute__(field_name), set):
-            source = self.__getattribute__(field_name)
-            self.__setattr__(field_name, source.add(field_value))
-        elif isinstance(self.__getattribute__(field_name), list):
-            source = self.__getattribute__(field_name)
-            self.__setattr__(field_name, source.append(field_value))
         return self
 
     def validate(self) -> dict:

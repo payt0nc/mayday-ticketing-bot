@@ -95,19 +95,19 @@ class Test(unittest.TestCase):
         assert query.prices == {1, 2, 3, 4}
 
         query.update_field('quantities', 1)
-        assert isinstance(query.prices, set)
+        assert isinstance(query.quantities, set)
         assert query.quantities == {1}
 
         query.update_field('quantities', 2)
-        assert isinstance(query.prices, set)
+        assert isinstance(query.quantities, set)
         assert query.quantities == {1, 2}
 
         query.update_field('quantities', 3)
-        assert isinstance(query.prices, set)
+        assert isinstance(query.quantities, set)
         assert query.quantities == {1, 2, 3}
 
         query.update_field('quantities', 4)
-        assert isinstance(query.prices, set)
+        assert isinstance(query.quantities, set)
         assert query.quantities == {1, 2, 3, 4}
 
         query.update_field('status', 0)
@@ -120,15 +120,15 @@ class Test(unittest.TestCase):
 
         # Remove
         query.update_field('quantities', 4, remove=True)
-        assert isinstance(query.prices, set)
+        assert isinstance(query.quantities, set)
         assert query.quantities == {1, 2, 3}
 
         query.update_field('quantities', 3, remove=True)
-        assert isinstance(query.prices, set)
+        assert isinstance(query.quantities, set)
         assert query.quantities == {1, 2}
 
         query.update_field('quantities', 2, remove=True)
-        assert isinstance(query.prices, set)
+        assert isinstance(query.quantities, set)
         assert query.quantities == {1}
 
         query.update_field('dates', 511, remove=True)
