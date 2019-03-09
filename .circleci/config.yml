@@ -33,6 +33,7 @@ jobs:
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements-dev.txt
+            codecov --token=$CODECOV_TOKEN
 
       - save_cache:
           paths:
@@ -51,8 +52,6 @@ jobs:
           command: |
             . venv/bin/activate
             pytest tests/
-            codecov --token=$CODECOV_TOKEN
-
 
       - store_artifacts:
           path: test-reports
