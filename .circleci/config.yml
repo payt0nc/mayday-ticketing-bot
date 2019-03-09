@@ -3,8 +3,6 @@
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
 version: 2.1
-orbs:
-  codecov: codecov/codecov@1.0.4
 jobs:
   build:
     docker:
@@ -52,10 +50,8 @@ jobs:
             CODECOV_TOKEN: 
           command: |
             . venv/bin/activate
-            pytest -v --cov=./mayday/ tests/ 
-      
-      - codecov/upload:
-          file: .coverage
+            pytest -v --cov=./mayday/ tests/
+            codecov
 
       - store_artifacts:
           path: test-reports
