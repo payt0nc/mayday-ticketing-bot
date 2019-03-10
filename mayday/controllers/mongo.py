@@ -22,6 +22,11 @@ class MongoController:
         collection = self.client[db_name][collection_name]
         return collection.count_documents(query)
 
+    def delete(self, db_name: str, collection_name: str, object_id: str) -> bool:
+        collection = self.client[db_name][collection_name]
+        self.logger.info(object_id)
+        return bool(collection.delete_one({'_id': ObjectId(object_id)}))
+
     def save(self, db_name: str, collection_name: str, content: dict) -> dict:
         collection = self.client[db_name][collection_name]
         self.logger.debug(content)
@@ -33,7 +38,7 @@ class MongoController:
         self.logger.debug(query)
         return [x for x in collection.find(query).sort('updated_at', DESCENDING)]
 
-    def delete(self, db_name: str, collection_name: str, object_id: str) -> bool:
+    def upsert(self, db_name: str, collection_name: str, content: dict, replace_condition: dict) -> bool:
         collection = self.client[db_name][collection_name]
-        self.logger.info(object_id)
-        return bool(collection.delete_one({'_id': ObjectId(object_id)}))
+        self.logger.debug(content)
+        return bool(collection.replace_one(filter=replace_condition, replacement=content, upsert=True).modified_count)

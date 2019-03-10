@@ -11,14 +11,14 @@ TIMEZONE = pytz.timezone('Asia/Taipei')
 
 class Ticket:
 
-    def __init__(self, user_id: int, username: str):
+    def __init__(self, user_id: int, username: str, ticket_id: str = ''):
 
         self._user_id = user_id
         self._username = username
 
         self._category = ''
         # Ticket Info
-        self._ticket_id = ''
+        self._ticket_id = ticket_id
         self._date = ''
         self._price = int()
         self._quantity = int()
@@ -37,6 +37,14 @@ class Ticket:
         self._updated_at = int(time.time())
 
     @property
+    def user_id(self):
+        return self._user_id
+
+    @property
+    def username(self):
+        return self._username
+
+    @property
     def category(self) -> int:
         return self._category
 
@@ -47,10 +55,6 @@ class Ticket:
     @property
     def ticket_id(self):
         return self._ticket_id
-
-    @ticket_id.setter
-    def ticket_id(self, value: str):
-        self._ticket_id = value
 
     @property
     def date(self) -> int:
@@ -101,24 +105,24 @@ class Ticket:
         self._seat = value
 
     @property
-    def wish_dates(self) -> set:
-        return self._wish_dates
+    def wish_dates(self) -> list:
+        return sorted(set(self._wish_dates))
 
     @wish_dates.setter
     def wish_dates(self, value: int):
         self._wish_dates.add(value)
 
     @property
-    def wish_prices(self) -> int:
-        return self._wish_prices
+    def wish_prices(self) -> list:
+        return sorted(set(self._wish_prices))
 
     @wish_prices.setter
     def wish_prices(self, value: int):
         self._wish_prices.add(value)
 
     @property
-    def wish_quantities(self) -> int:
-        return self._wish_quantities
+    def wish_quantities(self) -> list:
+        return sorted(set(self._wish_quantities))
 
     @wish_quantities.setter
     def wish_quantities(self, value: int):
@@ -174,6 +178,9 @@ class Ticket:
         for key, value in ticket_dict.items():
             if isinstance(value, list):
                 value = set(value)
+            if key == '_id':
+                key = 'ticket_id'
+                value = str(value)[-8:]
             self.__setattr__('_{}'.format(key), value)
         return self
 

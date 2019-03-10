@@ -21,9 +21,9 @@ class Test(unittest.TestCase):
                 section='',
                 row='',
                 seat='',
-                wish_dates=set(),
-                wish_prices=set(),
-                wish_quantities=set(),
+                wish_dates=list(),
+                wish_prices=list(),
+                wish_quantities=list(),
                 remarks='',
                 status=1,
                 username='testcase',
@@ -45,9 +45,9 @@ class Test(unittest.TestCase):
             section='Yellow',
             row='32',
             seat='59',
-            wish_dates=set(),
-            wish_prices=set(),
-            wish_quantities=set(),
+            wish_dates=list(),
+            wish_prices=list(),
+            wish_quantities=list(),
             remarks='',
             status=1,
             username='testcase',
@@ -95,56 +95,56 @@ class Test(unittest.TestCase):
         assert ticket.status == 1
 
         ticket.update_field('wish_dates', 503)
-        assert isinstance(ticket.wish_dates, set)
-        assert ticket.wish_dates == {503}
+        assert isinstance(ticket.wish_dates, list)
+        assert ticket.wish_dates == [503]
 
         ticket.update_field('wish_dates', 504)
-        assert isinstance(ticket.wish_dates, set)
-        assert ticket.wish_dates == {503, 504}
+        assert isinstance(ticket.wish_dates, list)
+        assert ticket.wish_dates == [503, 504]
 
         ticket.update_field('wish_dates', 505)
-        assert isinstance(ticket.wish_dates, set)
-        assert ticket.wish_dates == {503, 504, 505}
+        assert isinstance(ticket.wish_dates, list)
+        assert ticket.wish_dates == [503, 504, 505]
 
         ticket.update_field('wish_dates', 510)
-        assert isinstance(ticket.wish_dates, set)
-        assert ticket.wish_dates == {503, 504, 505, 510}
+        assert isinstance(ticket.wish_dates, list)
+        assert ticket.wish_dates == [503, 504, 505, 510]
 
         ticket.update_field('wish_dates', 511)
-        assert isinstance(ticket.wish_dates, set)
-        assert ticket.wish_dates == {503, 504, 505, 510, 511}
+        assert isinstance(ticket.wish_dates, list)
+        assert ticket.wish_dates == [503, 504, 505, 510, 511]
 
         ticket.update_field('wish_prices', 1)
-        assert isinstance(ticket.wish_prices, set)
-        assert ticket.wish_prices == {1}
+        assert isinstance(ticket.wish_prices, list)
+        assert ticket.wish_prices == [1]
 
         ticket.update_field('wish_prices', 2)
-        assert isinstance(ticket.wish_prices, set)
-        assert ticket.wish_prices == {1, 2}
+        assert isinstance(ticket.wish_prices, list)
+        assert ticket.wish_prices == [1, 2]
 
         ticket.update_field('wish_prices', 3)
-        assert isinstance(ticket.wish_prices, set)
-        assert ticket.wish_prices == {1, 2, 3}
+        assert isinstance(ticket.wish_prices, list)
+        assert ticket.wish_prices == [1, 2, 3]
 
         ticket.update_field('wish_prices', 4)
-        assert isinstance(ticket.wish_prices, set)
-        assert ticket.wish_prices == {1, 2, 3, 4}
+        assert isinstance(ticket.wish_prices, list)
+        assert ticket.wish_prices == [1, 2, 3, 4]
 
         ticket.update_field('wish_quantities', 1)
-        assert isinstance(ticket.wish_quantities, set)
-        assert ticket.wish_quantities == {1}
+        assert isinstance(ticket.wish_quantities, list)
+        assert ticket.wish_quantities == [1]
 
         ticket.update_field('wish_quantities', 2)
-        assert isinstance(ticket.wish_quantities, set)
-        assert ticket.wish_quantities == {1, 2}
+        assert isinstance(ticket.wish_quantities, list)
+        assert ticket.wish_quantities == [1, 2]
 
         ticket.update_field('wish_quantities', 3)
-        assert isinstance(ticket.wish_quantities, set)
-        assert ticket.wish_quantities == {1, 2, 3}
+        assert isinstance(ticket.wish_quantities, list)
+        assert ticket.wish_quantities == [1, 2, 3]
 
         ticket.update_field('wish_quantities', 4)
-        assert isinstance(ticket.wish_quantities, set)
-        assert ticket.wish_quantities == {1, 2, 3, 4}
+        assert isinstance(ticket.wish_quantities, list)
+        assert ticket.wish_quantities == [1, 2, 3, 4]
 
         ticket.update_field('status', 0)
         assert isinstance(ticket.status, int)
@@ -156,52 +156,52 @@ class Test(unittest.TestCase):
 
         # Remove
         ticket.update_field('wish_quantities', 4, remove=True)
-        assert isinstance(ticket.wish_quantities, set)
-        assert ticket.wish_quantities == {1, 2, 3}
+        assert isinstance(ticket.wish_quantities, list)
+        assert ticket.wish_quantities == [1, 2, 3]
 
         ticket.update_field('wish_quantities', 3, remove=True)
-        assert isinstance(ticket.wish_quantities, set)
-        assert ticket.wish_quantities == {1, 2}
+        assert isinstance(ticket.wish_quantities, list)
+        assert ticket.wish_quantities == [1, 2]
 
         ticket.update_field('wish_quantities', 2, remove=True)
-        assert isinstance(ticket.wish_quantities, set)
-        assert ticket.wish_quantities == {1}
+        assert isinstance(ticket.wish_quantities, list)
+        assert ticket.wish_quantities == [1]
 
         ticket.update_field('wish_dates', 511, remove=True)
-        assert isinstance(ticket.wish_dates, set)
-        assert ticket.wish_dates == {503, 504, 505, 510}
+        assert isinstance(ticket.wish_dates, list)
+        assert ticket.wish_dates == [503, 504, 505, 510]
 
         ticket.update_field('wish_dates', 510, remove=True)
-        assert isinstance(ticket.wish_dates, set)
-        assert ticket.wish_dates == {503, 504, 505}
+        assert isinstance(ticket.wish_dates, list)
+        assert ticket.wish_dates == [503, 504, 505]
 
         ticket.update_field('wish_dates', 505, remove=True)
-        assert isinstance(ticket.wish_dates, set)
-        assert ticket.wish_dates == {503, 504}
+        assert isinstance(ticket.wish_dates, list)
+        assert ticket.wish_dates == [503, 504]
 
         ticket.update_field('wish_dates', 504, remove=True)
-        assert isinstance(ticket.wish_dates, set)
-        assert ticket.wish_dates == {503}
+        assert isinstance(ticket.wish_dates, list)
+        assert ticket.wish_dates == [503]
 
         ticket.update_field('wish_dates', 503, remove=True)
-        assert isinstance(ticket.wish_dates, set)
-        assert ticket.wish_dates == set()
+        assert isinstance(ticket.wish_dates, list)
+        assert ticket.wish_dates == list()
 
         ticket.update_field('wish_prices', 4, remove=True)
-        assert isinstance(ticket.wish_prices, set)
-        assert ticket.wish_prices == {1, 2, 3}
+        assert isinstance(ticket.wish_prices, list)
+        assert ticket.wish_prices == [1, 2, 3]
 
         ticket.update_field('wish_prices', 3, remove=True)
-        assert isinstance(ticket.wish_prices, set)
-        assert ticket.wish_prices == {1, 2}
+        assert isinstance(ticket.wish_prices, list)
+        assert ticket.wish_prices == [1, 2]
 
         ticket.update_field('wish_prices', 2, remove=True)
-        assert isinstance(ticket.wish_prices, set)
-        assert ticket.wish_prices == {1}
+        assert isinstance(ticket.wish_prices, list)
+        assert ticket.wish_prices == [1]
 
         ticket.update_field('wish_prices', 1, remove=True)
-        assert isinstance(ticket.wish_prices, set)
-        assert ticket.wish_prices == set()
+        assert isinstance(ticket.wish_prices, list)
+        assert ticket.wish_prices == list()
 
     def test_ticket_to_human_readable(self):
         user_id = 123456789
@@ -214,9 +214,9 @@ class Test(unittest.TestCase):
             section='Yellow',
             row='32',
             seat='59',
-            wish_dates={504, 505},
-            wish_prices={1},
-            wish_quantities={1, 2},
+            wish_dates=[504, 505],
+            wish_prices=[1],
+            wish_quantities=[1, 2],
             remarks='',
             status=1,
             username='testcase',

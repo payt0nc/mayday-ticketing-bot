@@ -14,7 +14,7 @@ class Test(unittest.TestCase):
 
     def test_mongo(self):
         mongo = MongoController(mongo_client=self.client)
-        doc = dict(test='Do you see me?', text='Yes!')
+        doc = dict(user_id=123456789, username='pytest', test='Do you see me?', text='Yes!')
 
         # save
         obj = mongo.save(db_name='test', collection_name='uniitest', content=doc)
@@ -28,6 +28,14 @@ class Test(unittest.TestCase):
         result = mongo.load(db_name='test', collection_name='uniitest', query={'text': 'Yes!'})
         assert result[0]['text'] == doc['text']
         assert result[0]['test'] == doc['test']
+
+        # upsert
+        replace_condition = dict(user_id=123456789, username='pytest')
+        doc.update(dict(text='No!'))
+        assert mongo.upsert(db_name='test', collection_name='uniitest',
+                            content=doc, replace_condition=replace_condition)
+        new_doc = mongo.load(db_name='test', collection_name='uniitest', query=replace_condition)
+        assert new_doc[0]['text'] == 'No!'
 
         # delete
         assert mongo.delete(db_name='test', collection_name='uniitest', object_id=result[0]['_id'])
