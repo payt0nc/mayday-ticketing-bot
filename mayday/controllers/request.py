@@ -1,9 +1,9 @@
 import json
 
 import requests
+
 import mayday
 from mayday import Config
-
 
 logger = mayday.get_default_logger(__name__)
 

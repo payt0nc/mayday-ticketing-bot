@@ -1,6 +1,7 @@
-import mayday
 from bson.objectid import ObjectId
 from pymongo import DESCENDING, MongoClient
+
+import mayday
 
 
 class NoClientAndConfigProvided(Exception):

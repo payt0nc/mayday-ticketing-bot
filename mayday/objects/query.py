@@ -1,4 +1,5 @@
-from mayday.constants import CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING, STATUS_MAPPING
+from mayday.constants import (CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING,
+                              STATUS_MAPPING)
 from mayday.item_validator import ItemValidator
 
 
