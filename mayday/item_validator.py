@@ -1,4 +1,3 @@
-from mayday import constants
 
 
 class ItemValidator:
