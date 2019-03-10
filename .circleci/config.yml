@@ -51,7 +51,8 @@ jobs:
           command: |
             . venv/bin/activate
             pytest -v --cov=./mayday/ tests/
-            codecov
+            coverage xml
+            python-codacy-coverage -r coverage.xml
 
       - store_artifacts:
           path: test-reports
