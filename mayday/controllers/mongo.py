@@ -1,6 +1,6 @@
 import mayday
-from pymongo import MongoClient
 from bson.objectid import ObjectId
+from pymongo import DESCENDING, MongoClient
 
 
 class NoClientAndConfigProvided(Exception):
@@ -31,4 +31,9 @@ class MongoController:
     def load(self, db_name: str, collection_name: str, query: dict) -> list:
         collection = self.client[db_name][collection_name]
         self.logger.debug(query)
-        return [x for x in collection.find(query)]
+        return [x for x in collection.find(query).sort('updated_at', DESCENDING)]
+
+    def delete(self, db_name: str, collection_name: str, object_id: str) -> bool:
+        collection = self.client[db_name][collection_name]
+        self.logger.info(object_id)
+        return bool(collection.delete_one({'_id': ObjectId(object_id)}))

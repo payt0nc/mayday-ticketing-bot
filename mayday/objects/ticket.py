@@ -1,5 +1,12 @@
+import time
+from datetime import datetime
+
+import pytz
+from mayday.constants import (CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING,
+                              STATUS_MAPPING)
 from mayday.item_validator import ItemValidator
-from mayday.constants import CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING, STATUS_MAPPING
+
+TIMEZONE = pytz.timezone('Asia/Taipei')
 
 
 class Ticket:
@@ -11,6 +18,7 @@ class Ticket:
 
         self._category = ''
         # Ticket Info
+        self._ticket_id = ''
         self._date = ''
         self._price = int()
         self._quantity = int()
@@ -24,6 +32,9 @@ class Ticket:
         # Status
         self._status = 1
         self._remarks = ''
+        # TS
+        self._created_at = int(time.time())
+        self._updated_at = int(time.time())
 
     @property
     def category(self) -> int:
@@ -32,6 +43,14 @@ class Ticket:
     @category.setter
     def category(self, value: int):
         self._category = value
+
+    @property
+    def ticket_id(self):
+        return self._ticket_id
+
+    @ticket_id.setter
+    def ticket_id(self, value: str):
+        self._ticket_id = value
 
     @property
     def date(self) -> int:
@@ -121,9 +140,19 @@ class Ticket:
     def remarks(self, value: str):
         self._remarks = value
 
+    @property
+    def create_at(self) -> int:
+        return self._created_at
+
+    @property
+    def updated_at(self) -> int:
+        self._updated_at = int(time.time())
+        return self._updated_at
+
     def to_dict(self):
         return dict(
             category=self.category,
+            ticket_id=self.ticket_id,
             date=self.date,
             price=self.price,
             quantity=self.quantity,
@@ -136,7 +165,9 @@ class Ticket:
             wish_prices=self.wish_prices,
             wish_quantities=self.wish_quantities,
             user_id=self._user_id,
-            username=self._username
+            username=self._username,
+            created_at=self._created_at,
+            updated_at=int(time.time())
         )
 
     def to_obj(self, ticket_dict: dict):
@@ -149,6 +180,7 @@ class Ticket:
     def to_human_readable(self) -> dict:
         return dict(
             category=CATEGORY_MAPPING.get(self.category),
+            ticket_id=self.ticket_id,
             date=DATE_MAPPING.get(self.date),
             price=PRICE_MAPPING.get(self.price),
             quantity=self.quantity,
@@ -161,7 +193,9 @@ class Ticket:
             wish_prices=', '.join(sorted(set(map(PRICE_MAPPING.get, self.wish_prices)))),
             wish_quantities=', '.join(sorted(map(str, self.wish_quantities))),
             user_id=self._user_id,
-            username=self._username
+            username=self._username,
+            created_at=datetime.fromtimestamp(self._created_at).replace(tzinfo=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S'),
+            updated_at=datetime.fromtimestamp(self._updated_at).replace(tzinfo=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S')
         )
 
     def update_field(self, field_name: str, field_value: (str, int), remove=False) -> bool:

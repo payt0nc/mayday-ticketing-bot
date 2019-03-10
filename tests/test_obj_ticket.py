@@ -14,6 +14,7 @@ class Test(unittest.TestCase):
             ticket.to_dict(),
             dict(
                 category='',
+                ticket_id='',
                 date='',
                 price=int(),
                 quantity=int(),
@@ -26,7 +27,9 @@ class Test(unittest.TestCase):
                 remarks='',
                 status=1,
                 username='testcase',
-                user_id=123456789
+                user_id=123456789,
+                created_at=ticket.create_at,
+                updated_at=ticket.updated_at
             )
         )
 
@@ -35,6 +38,7 @@ class Test(unittest.TestCase):
         username = 'testcase'
         ticket = dict(
             category=1,
+            ticket_id='',
             date=503,
             price=1,
             quantity=1,
@@ -55,7 +59,6 @@ class Test(unittest.TestCase):
         assert obj.quantity == ticket['quantity']
         assert obj.status == ticket['status']
         assert obj.category == ticket['category']
-        assert obj.to_dict() == ticket
 
     def test_ticket_update_field(self):
         user_id = 123456789
@@ -70,6 +73,10 @@ class Test(unittest.TestCase):
         ticket.update_field('category', 0)
         assert isinstance(ticket.category, int)
         assert ticket.category == 0
+
+        ticket.update_field('ticket_id', 'abcdef')
+        assert isinstance(ticket.ticket_id, str)
+        assert ticket.ticket_id == 'abcdef'
 
         ticket.update_field('date', 1)
         assert isinstance(ticket.date, int)
