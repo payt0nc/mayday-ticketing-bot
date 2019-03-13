@@ -41,5 +41,8 @@ class MongoController:
 
     def upsert(self, db_name: str, collection_name: str, content: dict, replace_condition: dict) -> bool:
         collection = self.client[db_name][collection_name]
+        self.logger.debug(replace_condition)
         self.logger.debug(content)
-        return bool(collection.replace_one(filter=replace_condition, replacement=content, upsert=True).modified_count)
+        result = collection.replace_one(filter=replace_condition, replacement=content, upsert=True).modified_count
+        self.logger.debug(result)
+        return bool(result)

@@ -28,7 +28,7 @@ class Test(unittest.TestCase):
                 status=1,
                 username='testcase',
                 user_id=123456789,
-                created_at=ticket.create_at,
+                created_at=ticket.created_at,
                 updated_at=ticket.updated_at
             )
         )

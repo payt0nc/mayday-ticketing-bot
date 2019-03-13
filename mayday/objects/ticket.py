@@ -146,7 +146,7 @@ class Ticket:
         self._remarks = value
 
     @property
-    def create_at(self) -> int:
+    def created_at(self) -> int:
         return self._created_at
 
     @property
