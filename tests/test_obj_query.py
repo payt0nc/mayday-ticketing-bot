@@ -39,9 +39,9 @@ class Test(unittest.TestCase):
             user_id=123456789
         )
         obj = Query(user_id, username, category_id).to_obj(query)
-        assert obj.dates == set(query['dates'])
-        assert obj.prices == set(query['prices'])
-        assert obj.quantities == set(query['quantities'])
+        assert obj.dates == query['dates']
+        assert obj.prices == query['prices']
+        assert obj.quantities == query['quantities']
         assert obj.status == query['status']
         assert obj.category == query['category']
 
@@ -59,56 +59,56 @@ class Test(unittest.TestCase):
         assert query.category == 1
 
         query.update_field('dates', 503)
-        assert isinstance(query.dates, set)
-        assert query.dates == {503}
+        assert isinstance(query.dates, list)
+        assert query.dates == [503]
 
         query.update_field('dates', 504)
-        assert isinstance(query.dates, set)
-        assert query.dates == {503, 504}
+        assert isinstance(query.dates, list)
+        assert query.dates == [503, 504]
 
         query.update_field('dates', 505)
-        assert isinstance(query.dates, set)
-        assert query.dates == {503, 504, 505}
+        assert isinstance(query.dates, list)
+        assert query.dates == [503, 504, 505]
 
         query.update_field('dates', 510)
-        assert isinstance(query.dates, set)
-        assert query.dates == {503, 504, 505, 510}
+        assert isinstance(query.dates, list)
+        assert query.dates == [503, 504, 505, 510]
 
         query.update_field('dates', 511)
-        assert isinstance(query.dates, set)
-        assert query.dates == {503, 504, 505, 510, 511}
+        assert isinstance(query.dates, list)
+        assert query.dates == [503, 504, 505, 510, 511]
 
         query.update_field('prices', 1)
-        assert isinstance(query.prices, set)
-        assert query.prices == {1}
+        assert isinstance(query.prices, list)
+        assert query.prices == [1]
 
         query.update_field('prices', 2)
-        assert isinstance(query.prices, set)
-        assert query.prices == {1, 2}
+        assert isinstance(query.prices, list)
+        assert query.prices == [1, 2]
 
         query.update_field('prices', 3)
-        assert isinstance(query.prices, set)
-        assert query.prices == {1, 2, 3}
+        assert isinstance(query.prices, list)
+        assert query.prices == [1, 2, 3]
 
         query.update_field('prices', 4)
-        assert isinstance(query.prices, set)
-        assert query.prices == {1, 2, 3, 4}
+        assert isinstance(query.prices, list)
+        assert query.prices == [1, 2, 3, 4]
 
         query.update_field('quantities', 1)
-        assert isinstance(query.quantities, set)
-        assert query.quantities == {1}
+        assert isinstance(query.quantities, list)
+        assert query.quantities == [1]
 
         query.update_field('quantities', 2)
-        assert isinstance(query.quantities, set)
-        assert query.quantities == {1, 2}
+        assert isinstance(query.quantities, list)
+        assert query.quantities == [1, 2]
 
         query.update_field('quantities', 3)
-        assert isinstance(query.quantities, set)
-        assert query.quantities == {1, 2, 3}
+        assert isinstance(query.quantities, list)
+        assert query.quantities == [1, 2, 3]
 
         query.update_field('quantities', 4)
-        assert isinstance(query.quantities, set)
-        assert query.quantities == {1, 2, 3, 4}
+        assert isinstance(query.quantities, list)
+        assert query.quantities == [1, 2, 3, 4]
 
         query.update_field('status', 1)
         assert isinstance(query.status, int)
@@ -120,52 +120,52 @@ class Test(unittest.TestCase):
 
         # Remove
         query.update_field('quantities', 4, remove=True)
-        assert isinstance(query.quantities, set)
-        assert query.quantities == {1, 2, 3}
+        assert isinstance(query.quantities, list)
+        assert query.quantities == [1, 2, 3]
 
         query.update_field('quantities', 3, remove=True)
-        assert isinstance(query.quantities, set)
-        assert query.quantities == {1, 2}
+        assert isinstance(query.quantities, list)
+        assert query.quantities == [1, 2]
 
         query.update_field('quantities', 2, remove=True)
-        assert isinstance(query.quantities, set)
-        assert query.quantities == {1}
+        assert isinstance(query.quantities, list)
+        assert query.quantities == [1]
 
         query.update_field('dates', 511, remove=True)
-        assert isinstance(query.dates, set)
-        assert query.dates == {503, 504, 505, 510}
+        assert isinstance(query.dates, list)
+        assert query.dates == [503, 504, 505, 510]
 
         query.update_field('dates', 510, remove=True)
-        assert isinstance(query.dates, set)
-        assert query.dates == {503, 504, 505}
+        assert isinstance(query.dates, list)
+        assert query.dates == [503, 504, 505]
 
         query.update_field('dates', 505, remove=True)
-        assert isinstance(query.dates, set)
-        assert query.dates == {503, 504}
+        assert isinstance(query.dates, list)
+        assert query.dates == [503, 504]
 
         query.update_field('dates', 504, remove=True)
-        assert isinstance(query.dates, set)
-        assert query.dates == {503}
+        assert isinstance(query.dates, list)
+        assert query.dates == [503]
 
         query.update_field('dates', 503, remove=True)
-        assert isinstance(query.dates, set)
-        assert query.dates == set()
+        assert isinstance(query.dates, list)
+        assert query.dates == list()
 
         query.update_field('prices', 4, remove=True)
-        assert isinstance(query.prices, set)
-        assert query.prices == {1, 2, 3}
+        assert isinstance(query.prices, list)
+        assert query.prices == [1, 2, 3]
 
         query.update_field('prices', 3, remove=True)
-        assert isinstance(query.prices, set)
-        assert query.prices == {1, 2}
+        assert isinstance(query.prices, list)
+        assert query.prices == [1, 2]
 
         query.update_field('prices', 2, remove=True)
-        assert isinstance(query.prices, set)
-        assert query.prices == {1}
+        assert isinstance(query.prices, list)
+        assert query.prices == [1]
 
         query.update_field('prices', 1, remove=True)
-        assert isinstance(query.prices, set)
-        assert query.prices == set()
+        assert isinstance(query.prices, list)
+        assert query.prices == list()
 
     def test_ticket_to_human_readable(self):
         user_id = 123456789

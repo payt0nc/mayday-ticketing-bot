@@ -1,3 +1,5 @@
+import time
+
 from mayday.constants import (CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING,
                               STATUS_MAPPING)
 from mayday.item_validator import ItemValidator
@@ -18,37 +20,37 @@ class Query:
         self._quantities = set()
         self._status = 1
 
+        # TS
+        self._created_at = int(time.time())
+        self._updated_at = int(time.time())
+
     @property
     def category(self) -> int:
         return self._category
 
-    @category.setter
-    def category(self, value: int):
-        self._category = value
-
     @property
     def dates(self) -> list:
-        return self._dates
+        return sorted(self._dates)
 
     @dates.setter
     def dates(self, value: int):
-        self._dates.add(value)
+        self._dates = set(self._dates).add(value)
 
     @property
     def prices(self) -> list:
-        return self._prices
+        return sorted(self._prices)
 
     @prices.setter
     def prices(self, value: int):
-        self._prices.add(value)
+        self._prices = set(self._prices).add(value)
 
     @property
     def quantities(self) -> list:
-        return self._quantities
+        return sorted(self._quantities)
 
     @quantities.setter
     def quantities(self, value: int):
-        self._quantities.add(value)
+        self._quantities = set(self._quantities).add(value)
 
     @property
     def status(self) -> int:
@@ -57,6 +59,23 @@ class Query:
     @status.setter
     def status(self, value: int):
         self._status = value
+
+    @property
+    def user_id(self) -> int:
+        return self._user_id
+
+    @property
+    def username(self) -> str:
+        return self._username
+
+    @property
+    def created_at(self) -> int:
+        return self._created_at
+
+    @property
+    def updated_at(self) -> int:
+        self._updated_at = int(time.time())
+        return self._updated_at
 
     def to_dict(self) -> dict:
         return dict(
