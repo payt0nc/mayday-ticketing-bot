@@ -23,10 +23,15 @@ class MongoController:
         collection = self.client[db_name][collection_name]
         return collection.count_documents(query)
 
-    def delete(self, db_name: str, collection_name: str, object_id: str) -> bool:
+    def delete_one(self, db_name: str, collection_name: str, object_id: str) -> bool:
         collection = self.client[db_name][collection_name]
         self.logger.info(object_id)
         return bool(collection.delete_one({'_id': ObjectId(object_id)}))
+
+    def delete_all(self, db_name: str, collection_name: str, query: dict) -> bool:
+        collection = self.client[db_name][collection_name]
+        self.logger.info(query)
+        return bool(collection.delete_many(query))
 
     def save(self, db_name: str, collection_name: str, content: dict) -> dict:
         collection = self.client[db_name][collection_name]
@@ -39,10 +44,10 @@ class MongoController:
         self.logger.debug(query)
         return [x for x in collection.find(query).sort('updated_at', DESCENDING)]
 
-    def upsert(self, db_name: str, collection_name: str, content: dict, replace_condition: dict) -> bool:
+    def upsert(self, db_name: str, collection_name: str, filter: dict, update_part: dict) -> bool:
         collection = self.client[db_name][collection_name]
-        self.logger.debug(replace_condition)
-        self.logger.debug(content)
-        result = collection.replace_one(filter=replace_condition, replacement=content, upsert=True).modified_count
+        self.logger.debug(filter)
+        self.logger.debug(update_part)
+        result = collection.update_one(filter=filter, update={'$set': update_part}, upsert=True).matched_count
         self.logger.debug(result)
         return bool(result)

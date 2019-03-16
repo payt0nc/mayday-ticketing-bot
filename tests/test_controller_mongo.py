@@ -32,10 +32,17 @@ class Test(unittest.TestCase):
         # upsert
         replace_condition = dict(user_id=123456789, username='pytest')
         doc.update(dict(text='No!'))
-        assert mongo.upsert(db_name='test', collection_name='uniitest',
-                            content=doc, replace_condition=replace_condition)
+        assert mongo.upsert(db_name='test', collection_name='uniitest', filter=replace_condition, update_part=doc)
         new_doc = mongo.load(db_name='test', collection_name='uniitest', query=replace_condition)
         assert new_doc[0]['text'] == 'No!'
 
         # delete
-        assert mongo.delete(db_name='test', collection_name='uniitest', object_id=result[0]['_id'])
+        assert mongo.delete_one(db_name='test', collection_name='uniitest', object_id=result[0]['_id'])
+
+        # delete
+        mongo.save(db_name='test', collection_name='uniitest', content=dict(
+            user_id=123456789, username='pytest', test='Do you see me?', text='Yes! 1'))
+        mongo.save(db_name='test', collection_name='uniitest', content=dict(
+            user_id=123456789, username='pytest', test='Do you see me?', text='No!'))
+        assert mongo.delete_all(db_name='test', collection_name='uniitest',
+                                query=dict(user_id=123456789, username='pytest'))
