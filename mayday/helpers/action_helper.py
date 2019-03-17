@@ -1,7 +1,7 @@
 import mayday
 from mayday import Config
 from mayday.controllers import MongoController
-from mayday.objects import Query, Ticket, User
+from mayday.objects import User, Action
 
 
 class ActionHelper:
@@ -17,15 +17,33 @@ class ActionHelper:
         else:
             self.mongo = MongoController(mongo_config=Config.mongo_config)
 
-    def load_last_action(self, user: User) -> dict:
-        pass
+    def load_last_action(self, user_id: int, username: str, action_module_name: str = '') -> Action:
+        actions_dict = self.mongo.load(
+            db_name=self.DB_NAME, collection_name=self.COLLECTION_NAME,
+            query=dict(user_id=user_id, username=username, action_module_name=action_module_name))[0]
+        self.logger.debug(actions_dict)
+        return Action(user_id=user_id, username=username).to_obj(actions_dict)
 
-    def save_current_action(self, user: User) -> dict:
-        pass
+    def save_current_action(self, action: Action) -> bool:
+        self.logger.debug(action.to_dict())
+        return bool(self.mongo.save(db_name=self.DB_NAME, collection_name=self.COLLECTION_NAME, content=action.to_dict()))
 
-    def reset_current_action(self, user: User) -> dict:
-        pass
+    def reset_current_action(self, action: Action) -> Action:
+        self.logger.debug(action.to_dict())
+        querys = self.mongo.load(
+            db_name=self.DB_NAME, collection_name=self.COLLECTION_NAME,
+            query=dict(user_id=action.user_id, username=action.username, action_module_name=action.action_module_name))
+        if querys:
+            result = self.mongo.delete_all(
+                db_name=self.DB_NAME, collection_name=self.COLLECTION_NAME,
+                query=dict(user_id=action.user_id, username=action.username, action_module_name=action.action_module_name))
+            if result is False:
+                self.logger.warning(dict(info='Cant delete action', action=action.to_dict()))
+        reset_action_draft = Action(user_id=action.user_id, username=action.username)
+        reset_action_draft.action_module_name = action.action_module_name
+        return reset_action_draft
 
+    '''
     def reset(self, user_id: int, username: str, category_id: int) -> dict:
         if self._feature == 'search_ticket':
             content = Query(user_id=user_id, username=username, category_id=category_id).to_dict()
@@ -60,3 +78,4 @@ class ActionHelper:
             user_id=user_id,
             action=self._last_choice,
             value=content))
+    '''
