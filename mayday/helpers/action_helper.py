@@ -1,7 +1,7 @@
 import mayday
 from mayday import Config
 from mayday.controllers import MongoController
-from mayday.objects import User, Action
+from mayday.objects import Action
 
 
 class ActionHelper:

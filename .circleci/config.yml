@@ -9,11 +9,13 @@ jobs:
       # specify the version you desire here
       # use `-browsers` prefix for selenium tests, e.g. `3.6.1-browsers`
       - image: circleci/python:3.7.1
+        -
 
       # Specify service dependencies here if necessary
       # CircleCI maintains a library of pre-built images
       # documented at https://circleci.com/docs/2.0/circleci-images/
       # - image: circleci/postgres:9.4
+      - image: circleci/mongo:4.1.4-xenial
 
     working_directory: ~/repo
 
@@ -45,14 +47,22 @@ jobs:
       # https://pytest.org
       # https://nose.readthedocs.io
       - run:
-          name: run tests
+          name: run unittests
           environment:
             CODECOV_TOKEN: 
           command: |
             . venv/bin/activate
-            pytest -v --cov=./mayday/ tests/
+            pytest -v --cov=./mayday/ tests/test_*
             coverage xml
             python-codacy-coverage -r coverage.xml
+            
+      - run:
+          name: run integration tests
+          environment:
+            CODECOV_TOKEN: 
+          command: |
+            . venv/bin/activate
+            pytest -v tests/integration_test_*
 
       - store_artifacts:
           path: test-reports
