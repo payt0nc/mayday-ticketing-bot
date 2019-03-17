@@ -33,6 +33,14 @@ class Config:
         # Telegram
         self.telegram_token = os.environ['TELEGRAM_TOKEN']
 
+        # Schema
+        self.cache_db_name = 'cache'
+        self.query_db_name = 'query'
+        self.query_collection_name = 'queries'
+        self.quick_search_collection_name = 'quick_searches'
+        self.ticket_db_name = 'ticket'
+        self.ticket_collection_name = 'tickets'
+
     @property
     def aws_config(self) -> dict:
         return dict(
@@ -61,6 +69,17 @@ class Config:
     @property
     def telegram_config(self) -> dict:
         return dict(token=self.telegram_token)
+
+    @property
+    def schema_config(self) -> dict:
+        return dict(
+            cache_db_name=self.cache_db_name,
+            query_db_name=self.query_db_name,
+            query_collection_name=self.query_collection_name,
+            quick_search_collection_name=self.quick_search_collection_name,
+            ticket_db_name=self.ticket_db_name,
+            ticket_collection_name=self.ticket_collection_name
+        )
 
 
 STAGE = os.environ.get('stage', 'test').upper()
