@@ -64,6 +64,12 @@ SECTION_MAPPING = {
     'W-E1': '$880 無障礙通道座位',
 }
 
+SOURCE_MAPPING = {
+    1: '東亞信用卡',
+    2: '特高娛樂內部認購',
+    3: '公開發售',
+    4: '其他途徑'
+}
 
 TICKET_MAPPING = dict(
     category='門票類型',
