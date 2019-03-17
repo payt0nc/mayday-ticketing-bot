@@ -46,7 +46,7 @@ class QueryHelper:
     def update_cache_query(self, query: Query) -> Query:
         self.mongo.upsert(
             db_name=self.CACHE_DB_NAME, collection_name=self.CACHE_COLLECTION_NAME,
-            filter=dict(user_id=query.user_id, username=query.username), update_part=query.to_dict())
+            conditions=dict(user_id=query.user_id, username=query.username), update_part=query.to_dict())
         cached_query = self.mongo.load(
             db_name=self.CACHE_DB_NAME, collection_name=self.CACHE_COLLECTION_NAME, query=dict(user_id=query.user_id, username=query.username))
         self.logger.debug(cached_query)

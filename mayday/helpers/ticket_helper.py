@@ -40,7 +40,7 @@ class TicketHelper:
     def update_cache_ticket(self, ticket: Ticket) -> Ticket:
         self.mongo.upsert(
             db_name=self.CACHE_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME,
-            filter=dict(user_id=ticket.user_id, username=ticket.username), update_part=ticket.to_dict())
+            conditions=dict(user_id=ticket.user_id, username=ticket.username), update_part=ticket.to_dict())
         cached_ticket = self.mongo.load(
             db_name=self.CACHE_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME, query=dict(user_id=ticket.user_id, username=ticket.username))
         self.logger.debug(cached_ticket)
@@ -64,11 +64,14 @@ class TicketHelper:
         saved_ticket = self.mongo.save(
             db_name=self.TICKET_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME, content=ticket.to_dict())
         self.logger.debug(saved_ticket)
-        ticket_id = saved_ticket['_id']
-        return self.mongo.upsert(
+        ticket_id = str(saved_ticket['_id'])
+        new_ticket = Ticket(user_id=ticket.user_id, username=ticket.username,
+                            ticket_id=ticket_id[-6:]).to_obj(saved_ticket)
+        self.logger.debug(new_ticket.to_dict())
+        self.mongo.upsert(
             db_name=self.TICKET_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME,
-            update_part=Ticket(user_id=ticket.user_id, username=ticket.username).to_obj(saved_ticket).to_dict(),
-            filter=dict(_id=ticket_id))
+            conditions=dict(_id=ticket_id), update_part=new_ticket.to_dict())
+        return self.mongo.load(db_name=self.TICKET_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME, query=dict(_id=ticket_id))
 
     def update_ticket(self, ticket: Ticket) -> Ticket:
         saved_ticket = self.mongo.upsert(

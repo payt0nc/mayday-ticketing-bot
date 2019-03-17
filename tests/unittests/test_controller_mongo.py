@@ -1,16 +1,19 @@
 import unittest
-
 import pytest
-from mayday import Config
+import mongomock
+
 from mayday.controllers.mongo import MongoController
 
 
 @pytest.mark.usefixtures()
 class Test(unittest.TestCase):
 
+    @pytest.fixture(autouse=True, scope='function')
+    def before_all(self):
+        self.client = mongomock.MongoClient()
+
     def test_mongo(self):
-        config = Config().mongo_config
-        mongo = MongoController(mongo_config=config)
+        mongo = MongoController(mongo_client=self.client)
         doc = dict(user_id=123456789, username='pytest', test='Do you see me?', text='Yes!')
 
         # save
@@ -29,7 +32,7 @@ class Test(unittest.TestCase):
         # upsert
         replace_condition = dict(user_id=123456789, username='pytest')
         doc.update(dict(text='No!'))
-        assert mongo.upsert(db_name='test', collection_name='uniitest', filter=replace_condition, update_part=doc)
+        mongo.upsert(db_name='test', collection_name='uniitest', conditions=replace_condition, update_part=doc)
         new_doc = mongo.load(db_name='test', collection_name='uniitest', query=replace_condition)
         assert new_doc[0]['text'] == 'No!'
 

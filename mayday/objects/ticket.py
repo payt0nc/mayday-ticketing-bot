@@ -191,7 +191,7 @@ class Ticket:
                 value = set(value)
             if key == '_id':
                 key = 'ticket_id'
-                value = str(value)[-8:]
+                value = str(value)[-6:]
             self.__setattr__('_{}'.format(key), value)
         return self
 

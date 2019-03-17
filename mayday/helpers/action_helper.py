@@ -26,7 +26,10 @@ class ActionHelper:
 
     def save_current_action(self, action: Action) -> bool:
         self.logger.debug(action.to_dict())
-        return bool(self.mongo.save(db_name=self.DB_NAME, collection_name=self.COLLECTION_NAME, content=action.to_dict()))
+        self.mongo.upsert(db_name=self.DB_NAME, collection_name=self.COLLECTION_NAME,
+                          conditions=dict(user_id=action.user_id, username=action.username), update_part=action.to_dict())
+        return bool(self.mongo.load(db_name=self.DB_NAME, collection_name=self.COLLECTION_NAME,
+                                    query=dict(user_id=action.user_id, username=action.username)))
 
     def reset_current_action(self, action: Action) -> Action:
         self.logger.debug(action.to_dict())

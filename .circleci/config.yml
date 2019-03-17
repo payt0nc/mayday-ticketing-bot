@@ -51,7 +51,7 @@ jobs:
             CODECOV_TOKEN: 
           command: |
             . venv/bin/activate
-            pytest -v --cov=./mayday/ tests/test_*
+            pytest -v --cov=./mayday/ tests/unittests/*
             coverage xml
             python-codacy-coverage -r coverage.xml
             
@@ -61,7 +61,7 @@ jobs:
             CODECOV_TOKEN: 
           command: |
             . venv/bin/activate
-            pytest -v tests/integration_test_*
+            pytest -v tests/integration_test/
 
       - store_artifacts:
           path: test-reports
