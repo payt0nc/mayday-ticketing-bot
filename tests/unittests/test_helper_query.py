@@ -50,7 +50,7 @@ class Test(unittest.TestCase):
         query_in_cache = self.helper.update_cache_query(query)
         assert query_in_cache.dates == [503, 504]
 
-        query_in_cache = self.helper.load_cache_ticket(user_id=USER_ID, username=USERNAME)
+        query_in_cache = self.helper.load_cache_query(user_id=USER_ID, username=USERNAME)
         assert query_in_cache.dates == [503, 504]
 
     def test_reset_cache_query_with_query_in_cache(self):

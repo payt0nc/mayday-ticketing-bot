@@ -17,9 +17,7 @@ class Test(unittest.TestCase):
         doc = dict(user_id=123456789, username='pytest', test='Do you see me?', text='Yes!')
 
         # save
-        obj = mongo.save(db_name='test', collection_name='uniitest', content=doc)
-        assert obj['text'] == doc['text']
-        assert obj['test'] == doc['test']
+        assert mongo.save(db_name='test', collection_name='uniitest', content=doc)
 
         # count
         assert mongo.count(db_name='test', collection_name='uniitest', query={'text': 'Yes!'}) == 1
@@ -32,7 +30,7 @@ class Test(unittest.TestCase):
         # upsert
         replace_condition = dict(user_id=123456789, username='pytest')
         doc.update(dict(text='No!'))
-        mongo.upsert(db_name='test', collection_name='uniitest', conditions=replace_condition, update_part=doc)
+        mongo.update(db_name='test', collection_name='uniitest', conditions=replace_condition, update_part=doc)
         new_doc = mongo.load(db_name='test', collection_name='uniitest', query=replace_condition)
         assert new_doc[0]['text'] == 'No!'
 

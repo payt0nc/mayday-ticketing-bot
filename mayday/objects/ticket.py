@@ -12,14 +12,14 @@ TIMEZONE = pytz.timezone('Asia/Taipei')
 
 class Ticket:
 
-    def __init__(self, user_id: int, username: str, ticket_id: str = ''):
+    def __init__(self, user_id: int, username: str):
 
         self._user_id = user_id
         self._username = username
 
         self._category = ''
         # Ticket Info
-        self._ticket_id = ticket_id
+        self._ticket_id = ''
         self._date = ''
         self._price = int()
         self._quantity = int()
@@ -188,11 +188,11 @@ class Ticket:
     def to_obj(self, ticket_dict: dict):
         for key, value in ticket_dict.items():
             if isinstance(value, list):
-                value = set(value)
-            if key == '_id':
-                key = 'ticket_id'
-                value = str(value)[-6:]
-            self.__setattr__('_{}'.format(key), value)
+                self.__setattr__('_{}'.format(key), set(value))
+            elif key == '_id':
+                self.__setattr__('_{}'.format('ticket_id'), str(value)[-6:])
+            else:
+                self.__setattr__('_{}'.format(key), value)
         return self
 
     def to_human_readable(self) -> dict:

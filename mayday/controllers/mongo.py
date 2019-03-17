@@ -44,8 +44,8 @@ class MongoController:
         self.logger.debug(query)
         return [x for x in collection.find(query).sort('updated_at', DESCENDING)]
 
-    def upsert(self, db_name: str, collection_name: str, conditions: dict, update_part: dict) -> None:
+    def update(self, db_name: str, collection_name: str, conditions: dict, update_part: dict, upsert=False) -> None:
         collection = self.client[db_name][collection_name]
         self.logger.debug(conditions)
         self.logger.debug(update_part)
-        collection.update_one(filter=conditions, update={'$set': update_part}, upsert=True)
+        return collection.update_one(filter=conditions, update={'$set': update_part}, upsert=upsert).modified_count

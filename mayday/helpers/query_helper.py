@@ -1,7 +1,7 @@
 import mayday
 from mayday import Config
 from mayday.controllers import MongoController
-from mayday.objects import Query, Ticket
+from mayday.objects import Query
 
 
 class QueryHelper:
@@ -27,16 +27,12 @@ class QueryHelper:
     # Form Query
 
     def create_blank_query(self, query: Query) -> Query:
-        cached_query = self.mongo.save(
-            db_name=self.CACHE_DB_NAME, collection_name=self.CACHE_COLLECTION_NAME, content=query.to_dict())
-        query = Query(
-            user_id=query.user_id, username=query.username, category_id=query.category).to_obj(cached_query)
         self.logger.debug(query.to_dict())
-        query_dict = self.mongo.save(
+        new_query = self.mongo.save(
             db_name=self.CACHE_DB_NAME, collection_name=self.CACHE_COLLECTION_NAME, content=query.to_dict())
-        return Query(user_id=query.user_id, username=query.username, category_id=query.category).to_obj(query_dict)
+        return Query(query.user_id, query.username, query.category).to_obj(new_query)
 
-    def load_cache_ticket(self, user_id: int, username: str) -> Ticket:
+    def load_cache_query(self, user_id: int, username: str) -> Query:
         query = self.mongo.load(
             db_name=self.CACHE_DB_NAME, collection_name=self.CACHE_COLLECTION_NAME,
             query=dict(user_id=user_id, username=username))[0]
@@ -44,9 +40,9 @@ class QueryHelper:
         return Query(user_id=user_id, username=username, category_id=query['category']).to_obj(query)
 
     def update_cache_query(self, query: Query) -> Query:
-        self.mongo.upsert(
+        self.mongo.update(
             db_name=self.CACHE_DB_NAME, collection_name=self.CACHE_COLLECTION_NAME,
-            conditions=dict(user_id=query.user_id, username=query.username), update_part=query.to_dict())
+            conditions=dict(user_id=query.user_id, username=query.username), update_part=query.to_dict(), upsert=True)
         cached_query = self.mongo.load(
             db_name=self.CACHE_DB_NAME, collection_name=self.CACHE_COLLECTION_NAME, query=dict(user_id=query.user_id, username=query.username))
         self.logger.debug(cached_query)

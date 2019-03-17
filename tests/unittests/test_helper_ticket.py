@@ -23,7 +23,7 @@ class Test(unittest.TestCase):
     def test_create_cache_ticket(self):
 
         ticket = Ticket(user_id=USER_ID, username=USERNAME)
-        ticket_in_cache = self.helper.create_blank_ticket(ticket)
+        ticket_in_cache = self.helper.create_blank_ticket(USER_ID, USERNAME)
 
         assert ticket_in_cache.category == ticket.category
         assert ticket_in_cache.ticket_id  # can not know the ticket if before insert
@@ -45,7 +45,7 @@ class Test(unittest.TestCase):
 
     def test_update_cache_ticket(self):
         ticket = Ticket(user_id=USER_ID, username=USERNAME)
-        ticket = self.helper.create_blank_ticket(ticket)
+        ticket = self.helper.create_blank_ticket(USER_ID, USERNAME)
         assert ticket.date == ''
 
         ticket.date = 503
@@ -54,7 +54,7 @@ class Test(unittest.TestCase):
 
     def test_reset_cache_ticket_with_ticket_in_cache(self):
         ticket = Ticket(user_id=USER_ID, username=USERNAME)
-        ticket = self.helper.create_blank_ticket(ticket)
+        ticket = self.helper.create_blank_ticket(USER_ID, USERNAME)
         ticket.date = 503
         ticket = self.helper.update_cache_ticket(ticket)
         assert ticket.date == 503
