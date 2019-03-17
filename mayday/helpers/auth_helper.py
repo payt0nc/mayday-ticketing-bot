@@ -6,8 +6,10 @@ from mayday.objects import User
 
 class AuthHelper:
 
-    DB_NAME = 'user'
-    COLLECTION_NAME = 'users'
+    config = Config().schema_config
+
+    DB_NAME = config['user_db_name']
+    COLLECTION_NAME = config['user_collection_name']
 
     def __init__(self, mongo_controller: MongoController):
         self.logger = mayday.get_default_logger('auth_helper')

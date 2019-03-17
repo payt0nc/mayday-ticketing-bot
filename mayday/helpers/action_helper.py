@@ -1,22 +1,30 @@
-from mayday.controllers.redis import RedisHelper
-from mayday.controllers.request import RequestHelper
-from mayday.objects import Query, Ticket
+import mayday
+from mayday import Config
+from mayday.controllers import MongoController
+from mayday.objects import Query, Ticket, User
 
 
-class CacheHelper:
+class ActionHelper:
 
-    DB_NAME = 'cache'
-    COLLECTION_NAME = 'actions'
+    config = Config().schema_config
+    DB_NAME = config['cache_db_name']
+    COLLECTION_NAME = config['action_collection_name']
 
-    def __init__(self, feature: str, redis_helper: RedisHelper, request_helper: RequestHelper):
-        self._feature = feature
-        self._last_choice = '{}_last_choice'.format(feature)
-        self.redis = redis_helper
-        self.request_helper = request_helper
+    def __init__(self, mongo_controller: MongoController):
+        self.logger = mayday.get_default_logger('action_helper')
+        if mongo_controller:
+            self.mongo = mongo_controller
+        else:
+            self.mongo = MongoController(mongo_config=Config.mongo_config)
 
-    def init(self, user_id: int, username: username, category_id: int):
-        self.reset(user_id, username, category_id)
-        return self.get(user_id=user_id, username=username)
+    def load_last_action(self, user: User) -> dict:
+        pass
+
+    def save_current_action(self, user: User) -> dict:
+        pass
+
+    def reset_current_action(self, user: User) -> dict:
+        pass
 
     def reset(self, user_id: int, username: str, category_id: int) -> dict:
         if self._feature == 'search_ticket':
