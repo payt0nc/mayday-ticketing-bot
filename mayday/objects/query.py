@@ -99,6 +99,23 @@ class Query:
             user_id=self._user_id
         )
 
+    def to_mongo_syntax(self) -> dict:
+        draft = dict(
+            category=self.category,
+            date=self.dates,
+            price=self.prices,
+            quantity=self.quantities,
+            status=self.status
+        )
+        result = dict()
+        for key, value in draft.items():
+            if value:
+                if isinstance(value, int):
+                    result[key] = value
+                if isinstance(value, list):
+                    result[key] = {'$in': value}
+        return result
+
     def to_obj(self, query_dict: dict):
         for key, value in query_dict.items():
             if isinstance(value, list):

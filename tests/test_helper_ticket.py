@@ -72,7 +72,7 @@ class Test(unittest.TestCase):
         assert self.helper.save_ticket(ticket)
 
         tickets_in_db = self.mongo.load(
-            db_name=self.helper.TICKET_DB_NAME, collection_name=self.helper.COLLECTION_NAME,
+            db_name=self.helper.TICKET_DB_NAME, collection_name=self.helper.TICKET_COLLECTION_NAME,
             query=dict(user_id=USER_ID, username=USERNAME))
 
         assert bool(tickets_in_db)

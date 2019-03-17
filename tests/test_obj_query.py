@@ -2,43 +2,37 @@ import unittest
 
 from mayday.objects import Query
 
+USER_ID = 123456789
+USERNAME = 'testcase'
+CATEGORY = 1
+
 
 class Test(unittest.TestCase):
 
     def test_query_init(self):
-        user_id = 123456789
-        username = 'testcase'
-        category_id = 1
-
-        query = Query(user_id, username, category_id)
-        self.assertDictEqual(
-            query.to_dict(),
-            dict(
-                category=1,
-                dates=list(),
-                prices=list(),
-                quantities=list(),
-                status=1,
-                username='testcase',
-                user_id=123456789
-            )
+        query = Query(USER_ID, USERNAME, CATEGORY)
+        expect = dict(
+            category=1,
+            dates=list(),
+            prices=list(),
+            quantities=list(),
+            status=1,
+            username=USERNAME,
+            user_id=USER_ID
         )
+        self.assertDictEqual(query.to_dict(), expect)
 
     def test_query_dict_to_obj(self):
-        user_id = 123456789
-        username = 'testcase'
-        category_id = 1
-
         query = dict(
             category=1,
             dates=[503, 504],
             prices=[1, 2],
             quantities=[2, 3],
             status=1,
-            username='testcase',
-            user_id=123456789
+            username=USERNAME,
+            user_id=USER_ID
         )
-        obj = Query(user_id, username, category_id).to_obj(query)
+        obj = Query(USER_ID, USERNAME, CATEGORY).to_obj(query)
         assert obj.dates == query['dates']
         assert obj.prices == query['prices']
         assert obj.quantities == query['quantities']
@@ -48,11 +42,8 @@ class Test(unittest.TestCase):
         assert obj.to_dict() == query
 
     def test_query_update_field(self):
-        user_id = 123456789
-        username = 'testcase'
-        category_id = 0
 
-        query = Query(user_id, username, category_id)
+        query = Query(USER_ID, USERNAME, CATEGORY)
 
         query.update_field('category', 1)
         assert isinstance(query.category, int)
@@ -167,20 +158,17 @@ class Test(unittest.TestCase):
         assert isinstance(query.prices, list)
         assert query.prices == list()
 
-    def test_ticket_to_human_readable(self):
-        user_id = 123456789
-        username = 'testcase'
-        category_id = 1
+    def test_query_to_human_readable(self):
         sample_query = dict(
             category=1,
             dates=[503, 504],
             prices=[1, 2],
             quantities=[2, 3],
             status=1,
-            username='testcase',
-            user_id=123456789
+            username=USERNAME,
+            user_id=USER_ID
         )
-        query = Query(user_id, username, category_id).to_obj(sample_query)
+        query = Query(USER_ID, USERNAME, CATEGORY).to_obj(sample_query)
         query_string = query.to_human_readable()
 
         assert query_string['category'] == '原價轉讓'
@@ -188,3 +176,44 @@ class Test(unittest.TestCase):
         assert query_string['prices'] == '$1180座位, $880座位'
         assert query_string['quantities'] == '2, 3'
         assert query_string['status'] == '待交易'
+
+    def test_query_to_mongo_syntax(self):
+        sample_query = dict(
+            category=1,
+            dates=[503, 504],
+            prices=[1, 2],
+            quantities=[2, 3],
+            status=1,
+            username=USERNAME,
+            user_id=USER_ID
+        )
+        query = Query(USER_ID, USERNAME, CATEGORY).to_obj(sample_query)
+        expected = dict(
+            category=1,
+            date={'$in': [503, 504]},
+            price={'$in': [1, 2]},
+            quantity={'$in': [2, 3]},
+            status=1
+        )
+        from pprint import pprint
+        pprint(query.to_mongo_syntax())
+        self.assertDictEqual(expected, query.to_mongo_syntax())
+
+    def test_query_to_mongo_syntax_2(self):
+        sample_query = dict(
+            category=1,
+            dates=[503, 504],
+            prices=[1, 2],
+            quantities=[],
+            status=1,
+            username=USERNAME,
+            user_id=USER_ID
+        )
+        query = Query(USER_ID, USERNAME, CATEGORY).to_obj(sample_query)
+        expected = dict(
+            category=1,
+            date={'$in': [503, 504]},
+            price={'$in': [1, 2]},
+            status=1
+        )
+        self.assertDictEqual(expected, query.to_mongo_syntax())
