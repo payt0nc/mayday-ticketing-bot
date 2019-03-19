@@ -37,7 +37,9 @@ class MongoController:
         collection = self.client[db_name][collection_name]
         self.logger.debug(content)
         object_id = collection.insert_one(content).inserted_id
-        return collection.find_one({'_id': ObjectId(object_id)})
+        result = collection.find_one({'_id': ObjectId(object_id)})
+        self.logger.debug(result)
+        return result
 
     def load(self, db_name: str, collection_name: str, query: dict) -> list:
         collection = self.client[db_name][collection_name]
