@@ -193,7 +193,9 @@ class Test(unittest.TestCase):
             date={'$in': [503, 504]},
             price={'$in': [1, 2]},
             quantity={'$in': [2, 3]},
-            status=1
+            status=1,
+            user_id=USER_ID,
+            username=USERNAME
         )
         from pprint import pprint
         pprint(query.to_mongo_syntax())
@@ -214,6 +216,8 @@ class Test(unittest.TestCase):
             category=1,
             date={'$in': [503, 504]},
             price={'$in': [1, 2]},
-            status=1
+            status=1,
+            user_id=USER_ID,
+            username=USERNAME
         )
         self.assertDictEqual(expected, query.to_mongo_syntax())

@@ -105,12 +105,14 @@ class Query:
             date=self.dates,
             price=self.prices,
             quantity=self.quantities,
-            status=self.status
+            status=self.status,
+            user_id=self.user_id,
+            username=self.username
         )
         result = dict()
         for key, value in draft.items():
             if value:
-                if isinstance(value, int):
+                if isinstance(value, int) or isinstance(value, str):
                     result[key] = value
                 if isinstance(value, list):
                     result[key] = {'$in': value}

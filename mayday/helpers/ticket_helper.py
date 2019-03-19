@@ -69,7 +69,8 @@ class TicketHelper:
 
     def update_ticket(self, ticket: Ticket) -> Ticket:
         self.mongo.update(
-            db_name=self.TICKET_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME, content=ticket.to_dict())
+            db_name=self.TICKET_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME,
+            conditions=dict(ticket_id=ticket.ticket_id), update_part=ticket.to_dict())
         new_ticket = self.mongo.load(
-            db_name=self.TICKET_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME, content=dict(ticket_id=ticket.ticket_id))
-        return Ticket(user_id=ticket.user_id, username=ticket.username).to_obj(new_ticket)
+            db_name=self.TICKET_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME, query=dict(ticket_id=ticket.ticket_id))
+        return Ticket(user_id=ticket.user_id, username=ticket.username).to_obj(new_ticket[0])
