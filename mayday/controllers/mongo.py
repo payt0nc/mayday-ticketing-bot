@@ -1,5 +1,5 @@
 from bson.objectid import ObjectId
-from pymongo import DESCENDING, MongoClient
+from pymongo import ASCENDING, DESCENDING, MongoClient
 
 import mayday
 
@@ -50,4 +50,10 @@ class MongoController:
         collection = self.client[db_name][collection_name]
         self.logger.debug(conditions)
         self.logger.debug(update_part)
-        return collection.update_one(filter=conditions, update={'$set': update_part}, upsert=upsert).modified_count
+        result = collection.update_one(filter=conditions, update={'$set': update_part}, upsert=upsert).modified_count
+        self.logger.debug(result)
+        return result
+
+    def create_index(self, db_name: str, collection_name: str, field_name: str):
+        collection = self.client[db_name][collection_name]
+        return collection.create_index((field_name, ASCENDING), unique=True)
