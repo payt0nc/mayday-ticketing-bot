@@ -63,7 +63,6 @@ def test_new_user_auth(init_auth_db):
 
 def test_admin_auth(init_auth_db):
     mongo, helper = init_auth_db
-    print(mongo.load(db_name=helper.DB_NAME, collection_name=helper.COLLECTION_NAME, query=dict(user_id=123456787)))
     user = User(ADMIN_PROFILE)
     profile_in_db = helper.auth(user)
     assert profile_in_db['user_id'] == ADMIN_PROFILE['id']
@@ -74,7 +73,6 @@ def test_admin_auth(init_auth_db):
 
 def test_blacklist_auth(init_auth_db):
     mongo, helper = init_auth_db
-    print(mongo.load(db_name=helper.DB_NAME, collection_name=helper.COLLECTION_NAME, query=dict(user_id=123456788)))
     profile_in_db = helper.auth(User(BLACKLIST_PROFILE))
     assert profile_in_db['user_id'] == BLACKLIST_PROFILE['id']
     assert profile_in_db['username'] == BLACKLIST_PROFILE['username']
