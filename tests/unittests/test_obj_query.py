@@ -10,7 +10,7 @@ CATEGORY = 1
 class Test(unittest.TestCase):
 
     def test_query_init(self):
-        query = Query(USER_ID, USERNAME, CATEGORY)
+        query = Query(user_id=USER_ID, username=USERNAME, category_id=CATEGORY)
         expect = dict(
             category=1,
             dates=list(),
@@ -32,7 +32,7 @@ class Test(unittest.TestCase):
             username=USERNAME,
             user_id=USER_ID
         )
-        obj = Query(USER_ID, USERNAME, CATEGORY).to_obj(query)
+        obj = Query(user_id=USER_ID, username=USERNAME, category_id=CATEGORY).to_obj(query)
         assert obj.dates == query['dates']
         assert obj.prices == query['prices']
         assert obj.quantities == query['quantities']
@@ -43,7 +43,7 @@ class Test(unittest.TestCase):
 
     def test_query_update_field(self):
 
-        query = Query(USER_ID, USERNAME, CATEGORY)
+        query = Query(user_id=USER_ID, username=USERNAME, category_id=CATEGORY)
 
         query.update_field('category', 1)
         assert isinstance(query.category, int)
@@ -168,7 +168,7 @@ class Test(unittest.TestCase):
             username=USERNAME,
             user_id=USER_ID
         )
-        query = Query(USER_ID, USERNAME, CATEGORY).to_obj(sample_query)
+        query = Query(user_id=USER_ID, username=USERNAME, category_id=CATEGORY).to_obj(sample_query)
         query_string = query.to_human_readable()
 
         assert query_string['category'] == '原價轉讓'
@@ -187,7 +187,7 @@ class Test(unittest.TestCase):
             username=USERNAME,
             user_id=USER_ID
         )
-        query = Query(USER_ID, USERNAME, CATEGORY).to_obj(sample_query)
+        query = Query(user_id=USER_ID, username=USERNAME, category_id=CATEGORY).to_obj(sample_query)
         expected = dict(
             category=1,
             date={'$in': [503, 504]},
@@ -209,7 +209,7 @@ class Test(unittest.TestCase):
             username=USERNAME,
             user_id=USER_ID
         )
-        query = Query(USER_ID, USERNAME, CATEGORY).to_obj(sample_query)
+        query = Query(user_id=USER_ID, username=USERNAME, category_id=CATEGORY).to_obj(sample_query)
         expected = dict(
             category=1,
             date={'$in': [503, 504]},

@@ -12,7 +12,7 @@ TIMEZONE = pytz.timezone('Asia/Taipei')
 
 class Ticket:
 
-    def __init__(self, user_id: int, username: str):
+    def __init__(self, user_id: int = 0, username: str = ''):
 
         self._user_id = user_id
         self._username = username

@@ -1,11 +1,10 @@
-import pytest
 from mayday import Config
 from mayday.helpers import AuthHelper
 from mayday.controllers import MongoController
 from mayday.objects import User
 
 ADMIN_PROFILE = dict(
-    id=123456787,
+    id=123456787,  # in telegram profile
     user_id=123456787,
     username='admin',
     last_name='pytest',
@@ -17,7 +16,7 @@ ADMIN_PROFILE = dict(
 )
 
 BLACKLIST_PROFILE = dict(
-    id=123456788,
+    id=123456788,  # in telegram profile
     user_id=123456788,
     username='blacklist',
     last_name='pytest',
@@ -29,22 +28,10 @@ BLACKLIST_PROFILE = dict(
 )
 
 
-@pytest.fixture
-def init_auth_db():
+def test_new_user_auth():
     config = Config()
     mongo = MongoController(mongo_config=config.mongo_config)
     helper = AuthHelper(mongo)
-    mongo.delete_all(
-        db_name=helper.DB_NAME, collection_name=helper.COLLECTION_NAME, query=dict())
-    mongo.save(
-        db_name=helper.DB_NAME, collection_name=helper.COLLECTION_NAME, content=ADMIN_PROFILE)
-    mongo.save(
-        db_name=helper.DB_NAME, collection_name=helper.COLLECTION_NAME, content=BLACKLIST_PROFILE)
-    return mongo, helper
-
-
-def test_new_user_auth(init_auth_db):
-    mongo, helper = init_auth_db
     telegram_user_profile = dict(
         id=123456789,
         username='testcase',
@@ -61,19 +48,32 @@ def test_new_user_auth(init_auth_db):
     assert profile_in_db['is_blacklist'] is False
 
 
-def test_admin_auth(init_auth_db):
-    mongo, helper = init_auth_db
-    user = User(ADMIN_PROFILE)
-    profile_in_db = helper.auth(user)
+def test_admin_auth():
+    config = Config()
+    mongo = MongoController(mongo_config=config.mongo_config)
+    helper = AuthHelper(mongo)
+    mongo.save(db_name=helper.DB_NAME, collection_name=helper.COLLECTION_NAME, content=ADMIN_PROFILE)
+    profile_in_db = helper.auth(User(ADMIN_PROFILE))
+    assert mongo.count(
+        db_name=config.schema_config['user_db_name'],
+        collection_name=config.schema_config['user_collection_name'],
+        query=dict(user_id=ADMIN_PROFILE['id'])) == 1
     assert profile_in_db['user_id'] == ADMIN_PROFILE['id']
     assert profile_in_db['username'] == ADMIN_PROFILE['username']
     assert profile_in_db['is_admin']
     assert profile_in_db['is_blacklist'] is False
 
 
-def test_blacklist_auth(init_auth_db):
-    mongo, helper = init_auth_db
+def test_blacklist_auth():
+    config = Config()
+    mongo = MongoController(mongo_config=config.mongo_config)
+    helper = AuthHelper(mongo)
+    mongo.save(db_name=helper.DB_NAME, collection_name=helper.COLLECTION_NAME, content=BLACKLIST_PROFILE)
     profile_in_db = helper.auth(User(BLACKLIST_PROFILE))
+    assert mongo.count(
+        db_name=config.schema_config['user_db_name'],
+        collection_name=config.schema_config['user_collection_name'],
+        query=dict(user_id=BLACKLIST_PROFILE['id'])) == 1
     assert profile_in_db['user_id'] == BLACKLIST_PROFILE['id']
     assert profile_in_db['username'] == BLACKLIST_PROFILE['username']
     assert profile_in_db['is_admin'] is False

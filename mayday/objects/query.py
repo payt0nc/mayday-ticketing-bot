@@ -7,7 +7,7 @@ from mayday.item_validator import ItemValidator
 
 class Query:
 
-    def __init__(self, user_id: int, username: str, category_id: int):
+    def __init__(self, category_id: int, user_id: int = 0, username: str = ''):
 
         # Identity
         self._user_id = int(user_id)

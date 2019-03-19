@@ -30,7 +30,7 @@ class QueryHelper:
         self.logger.debug(query.to_dict())
         new_query = self.mongo.save(
             db_name=self.CACHE_DB_NAME, collection_name=self.CACHE_COLLECTION_NAME, content=query.to_dict())
-        return Query(query.user_id, query.username, query.category).to_obj(new_query)
+        return Query(user_id=query.user_id, username=query.username, category_id=query.category).to_obj(new_query)
 
     def load_cache_query(self, user_id: int, username: str) -> Query:
         query = self.mongo.load(
