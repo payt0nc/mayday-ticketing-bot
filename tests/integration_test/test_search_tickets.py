@@ -9,12 +9,12 @@ def test_search_ticket_by_date():
     mongo = MongoController(mongo_config=config.mongo_config)
     helper = QueryHelper(mongo)
 
-    tickets = helper.search_by_date(506)
+    tickets = helper.search_by_date(505)
     assert len(tickets) == 1
     ticket = Ticket().to_obj(tickets[0])
     assert ticket.category == 1
     assert ticket.ticket_id == ''
-    assert ticket.date == 506
+    assert ticket.date == 505
     assert ticket.price == 2
     assert ticket.quantity == 1
     assert ticket.section == 'C1'
@@ -26,7 +26,7 @@ def test_search_ticket_by_date():
     assert ticket.source == 1
     assert ticket.remarks == ''
     assert ticket.status == 1
-    assert ticket.username == 'test_account_2'
+    assert ticket.username == 'test_account_1'
     assert ticket.user_id == 8081
 
 
@@ -40,7 +40,7 @@ def test_search_ticket_by_section():
     ticket = tickets[0]
     assert ticket['category'] == 1
     assert ticket['ticket_id'] == ''
-    assert ticket['date'] == 506
+    assert ticket['date'] == 505
     assert ticket['price'] == 2
     assert ticket['quantity'] == 1
     assert ticket['section'] == 'C1'
@@ -52,7 +52,7 @@ def test_search_ticket_by_section():
     assert ticket['source'] == 1
     assert ticket['remarks'] == ''
     assert ticket['status'] == 1
-    assert ticket['username'] == 'test_account_2'
+    assert ticket['username'] == 'test_account_1'
     assert ticket['user_id'] == 8081
 
 
@@ -66,7 +66,7 @@ def test_search_ticket_by_query():
     ticket = tickets[0]
     assert ticket['category'] == 1
     assert ticket['ticket_id'] == ''
-    assert ticket['date'] == 506
+    assert ticket['date'] == 505
     assert ticket['price'] == 2
     assert ticket['quantity'] == 1
     assert ticket['section'] == 'C1'
@@ -78,7 +78,7 @@ def test_search_ticket_by_query():
     assert ticket['source'] == 1
     assert ticket['remarks'] == ''
     assert ticket['status'] == 1
-    assert ticket['username'] == 'test_account_2'
+    assert ticket['username'] == 'test_account_1'
     assert ticket['user_id'] == 8081
 
     tickets = helper.search_by_query(Query(category_id=1).to_obj(dict(prices=[2])))
@@ -86,7 +86,7 @@ def test_search_ticket_by_query():
     ticket = tickets[0]
     assert ticket['category'] == 1
     assert ticket['ticket_id'] == ''
-    assert ticket['date'] == 506
+    assert ticket['date'] == 505
     assert ticket['price'] == 2
     assert ticket['quantity'] == 1
     assert ticket['section'] == 'C1'
@@ -98,5 +98,5 @@ def test_search_ticket_by_query():
     assert ticket['source'] == 1
     assert ticket['remarks'] == ''
     assert ticket['status'] == 1
-    assert ticket['username'] == 'test_account_2'
+    assert ticket['username'] == 'test_account_1'
     assert ticket['user_id'] == 8081

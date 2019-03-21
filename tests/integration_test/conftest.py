@@ -6,7 +6,7 @@ from mayday.controllers import MongoController
 TICKET_1 = dict(
     category=1,
     ticket_id='',
-    date=506,
+    date=505,
     price=2,
     quantity=1,
     section='C1',
@@ -18,7 +18,7 @@ TICKET_1 = dict(
     source=1,
     remarks='',
     status=1,
-    username='test_account_2',
+    username='test_account_1',
     user_id=8081,
 )
 
@@ -37,7 +37,7 @@ TICKET_2 = dict(
     source=1,
     remarks='',
     status=1,
-    username='test_account_1',
+    username='test_account_2',
     user_id=8082,
 )
 
