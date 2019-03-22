@@ -46,22 +46,14 @@ jobs:
       # https://pytest.org
       # https://nose.readthedocs.io
       - run:
-          name: run unittests
+          name: run test
           environment:
             CODECOV_TOKEN: 
           command: |
             . venv/bin/activate
-            pytest -v --cov=./mayday/ tests/unittests/*
+            pytest -vv --cov=./mayday/ tests/*
             coverage xml
             python-codacy-coverage -r coverage.xml
-            
-      - run:
-          name: run integration tests
-          environment:
-            CODECOV_TOKEN: 
-          command: |
-            . venv/bin/activate
-            pytest -v tests/integration_test/
 
       - store_artifacts:
           path: test-reports

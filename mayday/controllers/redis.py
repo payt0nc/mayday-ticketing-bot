@@ -1,67 +1,63 @@
 import json
-import logging
-import traceback
 
 import redis
-
-logger = logging.getLogger(__name__)
+import mayday
 
 
 class NoRedisConfigException(Exception):
     pass
 
 
-class RedisHelper:
+class RedisController:
 
-    def __init__(self, config: dict = None, redis_client: redis.StrictRedis = None):
+    def __init__(self, redis_client: redis.StrictRedis = None, redis_config: dict = None):
+        self.logger = mayday.get_default_logger(log_name='redis_controller')
         if redis_client:
-            self._redis = redis_client
-        elif config:
-            pool = redis.ConnectionPool(host=config.get('redis_host', 'localhost'), db=config.get('redis_db', 0))
-            self._redis = redis.StrictRedis(connection_pool=pool)
+            self.client = redis_client
+        elif redis_config:
+            pool = redis.ConnectionPool(host=redis_config['host'], port=redis_config['port'], db=redis_config['db'])
+            self.client = redis.StrictRedis(connection_pool=pool)
         else:
             raise NoRedisConfigException
 
     def _insert(self, key: str, value: str, expiration=3600) -> bool:
         try:
-            return bool(self._redis.set(key, value, ex=expiration))
+            return bool(self.client.set(key, value, ex=expiration))
         except redis.exceptions.TimeoutError as timeout:
-            logger.error(timeout)
+            self.logger.error(timeout)
         except redis.exceptions.LockError as locked:
-            logger.error(locked)
+            self.logger.error(locked)
 
     def _load(self, key: str) -> dict:
         try:
-            result = self._redis.get(key)
+            result = self.client.get(key)
             return json.loads(result.decode()) if result else dict()
         except redis.exceptions.TimeoutError as timeout:
-            logger.error(timeout)
+            self.logger.error(timeout)
         except redis.exceptions.LockError as locked:
-            logger.error(locked)
+            self.logger.error(locked)
 
     def _delete(self, key: str) -> int:
         try:
-            return self._redis.delete(key)
+            return self.client.delete(key)
         except redis.exceptions.TimeoutError as timeout:
-            logger.error(timeout)
+            self.logger.error(timeout)
         except redis.exceptions.LockError as locked:
-            logger.error(locked)
+            self.logger.error(locked)
 
-    def save(self, profile: dict, expiration=3600) -> int:
-        key = self.get_key(profile['user_id'], profile['action'])
-        return self._insert(key, json.dumps(profile, ensure_ascii=False), expiration=expiration)
+    def save(self, user_id: int, action: str, content: dict, expiration=3600) -> int:
+        return self._insert(self.get_key(user_id, action), json.dumps(content, ensure_ascii=False), expiration=expiration)
 
-    def load(self, profile: dict) -> dict:
-        key = self.get_key(profile['user_id'], profile['action'])
-        return self._load(key)
+    def load(self, user_id: int, action: str) -> dict:
+        return self._load(self.get_key(user_id, action))
 
-    def clean(self, profile: dict) -> bool:
-        key = self.get_key(profile['user_id'], profile['action'])
+    def clean(self, user_id: int, action: str) -> bool:
+        key = self.get_key(user_id, action)
         self._delete(key)
-        return bool(self._load(key))
+        return bool(not self._load(key))
 
-    def direct_read(self, key: str) -> str:
-        return self._redis.get(key).decode()
+    def direct_read(self, user_id: int, action: str) -> str:
+        return self.client.get(self.get_key(user_id, action)).decode()
 
     @staticmethod
     def get_key(user_id: int, action: str):

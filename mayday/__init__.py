@@ -27,7 +27,7 @@ class Config:
 
         # Redis
         self.redis_host = os.environ.get('REDIS_HOST', 'localhost')
-        self.redis_port = os.environ.get('REDIS_PORT', 6627)
+        self.redis_port = os.environ.get('REDIS_PORT', 6379)
         self.redis_db = os.environ.get('REDIS_DB', 0)
 
         # Telegram
