@@ -48,30 +48,6 @@ def init_ticket_db():
     mongo = MongoController(mongo_config=config.mongo_config)
     schema_config = config.schema_config
 
-    # Cache - Action
-    mongo.delete_all(
-        db_name=schema_config['cache_db_name'],
-        collection_name=schema_config['action_collection_name'],
-        query=dict())
-
-    #  Cache - Query
-    mongo.delete_all(
-        db_name=schema_config['cache_db_name'],
-        collection_name=schema_config['query_collection_name'],
-        query=dict())
-
-    # Cache - Quick Search
-    mongo.delete_all(
-        db_name=schema_config['cache_db_name'],
-        collection_name=schema_config['quick_search_collection_name'],
-        query=dict())
-
-    # Cache - Ticket
-    mongo.delete_all(
-        db_name=schema_config['cache_db_name'],
-        collection_name=schema_config['ticket_collection_name'],
-        query=dict())
-
     # Ticket - Tickets
     mongo.delete_all(
         db_name=schema_config['ticket_db_name'],

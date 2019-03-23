@@ -33,6 +33,7 @@ def test_create_ticket():
     assert helper.save_ticket(ticket)
 
 
+'''
 def test_update_ticket():
     config = Config()
     mongo = MongoController(mongo_config=config.mongo_config)
@@ -63,3 +64,4 @@ def test_update_ticket():
     assert new_ticket.status == ticket.status
     assert new_ticket.username == ticket.username
     assert new_ticket.user_id == ticket.user_id
+'''

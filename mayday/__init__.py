@@ -33,10 +33,8 @@ class Config:
         self.telegram_token = os.environ['TELEGRAM_TOKEN']
 
         # Schema
-        self.cache_db_name = 'cache'
 
         self.query_db_name = 'query'
-        self.query_collection_name = 'queries'
         self.quick_search_collection_name = 'quick_searches'
 
         self.ticket_db_name = 'ticket'
@@ -44,8 +42,6 @@ class Config:
 
         self.user_db_name = 'user'
         self.user_collection_name = 'users'
-
-        self.action_collection_name = 'action'
 
     @property
     def aws_config(self) -> dict:
@@ -79,15 +75,12 @@ class Config:
     @property
     def schema_config(self) -> dict:
         return dict(
-            cache_db_name=self.cache_db_name,
             query_db_name=self.query_db_name,
-            query_collection_name=self.query_collection_name,
             quick_search_collection_name=self.quick_search_collection_name,
             ticket_db_name=self.ticket_db_name,
             ticket_collection_name=self.ticket_collection_name,
             user_db_name=self.user_db_name,
             user_collection_name=self.user_collection_name,
-            action_collection_name=self.action_collection_name
         )
 
 
