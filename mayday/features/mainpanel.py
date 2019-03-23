@@ -1,27 +1,29 @@
 import time
 
-import telegram
-from telegram.ext.dispatcher import run_async
-
+import mayday
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import ReplyKeyboards
-from mayday.features import (platform_stats, post_ticket, quick_search, search,
-                             support, update_ticket)
+# from mayday.features import (platform_stats, post_ticket, quick_search, search, support, update_ticket)
+from mayday.helpers import ActionHelper, AuthHelper
 from mayday.objects import User
+from telegram.ext.dispatcher import run_async
 
 KEYBOARDS = ReplyKeyboards()
+AUTH_HELPER = AuthHelper(mayday.MONGO_CONTROLLER)
+ACTION_HELPER = ActionHelper(mayday.ACTION_REDIS_CONTROLLER)
+
+logger = mayday.get_default_logger('main_panel')
 
 
 @run_async
 def start(bot, update, user_data, chat_data):
-    user = User(update._effective_user)
+    user = User(telegram_user=update.effective_user)
     if user.is_username_blank():
         update.message.reply_text(conversations.MAIN_PANEL_USERNAME_MISSING)
         return stages.END
 
-    access_pass = user.validate()
+    access_pass = AUTH_HELPER.auth(user)
     if access_pass['is_admin']:
-        # TODO: Add Admin Panel
         pass
 
     elif access_pass['is_blacklist']:
@@ -41,19 +43,17 @@ def start(bot, update, user_data, chat_data):
 
 @run_async
 def route(bot, update, user_data, chat_data):
-    telegram_info = update._effective_user
+    user = User(telegram_user=update.effective_user)
     callback_data = update.callback_query.data
-
     if callback_data == 'info':
-        telegram_info = update._effective_user
         bot.edit_message_text(
             text=conversations.INFO,
-            chat_id=telegram_info.id,
+            chat_id=user.user_id,
             message_id=update.callback_query.message.message_id,
-            reply_markup=KEYBOARDS.actions_keyboard_markup
-        )
+            reply_markup=KEYBOARDS.actions_keyboard_markup)
         return stages.MAIN_PANEL
 
+    '''
     if callback_data == 'post':
         post_ticket.start(bot, update, user_data)
         return stages.POST_SELECT_FIELD
@@ -77,7 +77,7 @@ def route(bot, update, user_data, chat_data):
     if callback_data == 'quick_search':
         quick_search.start(bot, update, user_data)
         return stages.QUICK_SEARCH_MODE_SELECTION
-
+    '''
     if callback_data == 'bye':
         done(bot, update, user_data, chat_data)
         return stages.END
@@ -85,16 +85,19 @@ def route(bot, update, user_data, chat_data):
 
 @run_async
 def done(bot, update, user_data, chat_data):
-    telegram_info = update._effective_user
+    user = User(telegram_user=update.effective_user)
     try:
         chat_id = update.callback_query.message.chat.id
     except Exception:
         chat_id = update.message.chat.id
 
+    bot.sendMessage(chat_id=update.message.chat.id, text=conversations.MAIN_PANEL_DONE)
+    '''
     bot.sendPhoto(
         chat_id=chat_id,
         photo=REDIS.direct_read('MAYDAY-BOT-CONFIG-GOODBYE_PHOTO_ID'),
         caption=conversations.MAIN_PANEL_DONE)
+    '''
     return stages.END
 
 
@@ -119,7 +122,6 @@ def timeout(bot, update, chat_data):
         chat_id = update.callback_query.message.chat.id
     except Exception:
         chat_id = update.message.chat.id
-    telegram_info = update._effective_user
     bot.edit_message_text(
         chat_id=chat_id,
         message_id=update.callback_query.message.message_id,

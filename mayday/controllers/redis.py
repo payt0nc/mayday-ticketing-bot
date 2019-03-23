@@ -1,6 +1,7 @@
 import json
 
 import redis
+
 import mayday
 
 
@@ -10,12 +11,13 @@ class NoRedisConfigException(Exception):
 
 class RedisController:
 
-    def __init__(self, redis_db: int, redis_client: redis.StrictRedis = None, redis_config: dict = None):
+    def __init__(self, db_name: str = 'actions', redis_client: redis.StrictRedis = None, redis_config: dict = None):
         self.logger = mayday.get_default_logger(log_name='redis_controller')
         if redis_client:
             self.client = redis_client
         elif redis_config:
-            pool = redis.ConnectionPool(host=redis_config['host'], port=redis_config['port'], db=redis_db)
+            pool = redis.ConnectionPool(
+                host=redis_config['host'], port=redis_config['port'], db=redis_config['dbs'].index(db_name))
             self.client = redis.StrictRedis(connection_pool=pool)
         else:
             raise NoRedisConfigException

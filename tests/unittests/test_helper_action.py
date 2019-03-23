@@ -15,7 +15,7 @@ class Test(unittest.TestCase):
 
     @pytest.fixture(autouse=True, scope='function')
     def before_all(self):
-        redis = RedisController(redis_db=0, redis_client=FakeStrictRedis())
+        redis = RedisController(redis_client=FakeStrictRedis())
         self.helper = ActionHelper(redis_controller=redis)
 
     def test_last_choice(self):

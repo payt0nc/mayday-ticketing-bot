@@ -1,13 +1,24 @@
+from telegram import User as TelegramUser
+
+
 class User:
     '''Convert Telegram User Dict to User Object'''
 
-    def __init__(self, telegram_info: dict) -> None:
-        self._user_id = telegram_info.get('id', 0)
-        self._username = telegram_info.get('username', None)
-        self._last_name = telegram_info.get('last_name', '')
-        self._first_name = telegram_info.get('first_name', '')
-        self._is_bot = telegram_info.get('is_bot', False)
-        self._language_code = telegram_info.get('language_code', '')
+    def __init__(self, telegram_info: dict = None, telegram_user: TelegramUser = None) -> None:
+        if telegram_user:
+            self._user_id = telegram_user.id
+            self._username = telegram_user.username
+            self._last_name = telegram_user.last_name
+            self._first_name = telegram_user.first_name
+            self._is_bot = telegram_user.is_bot
+            self._language_code = telegram_user.language_code
+        elif telegram_info:
+            self._user_id = telegram_info.get('id', 0)
+            self._username = telegram_info.get('username', None)
+            self._last_name = telegram_info.get('last_name', '')
+            self._first_name = telegram_info.get('first_name', '')
+            self._is_bot = telegram_info.get('is_bot', False)
+            self._language_code = telegram_info.get('language_code', '')
         self._is_admin = False
         self._is_blacklist = False
 

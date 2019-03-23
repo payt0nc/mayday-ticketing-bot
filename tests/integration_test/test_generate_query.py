@@ -9,7 +9,7 @@ USERNAME = 'test_account_1'
 
 def test_generate_query():
     config = Config()
-    redis = RedisController(redis_db=9, redis_config=config.redis_config)
+    redis = RedisController(db_name='actions', redis_config=config.redis_config)
     helper = ActionHelper(redis_controller=redis)
 
     query = Query(category_id=1, user_id=USER_ID, username=USERNAME)

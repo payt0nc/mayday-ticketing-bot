@@ -2,7 +2,7 @@
 import mayday
 from mayday import Config
 from mayday.controllers import RedisController
-from mayday.objects import Ticket, Query
+from mayday.objects import Query, Ticket
 
 
 class ActionHelper:

@@ -2,6 +2,8 @@ import json
 import logging
 import os
 
+from mayday import controllers
+
 
 class Config:
 
@@ -117,3 +119,7 @@ def get_default_logger(log_name: str, log_level: int = logging.DEBUG) -> logging
     logger.setLevel(log_level)
     logger.addHandler(console_handler())
     return logger
+
+
+ACTION_REDIS_CONTROLLER = controllers.RedisController(redis_config=Config().redis_config)
+MONGO_CONTROLLER = controllers.MongoController(mongo_config=Config().mongo_config)

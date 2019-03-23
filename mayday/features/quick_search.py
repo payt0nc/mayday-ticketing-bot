@@ -4,7 +4,6 @@ import telegram
 from telegram import chataction
 from telegram.ext.dispatcher import run_async
 
-
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import ReplyKeyboards
 from mayday.features import search

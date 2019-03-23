@@ -6,9 +6,8 @@ from telegram.ext.dispatcher import run_async
 
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import ReplyKeyboards
-from mayday.helpers.request import RequestHelper
 from mayday.helpers.feature_helpers.post_ticket_helper import PostTicketHelper
-
+from mayday.helpers.request import RequestHelper
 
 KEYBOARDS = ReplyKeyboards()
 request_helper = RequestHelper()

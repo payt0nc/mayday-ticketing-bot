@@ -8,7 +8,6 @@ from mayday.constants.replykeyboards import ReplyKeyboards
 from mayday.controllers.request import RequestHelper
 from mayday.helpers.sp_events_helper import SPEventHelper
 
-
 sp_helper = SPEventHelper('sp_helper')
 request_helper = RequestHelper()
 KEYBOARDS = ReplyKeyboards()
