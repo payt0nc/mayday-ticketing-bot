@@ -1,5 +1,8 @@
 import time
 
+from telegram.ext.dispatcher import run_async
+from telegram.parsemode import ParseMode
+
 import mayday
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import ReplyKeyboards
@@ -7,8 +10,6 @@ from mayday.constants.replykeyboards import ReplyKeyboards
 from mayday.features import support
 from mayday.helpers import ActionHelper, AuthHelper
 from mayday.objects import User
-from telegram.ext.dispatcher import run_async
-from telegram.parsemode import ParseMode
 
 KEYBOARDS = ReplyKeyboards()
 AUTH_HELPER = AuthHelper(mayday.MONGO_CONTROLLER)

@@ -1,6 +1,7 @@
-from mayday.constants import DATE_MAPPING, PRICE_MAPPING, STAT_URL
 from telegram import (InlineKeyboardButton, InlineKeyboardMarkup,
                       ReplyKeyboardMarkup)
+
+from mayday.constants import DATE_MAPPING, PRICE_MAPPING, STAT_URL
 
 
 class ReplyKeyboards:
@@ -58,7 +59,7 @@ class ReplyKeyboards:
                  InlineKeyboardButton('5.4(Sat)', callback_data=505),
                  InlineKeyboardButton('5.5(Sun)', callback_data=506)],
                 [InlineKeyboardButton('5.10(Fri)', callback_data=510),
-                [InlineKeyboardButton('5.11(Sat)', callback_data=511),
+                 InlineKeyboardButton('5.11(Sat)', callback_data=511),
                  InlineKeyboardButton('5.12(Sun)', callback_data=512)],
             ], one_time_keyboard=True),
 
