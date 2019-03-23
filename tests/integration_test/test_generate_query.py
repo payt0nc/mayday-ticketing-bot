@@ -1,7 +1,7 @@
 from mayday.objects import Query
-from mayday.helpers import QueryHelper
+from mayday.helpers import ActionHelper, QueryHelper
 from mayday import Config
-from mayday.controllers import MongoController
+from mayday.controllers import RedisController, MongoController
 
 USER_ID = 8081
 USERNAME = 'test_account_1'
@@ -9,11 +9,13 @@ USERNAME = 'test_account_1'
 
 def test_generate_query():
     config = Config()
-    mongo = MongoController(mongo_config=config.mongo_config)
-    helper = QueryHelper(mongo)
+    redis = RedisController(redis_db=9, redis_config=config.redis_config)
+    helper = ActionHelper(redis_controller=redis)
 
     query = Query(category_id=1, user_id=USER_ID, username=USERNAME)
-    cached_query = helper.create_blank_query(query)
+    assert helper.save_drafting_query(USER_ID, query)
+
+    cached_query = helper.load_drafting_query(USER_ID)
 
     assert cached_query.category == 1
     assert cached_query.user_id == USER_ID
@@ -22,13 +24,15 @@ def test_generate_query():
     # Update Field
     query = cached_query
     query.update_field('dates', 504)
-    cached_query = helper.update_cache_query(query)
+    helper.save_drafting_query(USER_ID, query)
+    cached_query = helper.load_drafting_query(USER_ID)
     assert cached_query.dates == query.dates
 
     # Update Field
     query = cached_query
     query.update_field('dates', 505)
-    cached_query = helper.update_cache_query(query)
+    helper.save_drafting_query(USER_ID, query)
+    cached_query = helper.load_drafting_query(USER_ID)
     assert cached_query.dates == query.dates
     assert cached_query.to_human_readable() == dict(
         category='原價轉讓',
@@ -41,9 +45,13 @@ def test_generate_query():
     )
 
     # Save to Quick Search
-    query = cached_query
-    assert helper.save_quick_search(cached_query)
-    cached_query = helper.load_quick_search(user_id=USER_ID, username=USERNAME)
-    assert query.category == cached_query.category
-    assert query.dates == cached_query.dates
-    assert query.to_dict() == cached_query.to_dict()
+    mongo = MongoController(mongo_config=config.mongo_config)
+    query_helper = QueryHelper(mongo_controller=mongo)
+
+    quick_search = helper.load_drafting_query(USER_ID)
+    assert query_helper.save_quick_search(quick_search)
+
+    quick_search_query = query_helper.load_quick_search(user_id=USER_ID, username=USERNAME)
+    assert query.category == quick_search_query.category
+    assert query.dates == quick_search_query.dates
+    assert query.to_dict() == quick_search_query.to_dict()
