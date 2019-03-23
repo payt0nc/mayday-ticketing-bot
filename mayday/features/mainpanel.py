@@ -7,6 +7,7 @@ from mayday.constants.replykeyboards import ReplyKeyboards
 from mayday.helpers import ActionHelper, AuthHelper
 from mayday.objects import User
 from telegram.ext.dispatcher import run_async
+from telegram.parsemode import ParseMode
 
 KEYBOARDS = ReplyKeyboards()
 AUTH_HELPER = AuthHelper(mayday.MONGO_CONTROLLER)
@@ -43,15 +44,9 @@ def start(bot, update, user_data, chat_data):
 
 @run_async
 def route(bot, update, user_data, chat_data):
-    user = User(telegram_user=update.effective_user)
     callback_data = update.callback_query.data
     if callback_data == 'info':
-        bot.edit_message_text(
-            text=conversations.INFO,
-            chat_id=user.user_id,
-            message_id=update.callback_query.message.message_id,
-            reply_markup=KEYBOARDS.actions_keyboard_markup)
-        return stages.MAIN_PANEL
+        return info(bot, update, user_data, chat_data)
 
     '''
     if callback_data == 'post':
@@ -84,14 +79,34 @@ def route(bot, update, user_data, chat_data):
 
 
 @run_async
+def info(bot, update, *args, **kwargs):
+    user = User(telegram_user=update.effective_user)
+    bot.send_photo(
+        chat_id=user.user_id,
+        photo=conversations.OFFICIAL_POSTER,
+        caption=conversations.INFO,
+        parse_mode=ParseMode.MARKDOWN)
+    time.sleep(0.5)
+    bot.send_photo(
+        chat_id=user.user_id,
+        photo=conversations.SEATING_PLAN,
+        parse_mode=ParseMode.MARKDOWN)
+    time.sleep(0.5)
+    bot.sendMessage(
+        chat_id=user.user_id,
+        text=conversations.MAIN_PANEL_START.format_map(user.to_dict()),
+        reply_markup=KEYBOARDS.actions_keyboard_markup)
+    return stages.MAIN_PANEL
+
+
+@run_async
 def done(bot, update, user_data, chat_data):
     user = User(telegram_user=update.effective_user)
     try:
         chat_id = update.callback_query.message.chat.id
     except Exception:
         chat_id = update.message.chat.id
-
-    bot.sendMessage(chat_id=update.message.chat.id, text=conversations.MAIN_PANEL_DONE)
+    bot.sendMessage(chat_id=chat_id, text=conversations.MAIN_PANEL_DONE)
     '''
     bot.sendPhoto(
         chat_id=chat_id,

@@ -246,8 +246,8 @@ UPDATE_YOURS = '''
 ## INFO ##
 ##########
 
-OFFICIAL_POSTER = 'https://scontent.ftpe7-3.fna.fbcdn.net/v/t1.0-9/54437007_2145900505476492_2174547551192088576_n.jpg?_nc_cat=102&_nc_eui2=AeEuR6NRan2b1p2s4azTva8tNbq8EvuzHYdGb1LU-m7kIfeZLHB2nf4Fuk3N8MnJgzfAK9cWA6cN3GSVgGkpY0cV74Yw45fFx3wvh5lcpXyg9A&_nc_ht=scontent.ftpe7-3.fna&oh=0d0e3e6e50a87082725281b38e42102d&oe=5D10E8E7'
-
+OFFICIAL_POSTER = 'https://raw.githubusercontent.com/Cooomma/mayday-ticketing-bot/master/asset/official_poster.jpg'
+SEATING_PLAN = 'https://raw.githubusercontent.com/Cooomma/mayday-ticketing-bot/master/asset/seating_plan.jpg'
 INFO = '''
 Mayday Just Rock It 2019 藍 BLUE
 
@@ -255,11 +255,10 @@ Mayday Just Rock It 2019 藍 BLUE
 日期：May 3,4,5,10,11,12
 時間：*19:15開始*
 門票售價：
-（座位門票）HK$1180/$880/＾$680/＾$480
+（座位門票）HK$1180/$880/^$680/^$480
 （企位門票）HK$$680
-(無障礙通道座位) HK$1180/HK$880
-（＾有部分座位可能會有視線受阻）
-[點擊查看座位圖](https://scontent.ftpe7-1.fna.fbcdn.net/v/t31.0-8/29060300_1123900231085500_5867832487083384930_o.jpg?_nc_fx=ftpe7-1&_nc_eui2=v1%3AAeHchup0xs6C6r4Frl8DxkjPp3lbPcGsWnvrEucYybvDM50CjQ-RKt568ySOmUZEXt7QT1YrfQl2RSOkqOq0pEILN5op2owZnF9XdW3jetzf-Q&oh=c4b84828c669690aec199cc69cfea1e9&oe=5B33FAFC)
+ (無障礙通道座位) HK$1180/HK$880
+ ^有部分座位可能會有視線受阻
 '''
 
 ###########
