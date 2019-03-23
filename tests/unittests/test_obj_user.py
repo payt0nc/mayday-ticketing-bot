@@ -43,8 +43,8 @@ class Test(unittest.TestCase):
             language_code='ZH'
         )
         profile = User(telegram_info)
-        assert profile.is_username_blank() is False
+        assert profile.is_username_blank()
 
         telegram_info.update(dict(username='testcase'))
         profile = User(telegram_info)
-        assert profile.is_username_blank()
+        assert profile.is_username_blank() is False

@@ -40,7 +40,7 @@ class User:
         self._is_blacklist = value
 
     def is_username_blank(self) -> bool:
-        return bool(self.username)
+        return not bool(self.username)
 
     def to_dict(self) -> dict:
         return dict(
