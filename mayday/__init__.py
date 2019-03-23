@@ -23,12 +23,11 @@ class Config:
 
         # Mongo
         self.mongo_host = os.environ.get('MONGO_HOST', 'localhost')
-        self.mongo_port = os.environ.get('MONGO_port', 27017)
+        self.mongo_port = os.environ.get('MONGO_PORT', 27017)
 
         # Redis
         self.redis_host = os.environ.get('REDIS_HOST', 'localhost')
         self.redis_port = os.environ.get('REDIS_PORT', 6379)
-        self.redis_db = os.environ.get('REDIS_DB', 0)
 
         # Telegram
         self.telegram_token = os.environ['TELEGRAM_TOKEN']
@@ -71,7 +70,7 @@ class Config:
 
     @property
     def redis_config(self) -> dict:
-        return dict(host=self.redis_host, port=self.redis_port, db=self.redis_db)
+        return dict(host=self.redis_host, port=self.redis_port, dbs=['actions', 'events', 'stats'])
 
     @property
     def telegram_config(self) -> dict:

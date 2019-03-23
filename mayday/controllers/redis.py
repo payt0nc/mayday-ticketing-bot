@@ -10,12 +10,12 @@ class NoRedisConfigException(Exception):
 
 class RedisController:
 
-    def __init__(self, redis_client: redis.StrictRedis = None, redis_config: dict = None):
+    def __init__(self, redis_db: int, redis_client: redis.StrictRedis = None, redis_config: dict = None):
         self.logger = mayday.get_default_logger(log_name='redis_controller')
         if redis_client:
             self.client = redis_client
         elif redis_config:
-            pool = redis.ConnectionPool(host=redis_config['host'], port=redis_config['port'], db=redis_config['db'])
+            pool = redis.ConnectionPool(host=redis_config['host'], port=redis_config['port'], db=redis_db)
             self.client = redis.StrictRedis(connection_pool=pool)
         else:
             raise NoRedisConfigException
@@ -45,7 +45,7 @@ class RedisController:
         except redis.exceptions.LockError as locked:
             self.logger.error(locked)
 
-    def save(self, user_id: int, action: str, content: dict, expiration=3600) -> int:
+    def save(self, user_id: int, action: str, content: dict, expiration=3600) -> bool:
         return self._insert(self.get_key(user_id, action), json.dumps(content, ensure_ascii=False), expiration=expiration)
 
     def load(self, user_id: int, action: str) -> dict:

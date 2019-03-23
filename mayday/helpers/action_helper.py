@@ -1,85 +1,62 @@
+
 import mayday
 from mayday import Config
-from mayday.controllers import MongoController
-from mayday.objects import Action
+from mayday.controllers import RedisController
+from mayday.objects import Ticket, Query
 
 
 class ActionHelper:
 
-    config = Config().schema_config
-    DB_NAME = config['cache_db_name']
-    COLLECTION_NAME = config['action_collection_name']
-
-    def __init__(self, mongo_controller: MongoController):
+    def __init__(self, redis_controller: RedisController):
         self.logger = mayday.get_default_logger('action_helper')
-        if mongo_controller:
-            self.mongo = mongo_controller
+        if redis_controller:
+            self.redis = redis_controller
         else:
-            self.mongo = MongoController(mongo_config=Config.mongo_config)
+            config = Config().redis_config
+            self.redis = RedisController(redis_db=config['dbs'].index('actions'), redis_config=config)
 
-    def load_last_action(self, user_id: int, username: str, action_module_name: str = '') -> Action:
-        actions_dict = self.mongo.load(
-            db_name=self.DB_NAME, collection_name=self.COLLECTION_NAME,
-            query=dict(user_id=user_id, username=username, action_module_name=action_module_name))[0]
-        self.logger.debug(actions_dict)
-        return Action(user_id=user_id, username=username).to_obj(actions_dict)
+    # Last Choice
 
-    def save_current_action(self, action: Action) -> bool:
-        self.logger.debug(action.to_dict())
-        self.mongo.update(db_name=self.DB_NAME, collection_name=self.COLLECTION_NAME,
-                          conditions=dict(user_id=action.user_id, username=action.username), update_part=action.to_dict(),
-                          upsert=True)
-        return bool(self.mongo.load(db_name=self.DB_NAME, collection_name=self.COLLECTION_NAME,
-                                    query=dict(user_id=action.user_id, username=action.username)))
+    def load_last_choice(self, user_id: int) -> dict:
+        result = self.redis.load(user_id=user_id, action='last_choice')
+        self.logger.debug(dict(user_id=user_id, result=result))
+        return result
 
-    def reset_current_action(self, action: Action) -> Action:
-        self.logger.debug(action.to_dict())
-        querys = self.mongo.load(
-            db_name=self.DB_NAME, collection_name=self.COLLECTION_NAME,
-            query=dict(user_id=action.user_id, username=action.username, action_module_name=action.action_module_name))
-        if querys:
-            result = self.mongo.delete_all(
-                db_name=self.DB_NAME, collection_name=self.COLLECTION_NAME,
-                query=dict(user_id=action.user_id, username=action.username, action_module_name=action.action_module_name))
-            if result is False:
-                self.logger.warning(dict(info='Cant delete action', action=action.to_dict()))
-        reset_action_draft = Action(user_id=action.user_id, username=action.username)
-        reset_action_draft.action_module_name = action.action_module_name
-        return reset_action_draft
+    def save_last_choice(self, user_id: int, field=None) -> bool:
+        self.logger.debug(dict(user_id=user_id, action='last_choice', content=dict(field=field)))
+        return self.redis.save(user_id=user_id, action='last_choice', content=dict(field=field))
 
-    '''
-    def reset(self, user_id: int, username: str, category_id: int) -> dict:
-        if self._feature == 'search_ticket':
-            content = Query(user_id=user_id, username=username, category_id=category_id).to_dict()
-            self.set(user_id, content)
-        elif self._feature == 'post_ticket':
-            content = Ticket(user_id=user_id, username=username).to_dict()
-            self.set(user_id, content)
-        elif self._feature == 'update_ticket':
-            ticket_id = self.get(user_id=user_id, username=username).get('id')
-            content = self.request_helper.get_ticket_by_ticket_id(ticket_id=ticket_id).get('info')
-            self.set(user_id=user_id, content=content)
-        return content
+    # Ticket
 
-    def get(self, user_id: int, username: str) -> dict:
-        result = self.redis.load(dict(user_id=user_id, action=self._feature))
-        return result.value if result else self.reset(user_id=user_id, username=username)
+    def load_drafting_ticket(self, user_id: int) -> Ticket:
+        result = self.redis.load(user_id=user_id, action='ticket')
+        self.logger.debug(result)
+        return Ticket(user_id=user_id).to_obj(result)
 
-    def set(self, user_id, content):
-        redis.save(dict(
-            user_id=user_id,
-            action=self._feature,
-            value=content
-        ))
+    def save_drafting_ticket(self, user_id: int, ticket: Ticket) -> bool:
+        self.logger.debug(ticket.to_dict())
+        return self.redis.save(user_id=user_id, action='ticket', content=ticket.to_dict())
 
-    def get_last_choice(self, user_id):
-        return redis.read(dict(
-            user_id=user_id,
-            action=self._last_choice)).value
+    def reset_drafting_ticket(self, user_id: int, username: str) -> Ticket:
+        self.redis.clean(user_id=user_id, action='ticket')
+        self.redis.save(user_id=user_id, action='ticket', content=Ticket(user_id=user_id, username=username).to_dict())
+        ticket = self.redis.load(user_id=user_id, action='ticket')
+        return Ticket(user_id=user_id, username=username).to_obj(ticket)
 
-    def set_last_choice(self, user_id, content):
-        redis.save(dict(
-            user_id=user_id,
-            action=self._last_choice,
-            value=content))
-    '''
+    # Query
+
+    def load_drafting_query(self, user_id: int) -> Query:
+        result = self.redis.load(user_id=user_id, action='query')
+        self.logger.debug(result)
+        return Query(category_id=-1, user_id=user_id).to_obj(result)
+
+    def save_drafting_query(self, user_id: int, query: Query) -> bool:
+        self.logger.debug(query.to_dict())
+        return self.redis.save(user_id=user_id, action='query', content=query.to_dict())
+
+    def reset_drafting_query(self, user_id: int, username: str, category: int) -> Ticket:
+        self.redis.clean(user_id=user_id, action='query')
+        self.redis.save(user_id=user_id, action='query',
+                        content=Query(category_id=category, user_id=user_id, username=username).to_dict())
+        query = self.redis.load(user_id=user_id, action='query')
+        return Query(category_id=-1, user_id=user_id, username=username).to_obj(query)

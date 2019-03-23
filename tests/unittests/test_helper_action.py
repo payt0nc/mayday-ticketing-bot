@@ -1,11 +1,10 @@
 import unittest
+
 import pytest
-import mongomock
-
-from mayday.controllers.mongo import MongoController
+from fakeredis import FakeStrictRedis
+from mayday.controllers import RedisController
 from mayday.helpers.action_helper import ActionHelper
-from mayday.objects import User, Action
-
+from mayday.objects import Action, Ticket, Query
 
 USER_ID = 123456789
 USERNAME = 'testcase'
@@ -16,33 +15,34 @@ class Test(unittest.TestCase):
 
     @pytest.fixture(autouse=True, scope='function')
     def before_all(self):
-        client = mongomock.MongoClient()
-        self.mongo = MongoController(mongo_client=client)
-        self.helper = ActionHelper(mongo_controller=self.mongo)
+        redis = RedisController(redis_db=0, redis_client=FakeStrictRedis())
+        self.helper = ActionHelper(redis_controller=redis)
 
-    def test_save_action(self):
+    def test_last_choice(self):
+        field = 'post_ticket'
+        self.helper.save_last_choice(user_id=USER_ID, field=field)
+        assert self.helper.load_last_choice(USER_ID) == dict(field=field)
 
-        action = Action(USER_ID, USERNAME)
-        assert self.helper.save_current_action(action)
+    def test_drafting_ticket(self):
+        ticket = Ticket(user_id=USER_ID, username=USERNAME)
+        ticket.update_field('date', 503)
+        self.helper.save_drafting_ticket(user_id=USER_ID, ticket=ticket)
+        ticket_in_cache = self.helper.load_drafting_ticket(user_id=USER_ID)
+        assert ticket_in_cache.to_dict() == ticket.to_dict()
 
-        action_in_cache = self.helper.load_last_action(USER_ID, USERNAME)
-        assert action.user_id == action_in_cache.user_id
-        assert action.username == action_in_cache.username
-        assert action.action_module_name == action_in_cache.action_module_name
-        assert action.field_name == action_in_cache.field_name
-        assert action.field_value == action_in_cache.field_value
+        # Reset Ticket
+        raw_ticket = Ticket(user_id=USER_ID, username=USERNAME)
+        ticket_in_cache = self.helper.reset_drafting_ticket(user_id=USER_ID, username=USERNAME)
+        assert ticket_in_cache.to_dict() == raw_ticket.to_dict()
 
-    def test_update_action(self):
-        action = Action(USER_ID, USERNAME)
-        assert self.helper.save_current_action(action)
+    def test_drafting_query(self):
+        query = Query(category_id=1, user_id=USER_ID, username=USERNAME)
+        query.update_field('dates', 503)
+        self.helper.save_drafting_query(user_id=USER_ID, query=query)
+        query_in_cache = self.helper.load_drafting_query(user_id=USER_ID)
+        assert query_in_cache.to_dict() == query.to_dict()
 
-        action = self.helper.load_last_action(USER_ID, USERNAME)
-        action.action_module_name = 'search_tickets'
-        assert self.helper.save_current_action(action)
-
-        updated_action = self.helper.load_last_action(USER_ID, USERNAME, action_module_name='search_tickets')
-        assert action.user_id == updated_action.user_id
-        assert action.username == updated_action.username
-        assert action.action_module_name == updated_action.action_module_name
-        assert action.field_name == updated_action.field_name
-        assert action.field_value == updated_action.field_value
+        # Reset Ticket
+        raw_query = Query(category_id=1, user_id=USER_ID, username=USERNAME)
+        query_in_cache = self.helper.reset_drafting_query(user_id=USER_ID, username=USERNAME, category=1)
+        assert query_in_cache.to_dict() == raw_query.to_dict()
