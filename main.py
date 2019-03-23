@@ -4,6 +4,7 @@ from mayday.constants import stages
 from mayday.constants.replykeyboards import ReplyKeyboards
 from mayday.features import mainpanel
 # from mayday.features import (mainpanel, platform_stats, post_ticket, quick_search, search, support, update_ticket)
+from mayday.features import support
 from telegram.ext import (CallbackQueryHandler, CommandHandler,
                           ConversationHandler, Filters, MessageHandler,
                           RegexHandler, Updater)
@@ -13,14 +14,14 @@ config = Config()
 
 
 def main():
-    updater = Updater(config.telegram_token, workers=64, request_kwargs={'read_timeout': 30, 'connect_timeout': 60})
+    updater = Updater(config.telegram_token, workers=4, request_kwargs={'read_timeout': 30, 'connect_timeout': 60})
     dp = updater.dispatcher
 
     # Main Panel Handler
     main_panel_handler = ConversationHandler(
         entry_points=[CommandHandler('start', mainpanel.start, pass_user_data=True, pass_chat_data=True)],
         states={
-            stages.MAIN_PANEL: [CallbackQueryHandler(mainpanel.route, pass_user_data=True, pass_chat_data=True)]
+            stages.MAIN_PANEL: [CallbackQueryHandler(mainpanel.route, pass_user_data=True, pass_chat_data=True)],
             # Post Stage
             # stages.POST_SELECT_FIELD: [CallbackQueryHandler(post_ticket.select_field, pass_user_data=True)],
             # stages.POST_FILL_VALUE: [CallbackQueryHandler(post_ticket.fill_in_field, pass_user_data=True), MessageHandler(Filters.text, post_ticket.fill_type_in_field, pass_user_data=True)],
@@ -41,10 +42,7 @@ def main():
             # stages.QUICK_SEARCH_MODE_SELECTION: [CallbackQueryHandler(quick_search.select_mode, pass_user_data=True)],
             # stages.QUICK_SEARCH_LIST: [CallbackQueryHandler(search.submit, pass_user_data=True)],
             # Event Stage
-            # stages.SUPPORT_EVENT_LIST: [CallbackQueryHandler(support.list_events, pass_user_data=True)],
-            # Ticket Stat
-            # stages.TICKET_STAT_LIST: [CallbackQueryHandler(platform_stats.backward, pass_user_data=True)]
-
+            stages.SUPPORT_EVENT_LIST: [CallbackQueryHandler(support.list_events, pass_user_data=True)],
         },
         fallbacks=[
             CommandHandler('home', mainpanel.start, pass_user_data=True, pass_chat_data=True),

@@ -176,37 +176,8 @@ QUICK_SEARCH_LIST_QUERY = '''
 ## SUPPORT ##
 #############
 
-SUPPORT_LIST_EVENTS = '''
-目前所知的應援活動：
-'''
-
+SUPPORT_LIST_EVENTS = '目前所知的應援活動：'
 SUPPORT_NONE_EVENTS = '目前沒有應援活動'
-
-SUPPORT_EVENTS_523 = '''
-[轉發] 523 節目
-https: // www.facebook.com / 523HKLifeTour/
-'''
-SUPPORT_EVENT_HOME_KONG = '''
-[轉發] 《五月之約》尋回專屬HOME KONG場的感動
-2006年的五月，
-台上只有五月天，
-台下只有熱愛他們的歌迷，
-還有汗水、淚水、呼喊聲
-交織著無數的感動與熱情。
-
-讓我們一起找回最初的感動，
-這是專屬香港的五月。
-
-https: // www.facebook.com / events / 401155273603140/
-'''
-
-SUPPORT_EVENT_HOME_KONG_CREDIT = '圖片來源：《五月之約》尋回專屬Home Kong場的感動 (by May)'
-SUPPORT_EVENT_BACK = '''
-可選擇介紹其他應援活動
-/home 回主選單
-/done 結束程式
-'''
-
 
 ############
 ## UPDATE ##

@@ -45,6 +45,9 @@ class Config:
         self.user_db_name = 'user'
         self.user_collection_name = 'users'
 
+        self.event_db_name = 'event'
+        self.event_collection_name = 'events'
+
     @property
     def aws_config(self) -> dict:
         return dict(
@@ -83,6 +86,8 @@ class Config:
             ticket_collection_name=self.ticket_collection_name,
             user_db_name=self.user_db_name,
             user_collection_name=self.user_collection_name,
+            event_db_name=self.event_db_name,
+            event_collection_name=self.event_collection_name
         )
 
 

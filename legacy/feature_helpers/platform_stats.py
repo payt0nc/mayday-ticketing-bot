@@ -18,22 +18,6 @@ def stats(bot, update, user_data):
     user = User(update._effective_user)
     message = update.callback_query.message
     # stmt = pf_helper.get_stat()
-    stmt = ''
-    bot.edit_message_text(
-        text=stmt,
-        chat_id=user.user_id,
-        message_id=message.message_id,
-        reply_markup=KEYBOARDS.return_main_panal,
-        parse_mode=telegram.ParseMode.MARKDOWN
-    )
-    return stages.TICKET_STAT_LIST
-
-
-@run_async
-def backward(bot, update, user_data):
-    callback_data = update.callback_query.data
-    message = update.callback_query.message
-    user = User(update._effective_user)
 
     if callback_data == 'mainpanel':
         bot.edit_message_text(
@@ -43,3 +27,12 @@ def backward(bot, update, user_data):
             reply_markup=KEYBOARDS.actions_keyboard_markup
         )
         return stages.MAIN_PANEL
+
+    bot.edit_message_text(
+        text='',
+        chat_id=user.user_id,
+        message_id=message.message_id,
+        reply_markup=KEYBOARDS.return_main_panal,
+        parse_mode=telegram.ParseMode.MARKDOWN
+    )
+    return stages.TICKET_STAT_LIST

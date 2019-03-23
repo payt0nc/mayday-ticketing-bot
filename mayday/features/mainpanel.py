@@ -4,6 +4,7 @@ import mayday
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import ReplyKeyboards
 # from mayday.features import (platform_stats, post_ticket, quick_search, search, support, update_ticket)
+from mayday.features import support
 from mayday.helpers import ActionHelper, AuthHelper
 from mayday.objects import User
 from telegram.ext.dispatcher import run_async
@@ -48,6 +49,9 @@ def route(bot, update, user_data, chat_data):
     if callback_data == 'info':
         return info(bot, update, user_data, chat_data)
 
+    if callback_data == 'events':
+        return support.list_events(bot, update, user_data)
+
     '''
     if callback_data == 'post':
         post_ticket.start(bot, update, user_data)
@@ -57,17 +61,9 @@ def route(bot, update, user_data, chat_data):
         search.start(bot, update, user_data)
         return stages.SEARCH_SELECT_FIELD
 
-    if callback_data == 'stats':
-        platform_stats.stats(bot, update, user_data)
-        return stages.TICKET_STAT_LIST
-
     if callback_data == 'my_ticket':
         update_ticket.start(bot, update, user_data)
         return stages.UPDATE_SELECT_TICKET
-
-    if callback_data == 'events':
-        support.start(bot, update, user_data)
-        return stages.SUPPORT_EVENT_LIST
 
     if callback_data == 'quick_search':
         quick_search.start(bot, update, user_data)

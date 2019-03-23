@@ -14,6 +14,9 @@ class QueryHelper:
     TICKET_DB_NAME = config['ticket_db_name']
     TICKET_COLLECTION_NAME = config['ticket_collection_name']
 
+    EVENT_DB_NAME = config['event_db_name']
+    EVENT_COLLECTION_NAME = config['event_collection_name']
+
     def __init__(self, mongo_controller: MongoController):
         self.logger = mayday.get_default_logger('query_helper')
         if mongo_controller:
@@ -59,6 +62,10 @@ class QueryHelper:
             db_name=self.TICKET_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME, query=query.to_mongo_syntax())
         self.logger.debug(results)
         return results
+
+    # Events
+    def list_all_events(self) -> list:
+        return self.mongo.load(db_name=self.EVENT_DB_NAME, collection_name=self.EVENT_COLLECTION_NAME, query=dict())
 
     # Util
 

@@ -1,7 +1,6 @@
+from mayday.constants import DATE_MAPPING, PRICE_MAPPING, STAT_URL
 from telegram import (InlineKeyboardButton, InlineKeyboardMarkup,
                       ReplyKeyboardMarkup)
-
-from mayday.constants import DATE_MAPPING, PRICE_MAPPING
 
 
 class ReplyKeyboards:
@@ -15,12 +14,11 @@ class ReplyKeyboards:
             ],
             [
                 InlineKeyboardButton('快速搜索🔍', callback_data='quick_search'),
-                InlineKeyboardButton('門票總覽📊', callback_data='stats'),
+                InlineKeyboardButton('我的飛💎', callback_data='my_ticket'),
             ],
             [
-                InlineKeyboardButton('我的飛💎', callback_data='my_ticket'),
+                InlineKeyboardButton('門票總覽📊', url=STAT_URL),
                 InlineKeyboardButton('五迷自發活動🙋', callback_data='events'),
-                # InlineKeyboardButton('估歌詞🎧', callback_data='lyrics_game')
             ],
             [
                 InlineKeyboardButton('演唱會資訊ℹ️', callback_data='info'),
@@ -33,8 +31,9 @@ class ReplyKeyboards:
                 [InlineKeyboardButton('5.3(Fri)', callback_data=504),
                  InlineKeyboardButton('5.4(Sat)', callback_data=505),
                  InlineKeyboardButton('5.5(Sun)', callback_data=506)],
-                [InlineKeyboardButton('5.10(Fri)', callback_data=511),
-                 InlineKeyboardButton('5.11(Sat)', callback_data=512)],
+                [InlineKeyboardButton('5.10(Fri)', callback_data=510),
+                 InlineKeyboardButton('5.11(Sat)', callback_data=511),
+                 InlineKeyboardButton('5.12(Sun)', callback_data=512)],
             ], one_time_keyboard=True),
 
             'price': InlineKeyboardMarkup([
@@ -58,8 +57,9 @@ class ReplyKeyboards:
                 [InlineKeyboardButton('5.3(Fri)', callback_data=504),
                  InlineKeyboardButton('5.4(Sat)', callback_data=505),
                  InlineKeyboardButton('5.5(Sun)', callback_data=506)],
-                [InlineKeyboardButton('5.10(Fri)', callback_data=511),
-                 InlineKeyboardButton('5.11(Sat)', callback_data=512)],
+                [InlineKeyboardButton('5.10(Fri)', callback_data=510),
+                [InlineKeyboardButton('5.11(Sat)', callback_data=511),
+                 InlineKeyboardButton('5.12(Sun)', callback_data=512)],
             ], one_time_keyboard=True),
 
             'wish_price_id': InlineKeyboardMarkup([
@@ -327,3 +327,6 @@ class ReplyKeyboards:
     @property
     def return_main_panal(self):
         return InlineKeyboardMarkup(self._return_main_panal, one_time_keyboard=True)
+
+
+KEYBOARDS = ReplyKeyboards()
