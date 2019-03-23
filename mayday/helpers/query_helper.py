@@ -59,3 +59,12 @@ class QueryHelper:
             db_name=self.TICKET_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME, query=query.to_mongo_syntax())
         self.logger.debug(results)
         return results
+
+    # Util
+
+    @staticmethod
+    def split_tickets_traits(tickets: list, size: int = 5) -> list:
+        trait = [ticket.to_human_readable() for ticket in tickets]
+        if len(trait) <= size:
+            return [trait]
+        return [trait[i: i+size] for i in range(0, len(trait), size)]

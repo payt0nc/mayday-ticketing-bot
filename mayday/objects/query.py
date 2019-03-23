@@ -2,7 +2,7 @@ import time
 
 from mayday.constants import (CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING,
                               STATUS_MAPPING)
-from mayday.item_validator import ItemValidator
+from mayday.helpers.item_validator import ItemValidator
 
 
 class Query:

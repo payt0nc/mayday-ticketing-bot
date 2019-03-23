@@ -1,7 +1,7 @@
 import unittest
 
+from mayday.helpers.item_validator import ItemValidator
 from mayday.objects import Ticket
-from mayday.item_validator import ItemValidator
 
 USERNAME = 'Mayday'
 USER_ID = 123456789

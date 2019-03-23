@@ -4,7 +4,7 @@ import pytest
 from fakeredis import FakeStrictRedis
 from mayday.controllers import RedisController
 from mayday.helpers.action_helper import ActionHelper
-from mayday.objects import Action, Ticket, Query
+from mayday.objects import Ticket, Query
 
 USER_ID = 123456789
 USERNAME = 'testcase'

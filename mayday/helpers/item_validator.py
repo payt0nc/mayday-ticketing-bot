@@ -1,5 +1,3 @@
-
-
 class ItemValidator:
 
     def __init__(self, ticket: dict):

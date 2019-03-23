@@ -1,12 +1,15 @@
-from mayday import LogConfig
-from mayday.constants import (CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING,
-                              STATUS_MAPPING, conversations)
-from mayday.helpers import Helper
-
-flogger = LogConfig.flogger
+import mayday
+from mayday.controllers import MongoController, RedisController
+from mayday.helpers import ActionHelper, TicketHelper
+from mayday.objects import Ticket
 
 
-class PostTicketHelper(Helper):
+class PostTicketHelper:
+
+    def __init__(self, redis_controller: RedisController, mongo_controller: MongoController):
+        self.logger = mayday.get_default_logger('post_ticket_helper')
+        self.redis = redis_controller
+        self.mongo = mongo_controller
 
     def fill_in_wishlist(self, ticket, todos):
         for key in todos:

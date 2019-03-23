@@ -5,7 +5,7 @@ import pytz
 
 from mayday.constants import (CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING,
                               STATUS_MAPPING)
-from mayday.item_validator import ItemValidator
+from mayday.helpers.item_validator import ItemValidator
 
 TIMEZONE = pytz.timezone('Asia/Taipei')
 
@@ -211,7 +211,6 @@ class Ticket:
             wish_dates=', '.join(sorted(set(map(DATE_MAPPING.get, self.wish_dates)))),
             wish_prices=', '.join(sorted(set(map(PRICE_MAPPING.get, self.wish_prices)))),
             wish_quantities=', '.join(sorted(map(str, self.wish_quantities))),
-            user_id=self._user_id,
             username=self._username,
             created_at=datetime.fromtimestamp(self._created_at).replace(tzinfo=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S'),
             updated_at=datetime.fromtimestamp(self._updated_at).replace(tzinfo=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S')
