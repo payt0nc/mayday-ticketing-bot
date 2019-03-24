@@ -1,12 +1,10 @@
-import re
-
 from telegram.ext.dispatcher import run_async
 
 from mayday import MONGO_CONTROLLER
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
 from mayday.helpers import AuthHelper, QueryHelper, TicketHelper, UpdateHelper
-from mayday.objects import Ticket, User
+from mayday.objects import User
 
 auth_helper = AuthHelper(MONGO_CONTROLLER)
 query_helper = QueryHelper(MONGO_CONTROLLER)

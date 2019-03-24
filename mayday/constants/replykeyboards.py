@@ -1,7 +1,5 @@
-from telegram import (InlineKeyboardButton, InlineKeyboardMarkup,
-                      ReplyKeyboardMarkup)
-
-from mayday.constants import DATE_MAPPING, PRICE_MAPPING, STAT_URL
+from mayday.constants import DATE_MAPPING, STAT_URL
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 
 class ReplyKeyboards:

@@ -1,17 +1,12 @@
-import traceback
-
+from mayday.constants import conversations, stages
+from mayday.constants.replykeyboards import KEYBOARDS
+from mayday.features import search
+from mayday.helpers import QuickSearchHelper
 import telegram
 from telegram import chataction
 from telegram.ext.dispatcher import run_async
 
-from mayday.constants import conversations, stages
-from mayday.constants.replykeyboards import ReplyKeyboards
-from mayday.features import search
-from mayday.helpers.quick_search_helper import QuickSearchHelper
-from mayday.utils import log_util
-
 quick_search_helper = QuickSearchHelper('quick_search')
-KEYBOARDS = ReplyKeyboards()
 
 
 @run_async

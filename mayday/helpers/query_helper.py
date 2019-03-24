@@ -1,6 +1,5 @@
 import mayday
 from mayday import Config
-from mayday.constants import conversations
 from mayday.controllers import MongoController
 from mayday.objects import Query, Ticket
 

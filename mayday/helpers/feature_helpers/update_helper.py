@@ -1,8 +1,6 @@
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
-
-from mayday.constants import conversations
 from mayday.helpers import FeatureHelper
 from mayday.objects import Ticket
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 
 class UpdateHelper(FeatureHelper):
