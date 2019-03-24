@@ -29,9 +29,9 @@ class ReplyKeyboards:
 
         self._conditions_keyboard_mapping = {
             'date': InlineKeyboardMarkup([
-                [InlineKeyboardButton('5.3(Fri)', callback_data=504),
-                 InlineKeyboardButton('5.4(Sat)', callback_data=505),
-                 InlineKeyboardButton('5.5(Sun)', callback_data=506)],
+                [InlineKeyboardButton('5.3(Fri)', callback_data=503),
+                 InlineKeyboardButton('5.4(Sat)', callback_data=504),
+                 InlineKeyboardButton('5.5(Sun)', callback_data=505)],
                 [InlineKeyboardButton('5.10(Fri)', callback_data=510),
                  InlineKeyboardButton('5.11(Sat)', callback_data=511),
                  InlineKeyboardButton('5.12(Sun)', callback_data=512)],
@@ -54,16 +54,16 @@ class ReplyKeyboards:
                  InlineKeyboardButton('4', callback_data=4)],
             ], one_time_keyboard=True),
 
-            'wish_date': InlineKeyboardMarkup([
-                [InlineKeyboardButton('5.3(Fri)', callback_data=504),
-                 InlineKeyboardButton('5.4(Sat)', callback_data=505),
-                 InlineKeyboardButton('5.5(Sun)', callback_data=506)],
+            'wish_dates': InlineKeyboardMarkup([
+                [InlineKeyboardButton('5.3(Fri)', callback_data=503),
+                 InlineKeyboardButton('5.4(Sat)', callback_data=504),
+                 InlineKeyboardButton('5.5(Sun)', callback_data=505)],
                 [InlineKeyboardButton('5.10(Fri)', callback_data=510),
                  InlineKeyboardButton('5.11(Sat)', callback_data=511),
                  InlineKeyboardButton('5.12(Sun)', callback_data=512)],
             ], one_time_keyboard=True),
 
-            'wish_price_id': InlineKeyboardMarkup([
+            'wish_prices': InlineKeyboardMarkup([
                 [InlineKeyboardButton('$1180座位', callback_data=1),
                  InlineKeyboardButton('$880座位', callback_data=2)],
                 [InlineKeyboardButton('$680座位', callback_data=3),
@@ -73,19 +73,18 @@ class ReplyKeyboards:
                  InlineKeyboardButton('$480座位', callback_data=7)]
             ], one_time_keyboard=True),
 
-            'wish_quantity': InlineKeyboardMarkup([
+            'wish_quantities': InlineKeyboardMarkup([
                 [InlineKeyboardButton('1', callback_data=1),
                  InlineKeyboardButton('2', callback_data=2)],
                 [InlineKeyboardButton('3', callback_data=3),
                  InlineKeyboardButton('4', callback_data=4)],
             ], one_time_keyboard=True),
-            'status_id': InlineKeyboardMarkup([
+            'status': InlineKeyboardMarkup([
                 [InlineKeyboardButton('待交易', callback_data=1),
                  InlineKeyboardButton('洽談中', callback_data=2)],
                 [InlineKeyboardButton('已交易', callback_data=3),
                  InlineKeyboardButton('已取消', callback_data=4)],
             ], one_time_keyboard=True),
-
             'section': {
                 1: InlineKeyboardMarkup([
                     [InlineKeyboardButton('A1', callback_data='A1'),

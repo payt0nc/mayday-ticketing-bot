@@ -5,16 +5,13 @@ from telegram.parsemode import ParseMode
 
 import mayday
 from mayday.constants import conversations, stages
-from mayday.constants.replykeyboards import ReplyKeyboards
+from mayday.constants.replykeyboards import KEYBOARDS
 # from mayday.features import (platform_stats, post_ticket, quick_search, search, support, update_ticket)
-from mayday.features import support
-from mayday.helpers import ActionHelper, AuthHelper
+from mayday.features import post_ticket, support, update_ticket
+from mayday.helpers import AuthHelper
 from mayday.objects import User
 
-KEYBOARDS = ReplyKeyboards()
 AUTH_HELPER = AuthHelper(mayday.MONGO_CONTROLLER)
-ACTION_HELPER = ActionHelper(mayday.ACTION_REDIS_CONTROLLER)
-
 logger = mayday.get_default_logger('main_panel')
 
 
@@ -53,18 +50,15 @@ def route(bot, update, user_data, chat_data):
     if callback_data == 'events':
         return support.list_events(bot, update, user_data)
 
-    '''
-    if callback_data == 'post':
-        post_ticket.start(bot, update, user_data)
-        return stages.POST_SELECT_FIELD
+    if callback_data == 'my_ticket':
+        return update_ticket.start(bot, update, user_data)
 
+    if callback_data == 'post':
+        return post_ticket.start(bot, update, user_data)
+    '''
     if callback_data == 'search':
         search.start(bot, update, user_data)
         return stages.SEARCH_SELECT_FIELD
-
-    if callback_data == 'my_ticket':
-        update_ticket.start(bot, update, user_data)
-        return stages.UPDATE_SELECT_TICKET
 
     if callback_data == 'quick_search':
         quick_search.start(bot, update, user_data)

@@ -13,9 +13,9 @@ class Test(unittest.TestCase):
         self.assertDictEqual(
             ticket.to_dict(),
             dict(
-                category='',
+                category=int(),
                 ticket_id='',
-                date='',
+                date=int(),
                 price=int(),
                 quantity=int(),
                 section='',

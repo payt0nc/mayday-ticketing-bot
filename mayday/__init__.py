@@ -71,7 +71,7 @@ class Config:
 
     @property
     def redis_config(self) -> dict:
-        return dict(host=self.redis_host, port=self.redis_port, dbs=['actions', 'events', 'stats'])
+        return dict(host=self.redis_host, port=self.redis_port, dbs=['search', 'post', 'quick_search', 'update', 'events', 'stats'])
 
     @property
     def telegram_config(self) -> dict:
@@ -126,5 +126,4 @@ def get_default_logger(log_name: str, log_level: int = logging.DEBUG) -> logging
     return logger
 
 
-ACTION_REDIS_CONTROLLER = controllers.RedisController(redis_config=Config().redis_config)
 MONGO_CONTROLLER = controllers.MongoController(mongo_config=Config().mongo_config)

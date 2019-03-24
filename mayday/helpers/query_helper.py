@@ -1,7 +1,8 @@
 import mayday
 from mayday import Config
+from mayday.constants import conversations
 from mayday.controllers import MongoController
-from mayday.objects import Query
+from mayday.objects import Query, Ticket
 
 
 class QueryHelper:
@@ -56,6 +57,18 @@ class QueryHelper:
         self.logger.debug(results)
         return results
 
+    def search_by_user_id(self, user_id: int) -> list:
+        results = self.mongo.load(
+            db_name=self.TICKET_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME, query=dict(user_id=user_id))
+        self.logger.debug(results)
+        return [Ticket().to_obj(ticket) for ticket in results]
+
+    def search_by_ticket_id(self, ticket_id: str) -> Ticket:
+        results = self.mongo.load(
+            db_name=self.TICKET_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME, query=dict(ticket_id=ticket_id))
+        self.logger.debug(results)
+        return Ticket().to_obj(results[0])
+
     def search_by_query(self, query: Query) -> list:
         self.logger.info(query.to_dict())
         results = self.mongo.load(
@@ -73,5 +86,5 @@ class QueryHelper:
     def split_tickets_traits(tickets: list, size: int = 5) -> list:
         trait = [ticket.to_human_readable() for ticket in tickets]
         if len(trait) <= size:
-            return [trait]
+            return [[trait]]
         return [trait[i: i+size] for i in range(0, len(trait), size)]

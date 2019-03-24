@@ -42,22 +42,13 @@ class Helper:
         return result.value if result else self.reset_cache(user_id=user_id, username=username)
 
     def set_cache(self, user_id, content):
-        redis.save(dict(
-            user_id=user_id,
-            action=self._task,
-            value=content
-        ))
+        redis.save(dict(user_id=user_id, action=self._task, value=content))
 
     def get_last_choice(self, user_id):
-        return redis.read(dict(
-            user_id=user_id,
-            action=self._last_choice)).value
+        return redis.read(dict(user_id=user_id, action=self._last_choice)).value
 
     def set_last_choice(self, user_id, content):
-        redis.save(dict(
-            user_id=user_id,
-            action=self._last_choice,
-            value=content))
+        redis.save(dict(user_id=user_id, action=self._last_choice, value=content))
 
     # def get_lastest_auth(self, telegram_info):
         # FIXME: removed

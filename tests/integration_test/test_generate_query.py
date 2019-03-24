@@ -1,5 +1,5 @@
 from mayday.objects import Query
-from mayday.helpers import ActionHelper, QueryHelper
+from mayday.helpers import FeatureHelper, QueryHelper
 from mayday import Config
 from mayday.controllers import RedisController, MongoController
 
@@ -9,8 +9,8 @@ USERNAME = 'test_account_1'
 
 def test_generate_query():
     config = Config()
-    redis = RedisController(db_name='actions', redis_config=config.redis_config)
-    helper = ActionHelper(redis_controller=redis)
+    redis = RedisController(db_name='search', redis_config=config.redis_config)
+    helper = FeatureHelper(feature='search', redis_controller=redis)
 
     query = Query(category_id=1, user_id=USER_ID, username=USERNAME)
     assert helper.save_drafting_query(USER_ID, query)

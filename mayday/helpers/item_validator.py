@@ -13,25 +13,14 @@ class ItemValidator:
         self.validate_quantity()
         return self.get_report()
 
-    def check_ticket_with_wishlist(self) -> dict:
-        self.validate_category()
-        self.validate_status()
-        self.validate_date()
-        self.validate_price()
-        self.validate_quantity()
-        self.validate_wish_date()
-        self.validate_wish_price()
-        self.validate_wish_quantity()
-        return self.get_report()
-
     def check_query(self) -> dict:
         self.validate_category()
         return self.get_report()
 
     def check_wishlist(self) -> dict:
-        self.validate_wish_date()
-        self.validate_wish_price()
-        self.validate_wish_quantity()
+        self.validate_wish_dates()
+        self.validate_wish_prices()
+        self.validate_wish_quantities()
         return self.get_report()
 
     def get_report(self) -> dict:
@@ -69,20 +58,20 @@ class ItemValidator:
             self._error_message.append('門票狀態未填喔')
         self._validation.append(result)
 
-    def validate_wish_date(self):
-        result = bool(self._ticket.get('wish_date'))
+    def validate_wish_dates(self):
+        result = bool(self._ticket.get('wish_dates'))
         if result is False:
             self._error_message.append('希望交換的日期未填喔')
         self._validation.append(result)
 
-    def validate_wish_price(self):
-        result = bool(self._ticket.get('wish_price'))
+    def validate_wish_prices(self):
+        result = bool(self._ticket.get('wish_prices'))
         if result is False:
             self._error_message.append('希望交換的價格種類未填喔')
         self._validation.append(result)
 
-    def validate_wish_quantity(self):
-        result = bool(self._ticket.get('wish_quantity'))
+    def validate_wish_quantities(self):
+        result = bool(self._ticket.get('wish_quantities'))
         if result is False:
             self._error_message.append('希望交換的數量未填喔')
         self._validation.append(result)

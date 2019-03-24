@@ -17,10 +17,10 @@ class Ticket:
         self._user_id = user_id
         self._username = username
 
-        self._category = ''
+        self._category = int()
         # Ticket Info
         self._ticket_id = ''
-        self._date = ''
+        self._date = int()
         self._price = int()
         self._quantity = int()
         self._section = ''
@@ -64,7 +64,7 @@ class Ticket:
 
     @date.setter
     def date(self, value: int):
-        self._date = value
+        self._date = int(value)
 
     @property
     def price(self) -> int:
@@ -72,7 +72,7 @@ class Ticket:
 
     @price.setter
     def price(self, value: int):
-        self._price = value
+        self._price = int(value)
 
     @property
     def quantity(self) -> int:
@@ -80,7 +80,7 @@ class Ticket:
 
     @quantity.setter
     def quantity(self, value: int):
-        self._quantity = value
+        self._quantity = int(value)
 
     @property
     def section(self) -> str:
@@ -112,7 +112,7 @@ class Ticket:
 
     @wish_dates.setter
     def wish_dates(self, value: int):
-        self._wish_dates.add(value)
+        self._wish_dates.add(int(value))
 
     @property
     def wish_prices(self) -> list:
@@ -120,7 +120,7 @@ class Ticket:
 
     @wish_prices.setter
     def wish_prices(self, value: int):
-        self._wish_prices.add(value)
+        self._wish_prices.add(int(value))
 
     @property
     def wish_quantities(self) -> list:
@@ -128,7 +128,7 @@ class Ticket:
 
     @wish_quantities.setter
     def wish_quantities(self, value: int):
-        self._wish_quantities.add(value)
+        self._wish_quantities.add(int(value))
 
     @property
     def status(self) -> int:
@@ -136,7 +136,7 @@ class Ticket:
 
     @status.setter
     def status(self, value: int):
-        self._status = value
+        self._status = int(value)
 
     @property
     def source(self) -> int:
@@ -144,7 +144,7 @@ class Ticket:
 
     @source.setter
     def source(self, value: int):
-        self._source = value
+        self._source = int(value)
 
     @property
     def remarks(self) -> str:
@@ -197,21 +197,21 @@ class Ticket:
 
     def to_human_readable(self) -> dict:
         return dict(
-            category=CATEGORY_MAPPING.get(self.category),
-            ticket_id=self.ticket_id,
-            date=DATE_MAPPING.get(self.date),
-            price=PRICE_MAPPING.get(self.price),
-            quantity=self.quantity,
-            section=self.section,
-            row=self.row,
-            seat=self.seat,
-            status=STATUS_MAPPING.get(self.status),
-            source=self.source,
-            remarks=self.remarks,
+            category=CATEGORY_MAPPING.get(self.category, ''),
+            ticket_id=self.ticket_id if self.ticket_id else '',
+            date=DATE_MAPPING.get(self.date, ''),
+            price=PRICE_MAPPING.get(self.price, ''),
+            quantity=self.quantity if self.quantity else '',
+            section=self.section if self.section else '',
+            row=self.row if self.row else '',
+            seat=self.seat if self.seat else '',
+            status=STATUS_MAPPING.get(self.status, ''),
+            source=self.source if self.source else '',
+            remarks=self.remarks if self.remarks else '',
             wish_dates=', '.join(sorted(set(map(DATE_MAPPING.get, self.wish_dates)))),
             wish_prices=', '.join(sorted(set(map(PRICE_MAPPING.get, self.wish_prices)))),
             wish_quantities=', '.join(sorted(map(str, self.wish_quantities))),
-            username=self._username,
+            username=self.username,
             created_at=datetime.fromtimestamp(self._created_at).replace(tzinfo=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S'),
             updated_at=datetime.fromtimestamp(self._updated_at).replace(tzinfo=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S')
         )
@@ -225,12 +225,24 @@ class Ticket:
             else:
                 source.add(field_value)
             self.__setattr__(field_name, source)
+        elif isinstance(self.__getattribute__(field_name), int):
+            self.__setattr__(field_name, int(field_value))
         else:
             self.__setattr__(field_name, field_value)
         return self
 
     def validate(self) -> dict:
-        validator = ItemValidator(self.to_dict())
-        if self.category == 2:  # For Excahnge Ticket
-            return validator.check_ticket_with_wishlist()
-        return validator.check_ticket()
+        return ItemValidator(self.to_dict()).check_ticket()
+
+    def validate_wishlist(self) -> dict:
+        return ItemValidator(self.to_dict()).check_wishlist()
+
+    def fill_full_wishlist(self):
+        if self.category == 2:
+            if not self.wish_dates:
+                self._wish_dates = list(DATE_MAPPING.keys())
+            if not self.wish_prices:
+                self._wish_prices = list(PRICE_MAPPING.keys())
+            if not self.wish_quantities:
+                self._wish_quantities = [x for x in range(0, 5)]
+        return self

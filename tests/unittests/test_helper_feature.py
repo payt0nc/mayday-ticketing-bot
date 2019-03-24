@@ -3,7 +3,7 @@ import unittest
 import pytest
 from fakeredis import FakeStrictRedis
 from mayday.controllers import RedisController
-from mayday.helpers.action_helper import ActionHelper
+from mayday.helpers import FeatureHelper
 from mayday.objects import Ticket, Query
 
 USER_ID = 123456789
@@ -16,12 +16,16 @@ class Test(unittest.TestCase):
     @pytest.fixture(autouse=True, scope='function')
     def before_all(self):
         redis = RedisController(redis_client=FakeStrictRedis())
-        self.helper = ActionHelper(redis_controller=redis)
+        self.helper = FeatureHelper(feature='test', redis_controller=redis)
+
+    def test_cache(self):
+        assert self.helper.save_cache(USER_ID, 'test')
+        assert self.helper.load_cache(USER_ID) == 'test'
 
     def test_last_choice(self):
         field = 'post_ticket'
         self.helper.save_last_choice(user_id=USER_ID, field=field)
-        assert self.helper.load_last_choice(USER_ID) == dict(field=field)
+        assert self.helper.load_last_choice(USER_ID) == field
 
     def test_drafting_ticket(self):
         ticket = Ticket(user_id=USER_ID, username=USERNAME)

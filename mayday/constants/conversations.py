@@ -15,12 +15,12 @@ Telegram Username: @{username}
 座位區域: {section}
 座位行數: {row}
 備註: {remarks}
-最後更新時間: {update_at}
+最後更新時間: {updated_at}
 
 == 換票部分 ==
-希望交換的日期: {wish_date}
-希望交換的價格種類: {wish_price}
-希望交換的數量: {wish_quantity}
+希望交換的日期: {wish_dates}
+希望交換的價格種類: {wish_prices}
+希望交換的數量: {wish_quantities}
 '''
 
 ################
@@ -64,7 +64,7 @@ MAIN_PANEL_TIMEOUT = '''
 ## POST TICKET ##
 #################
 
-POST_TICKET_ERROR = '系統錯誤 請稍後再試'
+POST_TICKET_CATOGORY = '請選擇門票類型'
 POST_TICKET_CHECK = '''請再一次確認你的門票
 
 Telegram Username: @{username}
@@ -78,10 +78,11 @@ Telegram Username: @{username}
 備註: {remarks}
 
 == 換票部分 ==
-希望交換的日期: {wish_date}
-希望交換的價格種類: {wish_price}
-希望交換的數量: {wish_quantity}
+希望交換的日期: {wish_dates}
+希望交換的價格種類: {wish_prices}
+希望交換的數量: {wish_quantities}
 '''
+POST_TICKET_ERROR = '系統錯誤 請稍後再試'
 POST_TICKET_INFO = '{message}係?'
 POST_TICKET_INTO_DB = '你的門票已經被紀錄'
 POST_TICKET_RESET = '重置完成'
@@ -99,9 +100,9 @@ Telegram Username: @{username}
 
 == 僅限換票填寫(供配對使用) ==
 若為欄位不填寫 則表示可交換任意條件
-希望交換的日期: {wish_date}
-希望交換的價格種類: {wish_price}
-希望交換的數量: {wish_quantity}
+希望交換的日期: {wish_dates}
+希望交換的價格種類: {wish_prices}
+希望交換的數量: {wish_quantities}
 '''
 POST_TICKET_SECTION = '''請先填寫票面價格再輸入座位區域'''
 
@@ -115,9 +116,9 @@ SEARCH_CHECK = '''請再一次確認你查詢的條件.
 (⚠️為必填項)
 ⚠️門票類別: {category}
 門票狀態: {status}
-日期: {date}
-票面價格: {price}
-數量: {quantity}
+日期: {dates}
+票面價格: {prices}
+數量: {quantities}
 '''
 SEARCH_TICKET_ERROR = '系統錯誤 請稍後再試'
 SEARCH_TICKET_INFO = '{message}係?'
@@ -128,9 +129,9 @@ SEARCH_TICKET_START = '''查詢的條件:
 (⚠️為必填項)
 ⚠️門票類別: {category}
 門票狀態: {status}
-日期: {date}
-票面價格: {price}
-數量: {quantity}
+日期: {dates}
+票面價格: {prices}
+數量: {quantities}
 '''
 
 ##################
@@ -154,9 +155,9 @@ QUICK_SEARCH_INSERT_SUCESS = '''搜索條件已被紀錄
 當前搜索條件
 門票類別: {category}
 門票狀態: {status}
-日期: {date}
-票面價格: {price}
-數量: {quantity}
+日期: {dates}
+票面價格: {prices}
+數量: {quantities}
 '''
 QUICK_SEARCH_NULL = '''冇快速搜索的紀錄
 快速搜索需要在 `搜索門票` 當中添加
@@ -166,9 +167,9 @@ QUICK_SEARCH_LIST_QUERY = '''
 儲存的快速搜索條件:
 門票類別: {category}
 門票狀態: {status}
-日期: {date}
-票面價格: {price}
-數量: {quantity}
+日期: {dates}
+票面價格: {prices}
+數量: {quantities}
 '''
 
 
@@ -184,7 +185,7 @@ SUPPORT_NONE_EVENTS = '目前沒有應援活動'
 ############
 
 UPDATE_CHECK = '''請再一次確認你的門票
-門票編號: {id}
+門票編號: {ticket_id}
 Telegram Username: @{username}
 門票類型: {category}
 門票狀態: {status}
@@ -201,7 +202,7 @@ UPDATE_INTO_DB = '你張門票已經畀紀錄'
 UPDATE_RESET = '重置完成'
 UPDATE_START = '''請選擇要更新的門票'''
 UPDATE_YOURS = '''
-門票編號: {id}
+門票編號: {ticket_id}
 門票狀態: {status}
 門票類型: {category}
 日期: {date}
@@ -210,7 +211,7 @@ UPDATE_YOURS = '''
 座位區域: {section}
 座位行數: {row}
 備註: {remarks}
-最後更新時間: {update_at}
+最後更新時間: {updated_at}
 '''
 
 ##########
@@ -238,7 +239,7 @@ Mayday Just Rock It 2019 藍 BLUE
 STATS_NONE = '''目前未有門票紀錄'''
 STATS = '''
 目前的門票狀況:
-更新時間: {update_at}
+更新時間: {updated_at}
 依門票狀態統計:
 {status_distribution}
 
