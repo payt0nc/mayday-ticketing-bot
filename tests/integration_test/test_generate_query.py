@@ -51,7 +51,7 @@ def test_generate_query():
     quick_search = helper.load_drafting_query(USER_ID)
     assert query_helper.save_quick_search(quick_search)
 
-    quick_search_query = query_helper.load_quick_search(user_id=USER_ID, username=USERNAME)
+    quick_search_query = query_helper.load_quick_search(user_id=USER_ID)
     assert query.category == quick_search_query.category
     assert query.dates == quick_search_query.dates
     assert query.to_dict() == quick_search_query.to_dict()

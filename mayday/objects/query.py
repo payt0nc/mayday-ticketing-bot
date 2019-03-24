@@ -30,7 +30,7 @@ class Query:
 
     @property
     def dates(self) -> list:
-        return sorted(self._dates)
+        return sorted(map(int, self._dates))
 
     @dates.setter
     def dates(self, value: int):
@@ -38,7 +38,7 @@ class Query:
 
     @property
     def prices(self) -> list:
-        return sorted(self._prices)
+        return sorted(map(int, self._prices))
 
     @prices.setter
     def prices(self, value: int):
@@ -46,7 +46,7 @@ class Query:
 
     @property
     def quantities(self) -> list:
-        return sorted(self._quantities)
+        return sorted(map(int, self._quantities))
 
     @quantities.setter
     def quantities(self, value: int):
@@ -89,11 +89,15 @@ class Query:
         )
 
     def to_human_readable(self) -> dict:
+        dates = list(map(DATE_MAPPING.get, self.dates)) if self.dates else list()
+        prices = list(map(PRICE_MAPPING.get, self.prices)) if self.prices else list()
+        quantities = sorted(map(str, self.quantities)) if self.quantities else list()
+
         return dict(
             category=CATEGORY_MAPPING.get(self.category),
-            dates=', '.join(sorted(set(map(DATE_MAPPING.get, self.dates)))),
-            prices=', '.join(sorted(set(map(PRICE_MAPPING.get, self.prices)))),
-            quantities=', '.join(sorted(map(str, self.quantities))),
+            dates=', '.join(dates),
+            prices=', '.join(prices),
+            quantities=', '.join(quantities),
             status=STATUS_MAPPING.get(self.status),
             username=self._username,
             user_id=self._user_id
@@ -126,9 +130,10 @@ class Query:
         return self
 
     def update_field(self, field_name: str, field_value: (str, int), remove=False) -> bool:
-        field_name = '_{}'.format(field_name)
+        field_name_mapping = dict(date='dates', price='prices', quantity='quantities')
+        field_name = '_{}'.format(field_name_mapping.get(field_name, field_name))
         if isinstance(self.__getattribute__(field_name), int):
-            self.__setattr__(field_name, field_value)
+            self.__setattr__(field_name, int(field_value))
         elif isinstance(self.__getattribute__(field_name), set):
             source = self.__getattribute__(field_name)
             if remove:

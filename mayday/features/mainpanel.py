@@ -7,7 +7,7 @@ import mayday
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
 # from mayday.features import (platform_stats, post_ticket, quick_search, search, support, update_ticket)
-from mayday.features import post_ticket, support, update_ticket
+from mayday.features import post_ticket, support, update_ticket, search
 from mayday.helpers import AuthHelper
 from mayday.objects import User
 
@@ -55,11 +55,11 @@ def route(bot, update, user_data, chat_data):
 
     if callback_data == 'post':
         return post_ticket.start(bot, update, user_data)
-    '''
+
     if callback_data == 'search':
         search.start(bot, update, user_data)
         return stages.SEARCH_SELECT_FIELD
-
+    '''
     if callback_data == 'quick_search':
         quick_search.start(bot, update, user_data)
         return stages.QUICK_SEARCH_MODE_SELECTION

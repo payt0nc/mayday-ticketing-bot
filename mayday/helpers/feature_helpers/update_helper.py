@@ -13,10 +13,8 @@ class UpdateHelper(FeatureHelper):
         self.save_drafting_ticket(user_id, ticket)
         return ticket
 
-    def reset_cache(self, user_id: int) -> Ticket:
-        pass
-
-    def list_tickets_on_reply_keyboard(self, tickets: list):
+    @staticmethod
+    def list_tickets_on_reply_keyboard(tickets: list):
         buttons = [[InlineKeyboardButton(ticket.ticket_id, callback_data=ticket.ticket_id)] for ticket in tickets]
         buttons.append([InlineKeyboardButton("返主選單", callback_data='mainpanel')])
         return InlineKeyboardMarkup(buttons, one_time_keyboard=True)

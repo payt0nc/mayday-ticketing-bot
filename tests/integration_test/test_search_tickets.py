@@ -64,39 +64,39 @@ def test_search_ticket_by_query():
     tickets = helper.search_by_query(Query(category_id=1).to_obj(dict(prices=[2])))
     assert len(tickets) == 1
     ticket = tickets[0]
-    assert ticket['category'] == 1
-    assert ticket['ticket_id'] == ''
-    assert ticket['date'] == 505
-    assert ticket['price'] == 2
-    assert ticket['quantity'] == 1
-    assert ticket['section'] == 'C1'
-    assert ticket['row'] == ''
-    assert ticket['seat'] == ''
-    assert ticket['wish_dates'] == list()
-    assert ticket['wish_prices'] == list()
-    assert ticket['wish_quantities'] == list()
-    assert ticket['source'] == 1
-    assert ticket['remarks'] == ''
-    assert ticket['status'] == 1
-    assert ticket['username'] == 'test_account_1'
-    assert ticket['user_id'] == 8081
+    assert ticket.category == 1
+    assert ticket.ticket_id == ''
+    assert ticket.date == 505
+    assert ticket.price == 2
+    assert ticket.quantity == 1
+    assert ticket.section == 'C1'
+    assert ticket.row == ''
+    assert ticket.seat == ''
+    assert ticket.wish_dates == list()
+    assert ticket.wish_prices == list()
+    assert ticket.wish_quantities == list()
+    assert ticket.source == 1
+    assert ticket.remarks == ''
+    assert ticket.status == 1
+    assert ticket.username == 'test_account_1'
+    assert ticket.user_id == 8081
 
     tickets = helper.search_by_query(Query(category_id=1).to_obj(dict(prices=[2])))
     assert len(tickets) == 1
     ticket = tickets[0]
-    assert ticket['category'] == 1
-    assert ticket['ticket_id'] == ''
-    assert ticket['date'] == 505
-    assert ticket['price'] == 2
-    assert ticket['quantity'] == 1
-    assert ticket['section'] == 'C1'
-    assert ticket['row'] == ''
-    assert ticket['seat'] == ''
-    assert ticket['wish_dates'] == list()
-    assert ticket['wish_prices'] == list()
-    assert ticket['wish_quantities'] == list()
-    assert ticket['source'] == 1
-    assert ticket['remarks'] == ''
-    assert ticket['status'] == 1
-    assert ticket['username'] == 'test_account_1'
-    assert ticket['user_id'] == 8081
+    assert ticket.category == 1
+    assert ticket.ticket_id == ''
+    assert ticket.date == 505
+    assert ticket.price == 2
+    assert ticket.quantity == 1
+    assert ticket.section == 'C1'
+    assert ticket.row == ''
+    assert ticket.seat == ''
+    assert ticket.wish_dates == list()
+    assert ticket.wish_prices == list()
+    assert ticket.wish_quantities == list()
+    assert ticket.source == 1
+    assert ticket.remarks == ''
+    assert ticket.status == 1
+    assert ticket.username == 'test_account_1'
+    assert ticket.user_id == 8081

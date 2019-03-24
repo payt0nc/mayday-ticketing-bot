@@ -29,11 +29,11 @@ class QueryHelper:
         self.logger.debug(query.to_dict())
         return bool(self.mongo.save(db_name=self.QUICK_SEARCH_QUERY_DB_NAME, collection_name=self.QUICK_SEARCH_COLLECTION_NAME, content=query.to_dict()))
 
-    def load_quick_search(self, user_id: int, username: str) -> Query:
+    def load_quick_search(self, user_id: int) -> Query:
         query = self.mongo.load(
-            db_name=self.QUICK_SEARCH_QUERY_DB_NAME, collection_name=self.QUICK_SEARCH_COLLECTION_NAME, query=dict(user_id=user_id, username=username))[0]
+            db_name=self.QUICK_SEARCH_QUERY_DB_NAME, collection_name=self.QUICK_SEARCH_COLLECTION_NAME, query=dict(user_id=user_id))[0]
         self.logger.debug(query)
-        return Query(user_id=user_id, username=username, category_id=query['category']).to_obj(query)
+        return Query(user_id=user_id, category_id=query['category']).to_obj(query)
 
     def update_quick_search(self, query: Query) -> bool:
         self.logger.debug(query.to_dict())
@@ -73,7 +73,7 @@ class QueryHelper:
         results = self.mongo.load(
             db_name=self.TICKET_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME, query=query.to_mongo_syntax())
         self.logger.debug(results)
-        return results
+        return [Ticket().to_obj(ticket) for ticket in results]
 
     # Events
     def list_all_events(self) -> list:

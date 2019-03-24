@@ -3,7 +3,7 @@ from mayday.constants import stages
 from mayday.constants.replykeyboards import ReplyKeyboards
 from mayday.features import mainpanel
 # from mayday.features import (mainpanel, platform_stats, post_ticket, quick_search, search, support, update_ticket)
-from mayday.features import support, post_ticket, update_ticket
+from mayday.features import support, post_ticket, update_ticket, search
 from telegram.ext import (CallbackQueryHandler, CommandHandler,
                           ConversationHandler, Filters, MessageHandler,
                           RegexHandler, Updater)
@@ -28,10 +28,10 @@ def main():
             stages.POST_BEFORE_SUBMIT: [CallbackQueryHandler(post_ticket.submit, pass_user_data=True)],
             stages.POST_SUBMIT: [CallbackQueryHandler(post_ticket.backward, pass_user_data=True)],
             # Search Stage
-            # stages.SEARCH_SELECT_FIELD: [CallbackQueryHandler(search.select_field, pass_user_data=True)],
-            # stages.SEARCH_FILL_VALUE: [CallbackQueryHandler(search.fill_in_field, pass_user_data=True)],
-            # stages.SEARCH_BEFORE_SUBMIT: [CallbackQueryHandler(search.submit, pass_user_data=True)],
-            # stages.SEARCH_SUBMIT: [CallbackQueryHandler(search.backward, pass_user_data=True)],
+            stages.SEARCH_SELECT_FIELD: [CallbackQueryHandler(search.select_field, pass_user_data=True)],
+            stages.SEARCH_FILL_VALUE: [CallbackQueryHandler(search.fill_in_field, pass_user_data=True)],
+            stages.SEARCH_BEFORE_SUBMIT: [CallbackQueryHandler(search.submit, pass_user_data=True)],
+            stages.SEARCH_SUBMIT: [CallbackQueryHandler(search.backward, pass_user_data=True)],
             # Update Stage
             stages.UPDATE_SELECT_TICKET: [CallbackQueryHandler(update_ticket.select_ticket, pass_user_data=True)],
             stages.UPDATE_SELECT_FIELD: [CallbackQueryHandler(update_ticket.select_field, pass_user_data=True)],

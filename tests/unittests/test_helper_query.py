@@ -37,7 +37,7 @@ class Test(unittest.TestCase):
         assert quick_search_query['dates'] == query.dates
         assert quick_search_query['prices'] == query.prices
 
-        quick_search_query = self.helper.load_quick_search(USER_ID, USERNAME)
+        quick_search_query = self.helper.load_quick_search(USER_ID)
         assert quick_search_query.dates == query.dates
         assert quick_search_query.prices == query.prices
 
@@ -61,11 +61,11 @@ class Test(unittest.TestCase):
 
         # By one query
         result = self.helper.search_by_query(query)[0]
-        assert result['category'] == ticket.category
-        assert result['date'] == ticket.date
-        assert result['price'] == ticket.price
-        assert result['quantity'] == ticket.quantity
-        assert result['status'] == ticket.status
+        assert result.category == ticket.category
+        assert result.date == ticket.date
+        assert result.price == ticket.price
+        assert result.quantity == ticket.quantity
+        assert result.status == ticket.status
 
         # By Section
         result = self.helper.search_by_section('D3')[0]

@@ -1,15 +1,13 @@
-import logging
 import re
 
-import telegram
-from telegram.ext.dispatcher import run_async
-
 import mayday
+import telegram
 from mayday import MONGO_CONTROLLER
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
 from mayday.helpers import AuthHelper, PostTicketHelper, TicketHelper
 from mayday.objects import User
+from telegram.ext.dispatcher import run_async
 
 auth_helper = AuthHelper(MONGO_CONTROLLER)
 ticket_helper = TicketHelper(MONGO_CONTROLLER)
