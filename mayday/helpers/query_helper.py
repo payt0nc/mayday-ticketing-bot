@@ -84,6 +84,4 @@ class QueryHelper:
     @staticmethod
     def split_tickets_traits(tickets: list, size: int = 5) -> list:
         trait = [ticket.to_human_readable() for ticket in tickets]
-        if len(trait) <= size:
-            return [[trait]]
         return [trait[i: i+size] for i in range(0, len(trait), size)]

@@ -187,9 +187,8 @@ def submit(bot, update, *args, **kwargs):
                 text=conversations.SEARCH_WITH_RESULTS,
                 chat_id=user.user_id,
                 message_id=message.message_id)
-            time.sleep(0.3)
-            traits = query_helper.split_tickets_traits(tickets)
-            for trait in traits:
+            time.sleep(0.2)
+            for trait in query_helper.split_tickets_traits(tickets):
                 bot.send_message(
                     text=search_helper.tickets_tostr(trait, conversations.TICKET),
                     chat_id=user.user_id,

@@ -89,6 +89,7 @@ class FeatureHelper:
 
         for ticket in tickets:
             self.logger.debug(type(ticket))
+            self.logger.debug(ticket)
             self.logger.debug(type(string_template))
             tmplate = string_template.format_map(ticket)
             self.logger.debug(tmplate)
