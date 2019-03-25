@@ -1,13 +1,15 @@
 import re
 import time
+
 import telegram
+from telegram import bot, chataction
+from telegram.ext.dispatcher import run_async
+
 from mayday import MONGO_CONTROLLER
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
 from mayday.helpers import AuthHelper, QueryHelper, SearchHelper
 from mayday.objects import User
-from telegram import bot, chataction
-from telegram.ext.dispatcher import run_async
 
 auth_helper = AuthHelper(MONGO_CONTROLLER)
 query_helper = QueryHelper(MONGO_CONTROLLER)
@@ -19,8 +21,8 @@ def quick_search_start(bot, update, *args, **kwargs):
     user = User(telegram_user=update.effective_user)
     message = update.callback_query.message
     query = query_helper.load_quick_search(user.user_id)
-    search_helper.save_drafting_query(user.user_id, query)
     if query:
+        search_helper.save_drafting_query(user.user_id, query)
         bot.edit_message_text(
             text=conversations.QUICK_SEARCH_LIST_QUERY.format_map(query.to_human_readable()),
             chat_id=user.user_id,

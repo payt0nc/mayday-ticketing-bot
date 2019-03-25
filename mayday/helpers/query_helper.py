@@ -30,10 +30,11 @@ class QueryHelper:
         return bool(self.mongo.save(db_name=self.QUICK_SEARCH_QUERY_DB_NAME, collection_name=self.QUICK_SEARCH_COLLECTION_NAME, content=query.to_dict()))
 
     def load_quick_search(self, user_id: int) -> Query:
-        query = self.mongo.load(
-            db_name=self.QUICK_SEARCH_QUERY_DB_NAME, collection_name=self.QUICK_SEARCH_COLLECTION_NAME, query=dict(user_id=user_id))[0]
-        self.logger.debug(query)
-        return Query(user_id=user_id, category_id=query['category']).to_obj(query)
+        queries = self.mongo.load(
+            db_name=self.QUICK_SEARCH_QUERY_DB_NAME, collection_name=self.QUICK_SEARCH_COLLECTION_NAME, query=dict(user_id=user_id))
+        self.logger.debug(queries)
+        if queries:
+            return Query(user_id=user_id, category_id=queries[0]['category']).to_obj(queries[0])
 
     def update_quick_search(self, query: Query) -> bool:
         self.logger.debug(query.to_dict())

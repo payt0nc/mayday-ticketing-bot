@@ -3,7 +3,7 @@ from mayday.constants import stages
 from mayday.constants.replykeyboards import ReplyKeyboards
 from mayday.features import mainpanel
 # from mayday.features import (mainpanel, platform_stats, post_ticket, quick_search, search, support, update_ticket)
-from mayday.features import support, post_ticket, update_ticket, search
+from mayday.features import support, post_ticket, update_ticket, search, quick_search
 from telegram.ext import (CallbackQueryHandler, CommandHandler,
                           ConversationHandler, Filters, MessageHandler,
                           RegexHandler, Updater)
@@ -39,8 +39,8 @@ def main():
             stages.UPDATE_BEFORE_SUBMIT: [CallbackQueryHandler(update_ticket.submit, pass_user_data=True)],
             stages.UPDATE_SUBMIT: [CallbackQueryHandler(update_ticket.backward, pass_user_data=True)],
             # Quick Search Stage
-            # stages.QUICK_SEARCH_MODE_SELECTION: [CallbackQueryHandler(quick_search.select_mode, pass_user_data=True)],
-            # stages.QUICK_SEARCH_LIST: [CallbackQueryHandler(search.submit, pass_user_data=True)],
+            stages.QUICK_SEARCH_MODE_SELECTION: [CallbackQueryHandler(quick_search.select_mode, pass_user_data=True)],
+            stages.QUICK_SEARCH_LIST: [CallbackQueryHandler(search.submit, pass_user_data=True)],
             # Event Stage
             stages.SUPPORT_EVENT_LIST: [CallbackQueryHandler(support.list_events, pass_user_data=True)],
         },

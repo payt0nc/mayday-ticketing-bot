@@ -83,10 +83,8 @@ class FeatureHelper:
         return Query(category_id=-1, user_id=user_id, username=username).to_obj(query)
 
     # Util
-
     def tickets_tostr(self, tickets: list, string_template: str) -> str:
         results = []
-
         for ticket in tickets:
             self.logger.debug(type(ticket))
             self.logger.debug(ticket)

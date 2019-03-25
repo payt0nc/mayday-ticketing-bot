@@ -7,7 +7,8 @@ import mayday
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
 # from mayday.features import (platform_stats, post_ticket, quick_search, search, support, update_ticket)
-from mayday.features import post_ticket, support, update_ticket, search
+from mayday.features import (post_ticket, quick_search, search, support,
+                             update_ticket)
 from mayday.helpers import AuthHelper
 from mayday.objects import User
 
@@ -36,8 +37,7 @@ def start(bot, update, user_data, chat_data):
         bot.sendMessage(
             chat_id=update.message.chat.id,
             text=conversations.MAIN_PANEL_START.format_map(user.to_dict()),
-            reply_markup=KEYBOARDS.actions_keyboard_markup
-        )
+            reply_markup=KEYBOARDS.actions_keyboard_markup)
     return stages.MAIN_PANEL
 
 
@@ -59,14 +59,12 @@ def route(bot, update, user_data, chat_data):
     if callback_data == 'search':
         search.start(bot, update, user_data)
         return stages.SEARCH_SELECT_FIELD
-    '''
+
     if callback_data == 'quick_search':
-        quick_search.start(bot, update, user_data)
-        return stages.QUICK_SEARCH_MODE_SELECTION
-    '''
+        return quick_search.start(bot, update, user_data)
+
     if callback_data == 'bye':
-        done(bot, update, user_data, chat_data)
-        return stages.END
+        return done(bot, update, user_data, chat_data)
 
 
 @run_async
