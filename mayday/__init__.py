@@ -36,17 +36,13 @@ class Config:
 
         # Schema
 
-        self.query_db_name = 'query'
+        self.main_db_name = 'mayday'
         self.quick_search_collection_name = 'quick_searches'
-
-        self.ticket_db_name = 'ticket'
         self.ticket_collection_name = 'tickets'
+        self.event_collection_name = 'events'
 
         self.user_db_name = 'user'
         self.user_collection_name = 'users'
-
-        self.event_db_name = 'event'
-        self.event_collection_name = 'events'
 
     @property
     def aws_config(self) -> dict:
@@ -80,15 +76,16 @@ class Config:
     @property
     def schema_config(self) -> dict:
         return dict(
-            query_db_name=self.query_db_name,
+            # Mayday DB
+            query_db_name=self.main_db_name,
             quick_search_collection_name=self.quick_search_collection_name,
-            ticket_db_name=self.ticket_db_name,
+            ticket_db_name=self.main_db_name,
             ticket_collection_name=self.ticket_collection_name,
+            event_db_name=self.main_db_name,
+            event_collection_name=self.event_collection_name,
+            # User DB
             user_db_name=self.user_db_name,
-            user_collection_name=self.user_collection_name,
-            event_db_name=self.event_db_name,
-            event_collection_name=self.event_collection_name
-        )
+            user_collection_name=self.user_collection_name)
 
 
 STAGE = os.environ.get('stage', 'test').upper()
