@@ -61,7 +61,7 @@ def select_mode(bot, update, *args, **kwargs):
                 message_id=message.message_id)
             for trait in quick_search_helper.split_tickets_traits(tickets):
                 bot.send_message(
-                    text=quick_search_helper.tickets_tostr(trait),
+                    text=quick_search_helper.tickets_tostr(trait, conversations.TICKET),
                     chat_id=user.user_id,
                     message_id=message.message_id)
                 time.sleep(0.2)

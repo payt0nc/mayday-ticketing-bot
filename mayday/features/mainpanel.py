@@ -89,19 +89,12 @@ def info(bot, update, *args, **kwargs):
 
 
 @run_async
-def done(bot, update, user_data, chat_data):
-    user = User(telegram_user=update.effective_user)
+def done(bot, update, *args, **kwargs):
     try:
         chat_id = update.callback_query.message.chat.id
     except Exception:
         chat_id = update.message.chat.id
     bot.sendMessage(chat_id=chat_id, text=conversations.MAIN_PANEL_DONE)
-    '''
-    bot.sendPhoto(
-        chat_id=chat_id,
-        photo=REDIS.direct_read('MAYDAY-BOT-CONFIG-GOODBYE_PHOTO_ID'),
-        caption=conversations.MAIN_PANEL_DONE)
-    '''
     return stages.END
 
 
@@ -112,7 +105,7 @@ def error(bot, update, error):
 
 
 @run_async
-def help(bot, update):
+def ask_help(bot, update, *args, **kwargs):
     bot.edit_message_text(
         chat_id=update.callback_query.message.chat.id,
         message_id=update.callback_query.message.message_id,
@@ -121,7 +114,7 @@ def help(bot, update):
 
 
 @run_async
-def timeout(bot, update, chat_data):
+def timeout(bot, update, *args, **kwargs):
     try:
         chat_id = update.callback_query.message.chat.id
     except Exception:

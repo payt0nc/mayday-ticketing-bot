@@ -54,7 +54,7 @@ def main():
     dp.add_handler(main_panel_handler)
 
     # Force Escape
-    dp.add_handler(CommandHandler('help', mainpanel.help))
+    dp.add_handler(CommandHandler('help', mainpanel.ask_help))
     dp.add_handler(RegexHandler('^(Done|done|完)$', mainpanel.done, pass_user_data=True, pass_chat_data=True))
     dp.add_handler(CommandHandler('done', mainpanel.done, pass_user_data=True, pass_chat_data=True))
 
