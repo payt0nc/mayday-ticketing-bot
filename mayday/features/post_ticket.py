@@ -4,7 +4,7 @@ import telegram
 from telegram.ext.dispatcher import run_async
 
 import mayday
-from mayday import MONGO_CONTROLLER
+from mayday import MONGO_CONTROLLER, SUBSCRIBE_CHANNEL_NAME
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
 from mayday.helpers import AuthHelper, PostTicketHelper, TicketHelper
@@ -179,6 +179,13 @@ def submit(bot, update, *args, **kwargs):
                 text=conversations.POST_TICKET_ERROR,
                 chat_id=user.user_id,
                 message_id=message.message_id)
+
+        # Send Ticket to Channel
+        bot.send_message(
+            text=conversations.NEW_TICKET.format_map(ticket.to_human_readable()),
+            chat_id=SUBSCRIBE_CHANNEL_NAME,
+            parse_mode=telegram.ParseMode.MARKDOWN)
+
         bot.send_message(
             text=conversations.AND_THEN,
             chat_id=user.user_id,

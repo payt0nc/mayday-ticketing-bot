@@ -9,19 +9,9 @@ class Config:
 
     def __init__(self):
 
-        # AWS
-        self.aws_access_key = os.environ.get('AWS_ACCESS_KEY')
-        self.aws_access_secret_key = os.environ.get('AWS_ACCESS_SECRET_KEY')
-        self.aws_s3_bucket = os.environ.get('AWS_S3_BUCKET')
-        self.aws_s3_log_prefix = os.environ.get('AWS_S3_LOG_PREFIX')
-
         # API
         self.api_host = os.environ.get('api_host', 'localhost')
         self.api_port = os.environ.get('api_port', 10000)
-
-        # FluentD
-        self.fluentd_host = os.environ.get('fluentd_host', 'fluentd.cooomma.info')
-        self.fluentd_port = os.environ.get('fluentd_port', 24224)
 
         # Mongo
         self.mongo_host = os.environ.get('MONGO_HOST', 'localhost')
@@ -45,21 +35,12 @@ class Config:
         self.user_collection_name = 'users'
 
     @property
-    def aws_config(self) -> dict:
-        return dict(
-            access_key=self.aws_access_key,
-            access_secret_key=self.aws_access_secret_key,
-            s3_bucket=self.aws_s3_bucket,
-            s3_log_prefix=self.aws_s3_log_prefix
-        )
-
-    @property
     def api_config(self) -> dict:
         return dict(host=self.api_host, port=self.api_port)
 
     @property
-    def fluentd_config(self) -> dict:
-        return dict(hos=self.fluentd_host, port=self.fluentd_port)
+    def subscribe_channel(self) -> str:
+        return self._subscribe_channel_name
 
     @property
     def mongo_config(self) -> dict:
@@ -124,3 +105,4 @@ def get_default_logger(log_name: str, log_level: int = logging.DEBUG) -> logging
 
 
 MONGO_CONTROLLER = controllers.MongoController(mongo_config=Config().mongo_config)
+SUBSCRIBE_CHANNEL_NAME = '@testHKmayday'

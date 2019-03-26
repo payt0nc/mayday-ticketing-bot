@@ -1,4 +1,4 @@
-__author__ = 'paytonc'
+from mayday import SUBSCRIBE_CHANNEL_NAME
 
 AND_THEN = '之後?'
 NONE_RECORD = '''目前未有紀錄'''
@@ -23,6 +23,30 @@ Telegram Username: @{username}
 希望交換的數量: {wish_quantities}
 '''
 
+##################
+## CHANNEL NEWS ##
+##################
+
+NEW_TICKET = '''
+新登記門票:
+
+Telegram Username: @{username}
+*門票狀態: {status}*
+門票類型: {category}
+日期: {date}
+票面價格: {price}
+數量: {quantity}
+座位區域: {section}
+座位行數: {row}
+備註: {remarks}
+最後更新時間: {updated_at}
+
+== 換票部分 ==
+希望交換的日期: {wish_dates}
+希望交換的價格種類: {wish_prices}
+希望交換的數量: {wish_quantities}
+'''
+
 ################
 ## MAIN PANEL ##
 ################
@@ -32,7 +56,8 @@ MAIN_PANEL_ADMIN_PANEL = '開啟Admin模式'
 MAIN_PANEL_START = '''
 Hello @{username} 有咩可以幫到你?
 若然中途不知所措/迷失方向，請使用 /home 回到主目錄
-'''
+想獲取最新門票資訊, 請加入 ''' + SUBSCRIBE_CHANNEL_NAME
+
 
 MAIN_PANEL_DONE = '''
 五月之約 迪士尼門口見~!
@@ -227,8 +252,8 @@ Mayday Just Rock It 2019 藍 BLUE
 日期：May 3,4,5,10,11,12
 時間：*19:15開始*
 門票售價：
-（座位門票）HK$1180/$880/^$680/^$480
-（企位門票）HK$$680
+ (座位門票) HK$1180/$880/^$680/^$480
+ (企位門票) HK$$680
  (無障礙通道座位) HK$1180/HK$880
  ^有部分座位可能會有視線受阻
 '''
