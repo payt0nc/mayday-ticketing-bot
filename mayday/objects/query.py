@@ -132,22 +132,22 @@ class Query:
     def update_field(self, field_name: str, field_value: (str, int), remove=False) -> bool:
         field_name_mapping = dict(date='dates', price='prices', quantity='quantities')
         field_name = '_{}'.format(field_name_mapping.get(field_name, field_name))
-        if isinstance(self.__getattribute__(field_name), int):
+        attribute = self.__getattribute__(field_name)
+
+        if isinstance(attribute, int):
             self.__setattr__(field_name, int(field_value))
-        elif isinstance(self.__getattribute__(field_name), set):
-            source = self.__getattribute__(field_name)
+        elif isinstance(attribute, set):
             if remove:
-                source.remove(field_value)
+                attribute.remove(field_value)
             else:
-                source.add(field_value)
-            self.__setattr__(field_name, source)
-        elif isinstance(self.__getattribute__(field_name), list):
-            source = self.__getattribute__(field_name)
+                attribute.add(field_value)
+            self.__setattr__(field_name, attribute)
+        elif isinstance(attribute, list):
             if remove:
-                source.remove(field_value)
+                attribute.remove(field_value)
             else:
-                source.append(field_value)
-            self.__setattr__(field_name, source)
+                attribute.append(field_value)
+            self.__setattr__(field_name, attribute)
         return self
 
     def validate(self) -> dict:

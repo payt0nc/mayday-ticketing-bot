@@ -41,8 +41,8 @@ class ReplyKeyboards:
                 [InlineKeyboardButton('$680座位', callback_data=3),
                  InlineKeyboardButton('$480座位', callback_data=4)],
                 [InlineKeyboardButton('$680企位', callback_data=5)],
-                [InlineKeyboardButton('$480座位', callback_data=6),
-                 InlineKeyboardButton('$480座位', callback_data=7)]
+                [InlineKeyboardButton('$1180 無障礙通道座位', callback_data=6),
+                 InlineKeyboardButton('$880 無障礙通道座位', callback_data=7)]
             ], one_time_keyboard=True),
 
             'quantity': InlineKeyboardMarkup([

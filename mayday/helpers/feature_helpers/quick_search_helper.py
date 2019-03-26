@@ -13,9 +13,12 @@ class QuickSearchHelper(FeatureHelper):
         query = Query(category_id=2, user_id=user_id)
         for ticket in query_helper.search_by_user_id(user_id):
             if ticket.category == 2:
-                query.update_field('date', ticket.wish_dates)
-                query.update_field('price', ticket.wish_prices)
-                query.update_field('quantity', ticket.wish_quantities)
+                for wish_date in ticket.wish_dates:
+                    query.update_field('dates', wish_date)
+                for wish_price in ticket.wish_prices:
+                    query.update_field('prices', wish_price)
+                for wish_quantity in ticket.wish_quantities:
+                    query.update_field('quantities', wish_quantity)
         self.save_drafting_query(user_id, query)
         return query_helper.search_by_query(query)
 

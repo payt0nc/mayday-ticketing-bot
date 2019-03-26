@@ -244,5 +244,5 @@ class Ticket:
             if not self.wish_prices:
                 self._wish_prices = list(PRICE_MAPPING.keys())
             if not self.wish_quantities:
-                self._wish_quantities = [x for x in range(0, 5)]
+                self._wish_quantities = [x for x in range(1, 5)]
         return self
