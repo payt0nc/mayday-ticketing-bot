@@ -1,6 +1,5 @@
 from mayday import Config
 from mayday.constants import stages
-from mayday.constants.replykeyboards import ReplyKeyboards
 from mayday.features import mainpanel
 # from mayday.features import (mainpanel, platform_stats, post_ticket, quick_search, search, support, update_ticket)
 from mayday.features import support, post_ticket, update_ticket, search, quick_search
@@ -8,7 +7,6 @@ from telegram.ext import (CallbackQueryHandler, CommandHandler,
                           ConversationHandler, Filters, MessageHandler,
                           RegexHandler, Updater)
 
-keyboards = ReplyKeyboards()
 config = Config()
 
 
