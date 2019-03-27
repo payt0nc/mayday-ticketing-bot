@@ -62,7 +62,7 @@ def main():
     dp.add_error_handler(mainpanel.error)
 
     # Start the Bot
-    updater.start_polling(timeout=20, read_latency=5)
+    updater.start_polling(timeout=10, read_latency=1)
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since

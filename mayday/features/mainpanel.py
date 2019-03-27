@@ -57,8 +57,7 @@ def route(bot, update, user_data, chat_data):
         return post_ticket.start(bot, update, user_data)
 
     if callback_data == 'search':
-        search.start(bot, update, user_data)
-        return stages.SEARCH_SELECT_FIELD
+        return search.start(bot, update, user_data)
 
     if callback_data == 'quick_search':
         return quick_search.start(bot, update, user_data)
