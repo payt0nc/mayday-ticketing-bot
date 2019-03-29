@@ -7,21 +7,22 @@
 
 Telegram bot for Mayday Concert Tickets Exchange
 
-### Objectives
+## Objectives
 
 「我們就是希望買不到票進來的人 這一輩子會 **痛不欲生**」（五月天阿信, D.N.A, 2009) 
 
 Because Ashin said this, this project is to help those fans get the tickets by their power.
-因為主場大人的一句話，這個Project就是想大家不會痛不欲生.
 
-### Features
+因為主唱大人的一句話，這個Project就是想大家不會痛不欲生.
 
-#### Post Ticket
+## Features
 
-#### Search Tickets
+### Post Ticket
 
-#### Quick Search Tickets
+### Search Tickets
 
-#### Ticket Summary
+### Quick Search Tickets
 
-#### Supporting Events
+### Ticket Summary
+
+### Supporting Events
