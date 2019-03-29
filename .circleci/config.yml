@@ -53,7 +53,7 @@ jobs:
           command: |
             . venv/bin/activate
             pytest -vv --cov=./mayday/ tests/*
-            coverage xml
+            coverage xml --omit="./mayday/constants/*"
             python-codacy-coverage -r coverage.xml
 
       - store_artifacts:
