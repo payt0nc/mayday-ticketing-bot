@@ -9,6 +9,7 @@ DATE_MAPPING = {
     505: '5.5(Sun)',
     510: '5.10(Fri)',
     511: '5.11(Sat)',
+    512: '5.12(Sun)',
 }
 
 PRICE_MAPPING = {

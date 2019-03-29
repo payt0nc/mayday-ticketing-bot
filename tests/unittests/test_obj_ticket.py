@@ -2,14 +2,14 @@ import unittest
 
 from mayday.objects import Ticket
 
+USER_ID = 123456789
+USERNAME = 'testcase'
+
 
 class Test(unittest.TestCase):
 
     def test_ticket_init(self):
-        user_id = 123456789
-        username = 'testcase'
-
-        ticket = Ticket(user_id, username)
+        ticket = Ticket(USER_ID, USERNAME)
         self.assertDictEqual(
             ticket.to_dict(),
             dict(
@@ -27,16 +27,14 @@ class Test(unittest.TestCase):
                 source='',
                 remarks='',
                 status=1,
-                username='testcase',
-                user_id=123456789,
+                username=USERNAME,
+                user_id=USER_ID,
                 created_at=ticket.created_at,
                 updated_at=ticket.updated_at
             )
         )
 
     def test_ticket_dict_to_obj(self):
-        user_id = 123456789
-        username = 'testcase'
         ticket = dict(
             category=1,
             ticket_id='',
@@ -52,10 +50,10 @@ class Test(unittest.TestCase):
             source='',
             remarks='',
             status=1,
-            username='testcase',
-            user_id=123456789
+            username=USERNAME,
+            user_id=USER_ID
         )
-        obj = Ticket(user_id, username).to_obj(ticket)
+        obj = Ticket(USER_ID, USERNAME).to_obj(ticket)
         assert obj.date == ticket['date']
         assert obj.price == ticket['price']
         assert obj.quantity == ticket['quantity']
@@ -63,10 +61,7 @@ class Test(unittest.TestCase):
         assert obj.category == ticket['category']
 
     def test_ticket_update_field(self):
-        user_id = 123456789
-        username = 'testcase'
-
-        ticket = Ticket(user_id, username)
+        ticket = Ticket(USER_ID, USERNAME)
 
         ticket.update_field('category', 1)
         assert isinstance(ticket.category, int)
@@ -210,8 +205,6 @@ class Test(unittest.TestCase):
         assert ticket.wish_prices == list()
 
     def test_ticket_to_human_readable(self):
-        user_id = 123456789
-        username = 'testcase'
         sample_ticket = dict(
             category=1,
             date=503,
@@ -226,10 +219,10 @@ class Test(unittest.TestCase):
             source=1,
             remarks='',
             status=1,
-            username='testcase',
-            user_id=123456789
+            username=USERNAME,
+            user_id=USER_ID
         )
-        ticket = Ticket(user_id, username).to_obj(sample_ticket)
+        ticket = Ticket(USER_ID, USERNAME).to_obj(sample_ticket)
         ticket_string = ticket.to_human_readable()
         assert ticket_string['category'] == '原價轉讓'
         assert ticket_string['date'] == '5.3(Fri)'
@@ -243,3 +236,50 @@ class Test(unittest.TestCase):
         assert ticket_string['wish_quantities'] == '1, 2'
         assert ticket_string['status'] == '待交易'
         assert ticket_string['remarks'] == ''
+
+    def test_ticket_check_wishlist(self):
+        sample_ticket = dict(
+            category=2,
+            date=503,
+            price=1,
+            quantity=2,
+            section='Yellow',
+            row='32',
+            seat='59',
+            wish_dates=[],
+            wish_prices=[],
+            wish_quantities=[],
+            source=1,
+            remarks='',
+            status=1,
+            username=USERNAME,
+            user_id=USER_ID
+        )
+        ticket = Ticket(USER_ID, USERNAME).to_obj(sample_ticket)
+        assert ticket.validate_wishlist()['status'] is False
+        assert ticket.validate_wishlist()['info'] == '希望交換的日期未填喔\n希望交換的價格種類未填喔\n希望交換的數量未填喔'
+
+    def test_ticket_fill_full_wishlist(self):
+        sample_ticket = dict(
+            category=2,
+            date=503,
+            price=1,
+            quantity=2,
+            section='Yellow',
+            row='32',
+            seat='59',
+            wish_dates=[],
+            wish_prices=[],
+            wish_quantities=[],
+            source=1,
+            remarks='',
+            status=1,
+            username=USERNAME,
+            user_id=USER_ID
+        )
+        ticket = Ticket(USER_ID, USERNAME).to_obj(sample_ticket)
+        ticket.fill_full_wishlist()
+
+        assert ticket.wish_dates == [503, 504, 505, 510, 511, 512]
+        assert ticket.wish_prices == [1, 2, 3, 4, 5, 6, 7]
+        assert ticket.wish_quantities == [1, 2, 3, 4]

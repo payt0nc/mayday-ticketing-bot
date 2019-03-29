@@ -110,25 +110,13 @@ class Ticket:
     def wish_dates(self) -> list:
         return sorted(set(self._wish_dates))
 
-    @wish_dates.setter
-    def wish_dates(self, value: int):
-        self._wish_dates.add(int(value))
-
     @property
     def wish_prices(self) -> list:
         return sorted(set(self._wish_prices))
 
-    @wish_prices.setter
-    def wish_prices(self, value: int):
-        self._wish_prices.add(int(value))
-
     @property
     def wish_quantities(self) -> list:
         return sorted(set(self._wish_quantities))
-
-    @wish_quantities.setter
-    def wish_quantities(self, value: int):
-        self._wish_quantities.add(int(value))
 
     @property
     def status(self) -> int:

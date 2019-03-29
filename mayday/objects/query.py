@@ -32,33 +32,17 @@ class Query:
     def dates(self) -> list:
         return sorted(map(int, self._dates))
 
-    @dates.setter
-    def dates(self, value: int):
-        self._dates = set(self._dates).add(value)
-
     @property
     def prices(self) -> list:
         return sorted(map(int, self._prices))
-
-    @prices.setter
-    def prices(self, value: int):
-        self._prices = set(self._prices).add(value)
 
     @property
     def quantities(self) -> list:
         return sorted(map(int, self._quantities))
 
-    @quantities.setter
-    def quantities(self, value: int):
-        self._quantities = set(self._quantities).add(value)
-
     @property
     def status(self) -> int:
         return self._status
-
-    @status.setter
-    def status(self, value: int):
-        self._status = value
 
     @property
     def user_id(self) -> int:
@@ -142,14 +126,7 @@ class Query:
             else:
                 attribute.add(field_value)
             self.__setattr__(field_name, attribute)
-        elif isinstance(attribute, list):
-            if remove:
-                attribute.remove(field_value)
-            else:
-                attribute.append(field_value)
-            self.__setattr__(field_name, attribute)
         return self
 
     def validate(self) -> dict:
-        validator = ItemValidator(self.to_dict())
-        return validator.check_query()
+        return ItemValidator(self.to_dict()).check_query()

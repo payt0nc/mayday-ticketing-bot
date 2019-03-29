@@ -185,8 +185,7 @@ class Test(unittest.TestCase):
             quantities=[2, 3],
             status=1,
             username=USERNAME,
-            user_id=USER_ID
-        )
+            user_id=USER_ID)
         query = Query(user_id=USER_ID, username=USERNAME, category_id=CATEGORY).to_obj(sample_query)
         expected = dict(
             category=1,
@@ -195,8 +194,7 @@ class Test(unittest.TestCase):
             quantity={'$in': [2, 3]},
             status=1,
             user_id=USER_ID,
-            username=USERNAME
-        )
+            username=USERNAME)
         from pprint import pprint
         pprint(query.to_mongo_syntax())
         self.assertDictEqual(expected, query.to_mongo_syntax())
@@ -209,8 +207,7 @@ class Test(unittest.TestCase):
             quantities=[],
             status=1,
             username=USERNAME,
-            user_id=USER_ID
-        )
+            user_id=USER_ID)
         query = Query(user_id=USER_ID, username=USERNAME, category_id=CATEGORY).to_obj(sample_query)
         expected = dict(
             category=1,
@@ -218,6 +215,9 @@ class Test(unittest.TestCase):
             price={'$in': [1, 2]},
             status=1,
             user_id=USER_ID,
-            username=USERNAME
-        )
+            username=USERNAME)
         self.assertDictEqual(expected, query.to_mongo_syntax())
+
+    def test_query_validation(self):
+        query = Query(user_id=USER_ID, username=USERNAME, category_id=1)
+        assert query.validate()
