@@ -1,6 +1,6 @@
 import unittest
 
-from mayday.objects import Ticket
+from mayday.objects.ticket import Ticket
 
 USER_ID = 123456789
 USERNAME = 'testcase'

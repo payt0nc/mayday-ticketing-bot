@@ -1,6 +1,6 @@
 import unittest
 
-from mayday.objects import Query
+from mayday.objects.query import Query
 
 USER_ID = 123456789
 USERNAME = 'testcase'

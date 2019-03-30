@@ -3,8 +3,9 @@ import unittest
 import pytest
 from fakeredis import FakeStrictRedis
 from mayday.controllers import RedisController
-from mayday.helpers import FeatureHelper
-from mayday.objects import Ticket, Query
+from mayday.helpers.feature_helpers import FeatureHelper
+from mayday.objects.ticket import Ticket
+from mayday.objects.query import Query
 
 USER_ID = 123456789
 USERNAME = 'testcase'

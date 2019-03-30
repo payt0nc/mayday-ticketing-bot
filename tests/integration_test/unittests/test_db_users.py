@@ -5,13 +5,14 @@ import sqlalchemy
 from sqlalchemy import MetaData
 
 from mayday.db.tables.users import Users
+from mayday.objects.user import User
 
-USER = dict(
+USER = User(user_profile=dict(
     user_id=123456789,
     username='test',
     first_name='tset',
     last_name='ttset'
-)
+))
 
 
 @pytest.mark.usefixtures()
@@ -31,20 +32,23 @@ class TestCase(unittest.TestCase):
     def test_get_auth(self):
         result = self.db.get_auth(USER)
         assert result
-        assert result['is_banned'] is False
+        assert result['is_blacklist'] is False
         assert result['is_admin'] is False
 
     def test_ban_user(self):
         self.db.get_auth(USER)
-        result = self.db.ban_user(USER)
+        assert self.db.ban_user(USER)
 
-        assert result
-        assert result['is_banned'] is True
-        assert result['is_admin'] is False
+        user = self.db.get_user_profile(USER.user_id)
+
+        assert user
+        assert user.blacklist
+        assert user.admin_role is False
 
     def test_get_user_profile(self):
         self.db.get_auth(USER)
-        result = self.db.get_user_profile(USER)
+        result = self.db.get_user_profile(USER.user_id)
         assert result
-        assert {x for x in result.keys()} == {'id', 'first_name', 'last_name', 'is_banned',
-                                              'is_admin', 'created_at', 'updated_at', 'user_id', 'username'}
+        assert isinstance(result, User)
+        assert result.user_id == USER.user_id
+        assert result.username == USER.username

@@ -9,8 +9,8 @@ from mayday.constants.replykeyboards import KEYBOARDS
 # from mayday.features import (platform_stats, post_ticket, quick_search, search, support, update_ticket)
 from mayday.features import (post_ticket, quick_search, search, support,
                              update_ticket)
-from mayday.helpers import AuthHelper
-from mayday.objects import User
+from mayday.helpers.auth_helper import AuthHelper
+from mayday.objects.user import User
 
 AUTH_HELPER = AuthHelper(mayday.MONGO_CONTROLLER)
 logger = mayday.get_default_logger('main_panel')

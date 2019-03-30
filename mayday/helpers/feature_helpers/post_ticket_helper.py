@@ -1,5 +1,5 @@
-from mayday.helpers import FeatureHelper
-from mayday.objects import Ticket
+from mayday.helpers.feature_helpers import FeatureHelper
+from mayday.objects.ticket import Ticket
 
 
 class PostTicketHelper(FeatureHelper):

@@ -1,6 +1,6 @@
 import mayday
-from mayday.helpers import FeatureHelper
-from mayday.objects import Query
+from mayday.helpers.feature_helpers import FeatureHelper
+from mayday.objects.query import Query
 
 logger = mayday.get_default_logger('search_helper')
 

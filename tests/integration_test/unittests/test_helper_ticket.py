@@ -3,8 +3,8 @@ import unittest
 import mongomock
 import pytest
 from mayday.controllers import MongoController
-from mayday.helpers import TicketHelper
-from mayday.objects import Ticket
+from mayday.helpers.ticket_helper import TicketHelper
+from mayday.objects.ticket import Ticket
 
 
 USER_ID = 123456789

@@ -1,7 +1,9 @@
 from mayday import Config
 from mayday.controllers import MongoController
-from mayday.helpers import TicketHelper, QueryHelper
-from mayday.objects import Ticket, Query
+from mayday.helpers.query_helper import QueryHelper
+from mayday.helpers.ticket_helper import TicketHelper
+from mayday.objects.query import Query
+from mayday.objects.ticket import Ticket
 
 USER_ID = 123456789
 USERNAME = 'it_search_ticket'

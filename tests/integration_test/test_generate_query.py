@@ -1,7 +1,8 @@
-from mayday.objects import Query
-from mayday.helpers import FeatureHelper, QueryHelper
 from mayday import Config
-from mayday.controllers import RedisController, MongoController
+from mayday.controllers import MongoController, RedisController
+from mayday.helpers.feature_helpers import FeatureHelper
+from mayday.helpers.query_helper import QueryHelper
+from mayday.objects.query import Query
 
 USER_ID = 8081
 USERNAME = 'test_account_1'

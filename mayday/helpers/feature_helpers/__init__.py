@@ -1,7 +1,8 @@
 
 import mayday
 from mayday.controllers import RedisController
-from mayday.objects import Query, Ticket
+from mayday.objects.query import Query
+from mayday.objects.ticket import Ticket
 
 
 class FeatureHelper:

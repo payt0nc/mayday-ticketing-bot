@@ -7,8 +7,10 @@ import mayday
 from mayday import MONGO_CONTROLLER, SUBSCRIBE_CHANNEL_NAME
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
-from mayday.helpers import AuthHelper, PostTicketHelper, TicketHelper
-from mayday.objects import User
+from mayday.helpers.auth_helper import AuthHelper
+from mayday.helpers.feature_helpers.post_ticket_helper import PostTicketHelper
+from mayday.helpers.ticket_helper import TicketHelper
+from mayday.objects.user import User
 
 auth_helper = AuthHelper(MONGO_CONTROLLER)
 ticket_helper = TicketHelper(MONGO_CONTROLLER)

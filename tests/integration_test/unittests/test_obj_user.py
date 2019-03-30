@@ -1,14 +1,13 @@
 import logging
 import unittest
 
-import pytest
-from mayday.objects import User
+from mayday.objects.user import User
 from telegram import User as TelegramUser
 
 logger = logging.getLogger('test')
 
 TELEGRAM_INFO = dict(
-    id=123456789,
+    user_id=123456789,
     username='',
     last_name='pytest',
     first_name='test',
@@ -21,8 +20,8 @@ class Test(unittest.TestCase):
 
     def test_user_object_init(self):
 
-        profile = User(telegram_info=TELEGRAM_INFO).to_dict()
-        assert profile['user_id'] == TELEGRAM_INFO['id']
+        profile = User(user_profile=TELEGRAM_INFO).to_dict()
+        assert profile['user_id'] == TELEGRAM_INFO['user_id']
         assert profile['username'] == TELEGRAM_INFO['username']
         assert profile['last_name'] == TELEGRAM_INFO['last_name']
         assert profile['first_name'] == TELEGRAM_INFO['first_name']
@@ -33,11 +32,11 @@ class Test(unittest.TestCase):
 
     def test_username_blank(self):
 
-        profile = User(telegram_info=TELEGRAM_INFO)
+        profile = User(user_profile=TELEGRAM_INFO)
         assert profile.is_username_blank()
 
         TELEGRAM_INFO.update(dict(username='testcase'))
-        profile = User(telegram_info=TELEGRAM_INFO)
+        profile = User(user_profile=TELEGRAM_INFO)
         assert profile.is_username_blank() is False
 
     def test_convert_telegram_user_to_user(self):
@@ -51,10 +50,10 @@ class Test(unittest.TestCase):
         assert user.is_username_blank() is False
 
     def test_set_user_role(self):
-        admin_user = User(telegram_info=TELEGRAM_INFO)
+        admin_user = User(user_profile=TELEGRAM_INFO)
         admin_user.admin_role = True
         assert admin_user.admin_role
 
-        admin_user = User(telegram_info=TELEGRAM_INFO)
+        admin_user = User(user_profile=TELEGRAM_INFO)
         admin_user.blacklist = True
         assert admin_user.blacklist

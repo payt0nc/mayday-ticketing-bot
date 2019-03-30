@@ -1,12 +1,11 @@
 import time
 
-from sqlalchemy import BIGINT, BOOLEAN, INT, SMALLINT, Column, String, Table
+from sqlalchemy import BIGINT, INT, SMALLINT, Column, String, Table
 from sqlalchemy.sql.expression import and_, desc, select, text
 
 from mayday.db import sqls as SQL
 from mayday.db.tables import BaseModel, MagicJSON
-
-THIS_YEAR = 2019
+from mayday.objects.ticket import Ticket
 
 
 class Tickets(BaseModel):
@@ -16,34 +15,34 @@ class Tickets(BaseModel):
             'tickets',
             metadata,
             Column('id', INT, primary_key=True, autoincrement=True),
-            Column('category_id', SMALLINT),
+            Column('category', SMALLINT),
             Column('date', INT),
-            Column('price_id', INT),
+            Column('price_id', SMALLINT),
             Column('quantity', SMALLINT),
             Column('section', String),
             Column('row', String),
-            Column('status_id', SMALLINT),
-            Column('wish_date', MagicJSON),
-            Column('wish_price_id', MagicJSON),
-            Column('wish_quantity', MagicJSON),
+            Column('status', SMALLINT),
+            Column('wish_dates', MagicJSON),
+            Column('wish_price_ids', MagicJSON),
+            Column('wish_quantities', MagicJSON),
             Column('user_id', BIGINT),
             Column('username', String),
             Column('remarks', String),
-            Column('updated_at', INT),
-            Column('year', INT, default=THIS_YEAR)
+            Column('created_at', INT),
+            Column('updated_at', INT)
         )
         super().__init__(engine, metadata, table, role)
 
     @staticmethod
     def _trim_ticket_tuple(ticket: dict):
-        values = ['year={}'.format(THIS_YEAR)]
+        values = []
         for key, value in ticket.items():
             if value:
                 if key == 'status':
-                    values.append('status_id = {}'.format(value))
-                elif key == 'category_id':
-                    values.append('category_id = {}'.format(value))
-                elif key in ['section', 'row', 'remarks', 'wish_date', 'wish_price_id', 'wish_quantity']:
+                    values.append('status = {}'.format(value))
+                elif key == 'category':
+                    values.append('category = {}'.format(value))
+                elif key in ['section', 'row', 'remarks', 'wish_dates', 'wish_price_ids', 'wish_quantities']:
                     values.append('{} = \'{}\''.format(key, value))
                 elif key not in ['updated_at', 'user_id', 'username']:
                     values.append('{} = {}'.format(key, value))
@@ -51,14 +50,14 @@ class Tickets(BaseModel):
 
     @staticmethod
     def _trim_where_stmt(conditions: dict):
-        conds = ['year = {}'.format(THIS_YEAR)]
+        conds = []
         for key, value in conditions.items():
             if value:
                 if key == 'status':
-                    conds.append('status_id = {}'.format(value))
+                    conds.append('status = {}'.format(value))
 
-                if key == 'category_id':
-                    conds.append('category_id = {}'.format(value))
+                if key == 'category':
+                    conds.append('category = {}'.format(value))
 
                 if key in ['price_id', 'date', 'quantity']:
                     if isinstance(value, list):
@@ -71,37 +70,37 @@ class Tickets(BaseModel):
         table = self.table
         stmt = select([
             table.c.id,
-            table.c.category_id,
+            table.c.category,
             table.c.date,
             table.c.price_id,
             table.c.quantity,
             table.c.section,
             table.c.row,
-            table.c.status_id,
-            table.c.wish_date,
-            table.c.wish_price_id,
-            table.c.wish_quantity,
+            table.c.status,
+            table.c.wish_dates,
+            table.c.wish_price_ids,
+            table.c.wish_quantities,
             table.c.user_id,
             table.c.username,
             table.c.remarks,
             table.c.updated_at,
         ]) \
-            .where(and_(table.c.id == ticket_id, table.c.year == THIS_YEAR)) \
+            .where(and_(table.c.id == ticket_id)) \
             .order_by(desc(table.c.updated_at))
         row = self.execute(stmt).fetchone()
         if row:
             return dict(
                 id=row.id,
-                category_id=row.category_id,
+                category=row.category,
                 date=row.date,
                 price_id=row.price_id,
                 quantity=row.quantity,
                 section=row.section,
                 row=row.row,
-                status_id=row.status_id,
-                wish_date=row.wish_date,
-                wish_price_id=row.wish_price_id,
-                wish_quantity=row.wish_quantity,
+                status=row.status,
+                wish_dates=row.wish_dates,
+                wish_price_ids=row.wish_price_ids,
+                wish_quantities=row.wish_quantities,
                 user_id=row.user_id,
                 username=row.username,
                 remarks=row.remarks,
@@ -113,38 +112,38 @@ class Tickets(BaseModel):
         table = self.table
         stmt = select([
             table.c.id,
-            table.c.category_id,
+            table.c.category,
             table.c.date,
             table.c.price_id,
             table.c.quantity,
             table.c.section,
             table.c.row,
-            table.c.status_id,
-            table.c.wish_date,
-            table.c.wish_price_id,
-            table.c.wish_quantity,
+            table.c.status,
+            table.c.wish_dates,
+            table.c.wish_price_ids,
+            table.c.wish_quantities,
             table.c.user_id,
             table.c.username,
             table.c.remarks,
             table.c.updated_at,
         ]) \
-            .where(and_(table.c.user_id == user_id, table.c.year == THIS_YEAR)) \
+            .where(and_(table.c.user_id == user_id)) \
             .order_by(desc(table.c.updated_at))
         cursor = self.execute(stmt)
         row = cursor.fetchone()
         while row:
             yield dict(
                 id=row.id,
-                category_id=row.category_id,
+                category=row.category,
                 date=row.date,
                 price_id=row.price_id,
                 quantity=row.quantity,
                 section=row.section,
                 row=row.row,
-                status_id=row.status_id,
-                wish_date=row.wish_date,
-                wish_price_id=row.wish_price_id,
-                wish_quantity=row.wish_quantity,
+                status=row.status,
+                wish_dates=row.wish_dates,
+                wish_price_ids=row.wish_price_ids,
+                wish_quantities=row.wish_quantities,
                 user_id=row.user_id,
                 username=row.username,
                 remarks=row.remarks,

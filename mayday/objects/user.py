@@ -4,7 +4,8 @@ from telegram import User as TelegramUser
 class User:
     '''Convert Telegram User Dict to User Object'''
 
-    def __init__(self, telegram_info: dict = None, telegram_user: TelegramUser = None) -> None:
+    def __init__(self, user_profile: dict = None, telegram_user: TelegramUser = None) -> None:
+
         if telegram_user:
             self._user_id = telegram_user.id
             self._username = telegram_user.username
@@ -12,15 +13,18 @@ class User:
             self._first_name = telegram_user.first_name
             self._is_bot = telegram_user.is_bot
             self._language_code = telegram_user.language_code
-        elif telegram_info:
-            self._user_id = telegram_info.get('id', 0)
-            self._username = telegram_info.get('username', None)
-            self._last_name = telegram_info.get('last_name', '')
-            self._first_name = telegram_info.get('first_name', '')
-            self._is_bot = telegram_info.get('is_bot', False)
-            self._language_code = telegram_info.get('language_code', '')
-        self._is_admin = False
-        self._is_blacklist = False
+            self._is_admin = False
+            self._is_blacklist = False
+
+        elif user_profile:
+            self._user_id = user_profile['user_id']
+            self._username = user_profile['username']
+            self._first_name = user_profile.get('first_name', '')
+            self._last_name = user_profile.get('last_name', '')
+            self._language_code = user_profile.get('language_code', '')
+            self._is_admin = bool(user_profile.get('is_admin', False))
+            self._is_bot = bool(user_profile.get('is_bot', False))
+            self._is_blacklist = bool(user_profile.get('is_blacklist', False))
 
     @property
     def user_id(self) -> int:
@@ -36,9 +40,7 @@ class User:
 
     @admin_role.setter
     def admin_role(self, value: bool):
-        if isinstance(value, bool) is False:
-            value = False
-        self._is_admin = value
+        self._is_admin = value if isinstance(value, bool) else False
 
     @property
     def blacklist(self):
@@ -46,9 +48,7 @@ class User:
 
     @blacklist.setter
     def blacklist(self, value: bool):
-        if isinstance(value, bool) is False:
-            raise TypeError
-        self._is_blacklist = value
+        self._is_blacklist = value if isinstance(value, bool) else False
 
     def is_username_blank(self) -> bool:
         return not bool(self.username)
@@ -62,5 +62,4 @@ class User:
             is_bot=self._is_bot,
             language_code=self._language_code,
             is_admin=self._is_admin,
-            is_blacklist=self._is_blacklist
-        )
+            is_blacklist=self._is_blacklist)

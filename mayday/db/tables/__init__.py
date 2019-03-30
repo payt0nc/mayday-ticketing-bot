@@ -16,20 +16,20 @@ class BaseModel:
         self.table = table
         self.role = role
 
-    def execute(self, stmt):
+    def execute(self, stmt: str):
         return self.engine.execute(stmt)
 
-    def raw_insert(self, row):
+    def raw_insert(self, row: dict):
         assert self.role == 'writer'
         row['updated_at'] = int(time.time())
         return self.execute(insert(self.table, row))
 
-    def raw_update(self, where, row):
+    def raw_update(self, where: dict, row: dict):
         assert self.role == 'writer'
         row['updated_at'] = int(time.time())
         return self.execute(update(self.table).where(where).values(row))
 
-    def raw_upsert(self, row):
+    def raw_upsert(self, row: dict):
         assert self.role == 'writer'
         row['updated_at'] = int(time.time())
         return self.execute(Upsert(self.table, row))
@@ -90,6 +90,7 @@ def mysql_compile_upsert(insert_stmt, compiler, **kwargs):
 def sqlite_compile_upsert(insert_stmt, compiler, **kwargs):
     insert = compiler.visit_insert(insert_stmt, **kwargs)
     return insert.replace("INSERT INTO", "INSERT OR REPLACE INTO", 1)
+
 
 class StringfyJSON(types.TypeDecorator):
     # Stores and retrieves JSON as TEXT.

@@ -9,8 +9,9 @@ from mayday import MONGO_CONTROLLER
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
 from mayday.features import search
-from mayday.helpers import AuthHelper, QuickSearchHelper
-from mayday.objects import User
+from mayday.helpers.auth_helper import AuthHelper
+from mayday.helpers.feature_helpers.quick_search_helper import QuickSearchHelper
+from mayday.objects.user import User
 
 auth_helper = AuthHelper(MONGO_CONTROLLER)
 quick_search_helper = QuickSearchHelper('quick_search')

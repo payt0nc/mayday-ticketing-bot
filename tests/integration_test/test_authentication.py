@@ -1,7 +1,7 @@
 from mayday import Config
-from mayday.helpers import AuthHelper
 from mayday.controllers import MongoController
-from mayday.objects import User
+from mayday.helpers.auth_helper import AuthHelper
+from mayday.objects.user import User
 
 ADMIN_PROFILE = dict(
     id=123456787,  # in telegram profile
@@ -33,7 +33,7 @@ def test_new_user_auth():
     mongo = MongoController(mongo_config=config.mongo_config)
     helper = AuthHelper(mongo)
     telegram_user_profile = dict(
-        id=123456789,
+        user_id=123456789,
         username='testcase',
         last_name='pytest',
         first_name='test',
@@ -42,7 +42,7 @@ def test_new_user_auth():
     )
     user = User(telegram_user_profile)
     profile_in_db = helper.auth(user)
-    assert profile_in_db['user_id'] == telegram_user_profile['id']
+    assert profile_in_db['user_id'] == telegram_user_profile['user_id']
     assert profile_in_db['username'] == telegram_user_profile['username']
     assert profile_in_db['is_admin'] is False
     assert profile_in_db['is_blacklist'] is False

@@ -1,7 +1,8 @@
 import mayday
 from mayday import MONGO_CONTROLLER
-from mayday.helpers import FeatureHelper, QueryHelper
-from mayday.objects import Query
+from mayday.helpers.feature_helpers import FeatureHelper
+from mayday.helpers.query_helper import QueryHelper
+from mayday.objects.query import Query
 
 logger = mayday.get_default_logger('search_helper')
 query_helper = QueryHelper(MONGO_CONTROLLER)

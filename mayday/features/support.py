@@ -3,9 +3,9 @@ from telegram.ext.dispatcher import run_async
 from mayday import MONGO_CONTROLLER
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
-from mayday.helpers import QueryHelper
 from mayday.helpers.feature_helpers import sp_events_helper
-from mayday.objects import User
+from mayday.helpers.query_helper import QueryHelper
+from mayday.objects.user import User
 
 query_helper = QueryHelper(MONGO_CONTROLLER)
 

@@ -1,7 +1,8 @@
 from mayday import Config
 from mayday.controllers import MongoController
-from mayday.helpers import QueryHelper
-from mayday.objects import Query, Ticket
+from mayday.helpers.query_helper import QueryHelper
+from mayday.objects.query import Query
+from mayday.objects.ticket import Ticket
 
 
 def test_search_ticket_by_date():

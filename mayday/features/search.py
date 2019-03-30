@@ -2,13 +2,16 @@ import re
 import time
 
 import telegram
+from telegram import chataction
+from telegram.ext.dispatcher import run_async
+
 from mayday import MONGO_CONTROLLER
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
-from mayday.helpers import AuthHelper, QueryHelper, SearchHelper
-from mayday.objects import User
-from telegram import chataction
-from telegram.ext.dispatcher import run_async
+from mayday.helpers.auth_helper import AuthHelper
+from mayday.helpers.feature_helpers.search_helper import SearchHelper
+from mayday.helpers.query_helper import QueryHelper
+from mayday.objects.user import User
 
 auth_helper = AuthHelper(MONGO_CONTROLLER)
 query_helper = QueryHelper(MONGO_CONTROLLER)

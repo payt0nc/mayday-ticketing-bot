@@ -1,7 +1,7 @@
 import mayday
 from mayday import Config
 from mayday.controllers import MongoController
-from mayday.objects import User
+from mayday.objects.user import User
 
 
 class AuthHelper:
@@ -24,9 +24,9 @@ class AuthHelper:
         return self.mongo.save(db_name=self.DB_NAME, collection_name=self.COLLECTION_NAME, content=profile)
 
     def auth(self, user: User) -> dict:
-        profile = self.mongo.load(db_name=self.DB_NAME, collection_name=self.COLLECTION_NAME,
-                                  query=dict(user_id=user.user_id))
+        profile = self.mongo.load_one(db_name=self.DB_NAME, collection_name=self.COLLECTION_NAME,
+                                      query=dict(user_id=user.user_id))
         self.logger.debug(profile)
         if profile:
-            return profile[0]
+            return profile
         return self._create_new_profile(user)
