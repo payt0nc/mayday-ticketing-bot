@@ -22,7 +22,7 @@ class QueryHelper:
         if mongo_controller:
             self.mongo = mongo_controller
         else:
-            self.mongo = MongoController(mongo_config=Config.mongo_config)
+            self.mongo = MongoController(mongo_config=Config().mongo_config)
 
     # Quick Search
     def save_quick_search(self, query: Query) -> bool:
@@ -64,10 +64,10 @@ class QueryHelper:
         return [Ticket().to_obj(ticket) for ticket in results]
 
     def search_by_ticket_id(self, ticket_id: str) -> Ticket:
-        results = self.mongo.load(
+        result = self.mongo.load_one(
             db_name=self.TICKET_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME, query=dict(ticket_id=ticket_id))
-        self.logger.debug(results)
-        return Ticket().to_obj(results[0])
+        self.logger.debug(result)
+        return Ticket().to_obj(result)
 
     def search_by_query(self, query: Query) -> list:
         self.logger.info(query.to_dict())

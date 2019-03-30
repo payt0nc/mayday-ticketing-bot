@@ -22,6 +22,11 @@ class Test(unittest.TestCase):
         # count
         assert mongo.count(db_name='test', collection_name='uniitest', query={'text': 'Yes!'}) == 1
 
+        # load one
+        result = mongo.load_one(db_name='test', collection_name='uniitest', query={'text': 'Yes!'})
+        assert result['text'] == doc['text']
+        assert result['test'] == doc['test']
+
         # load
         result = mongo.load(db_name='test', collection_name='uniitest', query={'text': 'Yes!'})
         assert result[0]['text'] == doc['text']

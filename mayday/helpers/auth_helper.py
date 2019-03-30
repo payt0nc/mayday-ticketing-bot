@@ -16,7 +16,7 @@ class AuthHelper:
         if mongo_controller:
             self.mongo = mongo_controller
         else:
-            self.mongo = MongoController(mongo_config=Config.mongo_config)
+            self.mongo = MongoController(mongo_config=Config().mongo_config)
 
     def _create_new_profile(self, user: User) -> dict:
         profile = user.to_dict()

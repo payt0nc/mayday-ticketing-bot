@@ -84,3 +84,14 @@ class Test(unittest.TestCase):
         assert result['price'] == ticket.price
         assert result['quantity'] == ticket.quantity
         assert result['status'] == ticket.status
+
+    def test_split_tickets_traits(self):
+        ticket = Ticket()
+        tickets = list()
+        for i in range(0, 9):
+            tickets.append(ticket)
+
+        traits = QueryHelper.split_tickets_traits(tickets)
+        assert len(traits) == 2
+        assert len(traits[0]) == 5
+        assert len(traits[1]) == 4

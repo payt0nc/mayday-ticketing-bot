@@ -13,7 +13,7 @@ def test_search_ticket_by_date():
     assert len(tickets) == 1
     ticket = Ticket().to_obj(tickets[0])
     assert ticket.category == 1
-    assert ticket.ticket_id == ''
+    assert ticket.ticket_id
     assert ticket.date == 505
     assert ticket.price == 2
     assert ticket.quantity == 1
@@ -39,7 +39,7 @@ def test_search_ticket_by_section():
     assert len(tickets) == 1
     ticket = tickets[0]
     assert ticket['category'] == 1
-    assert ticket['ticket_id'] == ''
+    assert ticket['ticket_id']
     assert ticket['date'] == 505
     assert ticket['price'] == 2
     assert ticket['quantity'] == 1
@@ -65,7 +65,7 @@ def test_search_ticket_by_query():
     assert len(tickets) == 1
     ticket = tickets[0]
     assert ticket.category == 1
-    assert ticket.ticket_id == ''
+    assert ticket.ticket_id
     assert ticket.date == 505
     assert ticket.price == 2
     assert ticket.quantity == 1
@@ -85,7 +85,7 @@ def test_search_ticket_by_query():
     assert len(tickets) == 1
     ticket = tickets[0]
     assert ticket.category == 1
-    assert ticket.ticket_id == ''
+    assert ticket.ticket_id
     assert ticket.date == 505
     assert ticket.price == 2
     assert ticket.quantity == 1
@@ -100,3 +100,52 @@ def test_search_ticket_by_query():
     assert ticket.status == 1
     assert ticket.username == 'test_account_1'
     assert ticket.user_id == 8081
+
+
+def test_search_ticket_by_user_id():
+    helper = QueryHelper(mongo_controller=None)
+    tickets = helper.search_by_user_id(8082)
+
+    assert len(tickets) == 1
+    ticket = tickets[0]
+
+    assert ticket.category == 2
+    assert ticket.ticket_id
+    assert ticket.date == 504
+    assert ticket.price == 1
+    assert ticket.quantity == 1
+    assert ticket.section == 'A1'
+    assert ticket.row == ''
+    assert ticket.seat == ''
+    assert ticket.wish_dates == [504, 505]
+    assert ticket.wish_prices == [1, 2]
+    assert ticket.wish_quantities == [1]
+    assert ticket.source == 1
+    assert ticket.remarks == ''
+    assert ticket.status == 1
+    assert ticket.username == 'test_account_2'
+    assert ticket.user_id == 8082
+
+
+def test_search_ticket_by_ticket_id():
+    helper = QueryHelper(mongo_controller=None)
+    tickets = helper.search_by_user_id(8082)
+    assert tickets
+    ticket = helper.search_by_ticket_id(tickets[0].ticket_id)
+    assert ticket
+    assert ticket.category == 2
+    assert ticket.ticket_id
+    assert ticket.date == 504
+    assert ticket.price == 1
+    assert ticket.quantity == 1
+    assert ticket.section == 'A1'
+    assert ticket.row == ''
+    assert ticket.seat == ''
+    assert ticket.wish_dates == [504, 505]
+    assert ticket.wish_prices == [1, 2]
+    assert ticket.wish_quantities == [1]
+    assert ticket.source == 1
+    assert ticket.remarks == ''
+    assert ticket.status == 1
+    assert ticket.username == 'test_account_2'
+    assert ticket.user_id == 8082

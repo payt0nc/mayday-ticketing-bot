@@ -16,14 +16,12 @@ class TicketHelper:
         if mongo_controller:
             self.mongo = mongo_controller
         else:
-            self.mongo = MongoController(mongo_config=Config.mongo_config)
+            self.mongo = MongoController(mongo_config=Config().mongo_config)
 
     # Formal Ticket
     def save_ticket(self, ticket: Ticket) -> bool:
-        saved_ticket = self.mongo.save(
+        return self.mongo.save(
             db_name=self.TICKET_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME, content=ticket.to_dict())
-        return bool(self.mongo.update(db_name=self.TICKET_DB_NAME, collection_name=self.TICKET_COLLECTION_NAME,
-                                      conditions=ticket.to_dict(), update_part=dict(ticket_id=str(saved_ticket['_id'])[-6:])))
 
     def update_ticket(self, ticket: Ticket) -> Ticket:
         self.mongo.update(

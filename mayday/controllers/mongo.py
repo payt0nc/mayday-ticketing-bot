@@ -37,6 +37,8 @@ class MongoController:
         collection = self.client[db_name][collection_name]
         self.logger.debug(content)
         object_id = collection.insert_one(content).inserted_id
+        collection.update_one(filter={'_id': ObjectId(object_id)},
+                              update={'$set': dict(ticket_id=self.capture_ticket_id(object_id))})
         result = collection.find_one({'_id': ObjectId(object_id)})
         self.logger.debug(result)
         return result
@@ -45,6 +47,11 @@ class MongoController:
         collection = self.client[db_name][collection_name]
         self.logger.debug(query)
         return [x for x in collection.find(query).sort('updated_at', DESCENDING)]
+
+    def load_one(self, db_name: str, collection_name: str, query: dict) -> dict:
+        collection = self.client[db_name][collection_name]
+        self.logger.debug(query)
+        return collection.find_one(query)
 
     def update(self, db_name: str, collection_name: str, conditions: dict, update_part: dict, upsert=False) -> None:
         collection = self.client[db_name][collection_name]
@@ -57,3 +64,7 @@ class MongoController:
     def create_index(self, db_name: str, collection_name: str, field_name: str):
         collection = self.client[db_name][collection_name]
         return collection.create_index((field_name, ASCENDING), unique=True)
+
+    @staticmethod
+    def capture_ticket_id(object_id: str) -> str:
+        return str(object_id)[-6:]

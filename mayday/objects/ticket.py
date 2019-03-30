@@ -170,15 +170,17 @@ class Ticket:
             user_id=self._user_id,
             username=self._username,
             created_at=self._created_at,
-            updated_at=int(time.time())
-        )
+            updated_at=int(time.time()))
 
     def to_obj(self, ticket_dict: dict):
         for key, value in ticket_dict.items():
             if isinstance(value, list):
                 self.__setattr__('_{}'.format(key), set(value))
+            elif key == 'ticket_id':
+                if value:
+                    self._ticket_id = value
             elif key == '_id':
-                self.__setattr__('_{}'.format('ticket_id'), str(value)[-6:])
+                self._ticket_id = str(value)[-6:]
             else:
                 self.__setattr__('_{}'.format(key), value)
         return self

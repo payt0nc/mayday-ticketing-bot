@@ -35,30 +35,32 @@ class Test(unittest.TestCase):
         )
 
     def test_ticket_dict_to_obj(self):
-        ticket = dict(
-            category=1,
-            ticket_id='',
-            date=503,
-            price=1,
-            quantity=1,
-            section='Yellow',
-            row='32',
-            seat='59',
-            wish_dates=list(),
-            wish_prices=list(),
-            wish_quantities=list(),
-            source='',
-            remarks='',
-            status=1,
-            username=USERNAME,
-            user_id=USER_ID
-        )
+        ticket = {
+            '_id': 'asdfgh',
+            'category': 1,
+            'ticket_id': '',
+            'date': 503,
+            'price': 1,
+            'quantity': 1,
+            'section': 'Yellow',
+            'row': '32',
+            'seat': '59',
+            'wish_dates': list(),
+            'wish_prices': list(),
+            'wish_quantities': list(),
+            'source': '',
+            'remarks': '',
+            'status': 1,
+            'username': USERNAME,
+            'user_id': USER_ID
+        }
         obj = Ticket(USER_ID, USERNAME).to_obj(ticket)
         assert obj.date == ticket['date']
         assert obj.price == ticket['price']
         assert obj.quantity == ticket['quantity']
         assert obj.status == ticket['status']
         assert obj.category == ticket['category']
+        assert obj.ticket_id == 'asdfgh'
 
     def test_ticket_update_field(self):
         ticket = Ticket(USER_ID, USERNAME)
