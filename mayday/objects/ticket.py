@@ -19,16 +19,16 @@ class Ticket:
 
         self._category = int()
         # Ticket Info
-        self._ticket_id = ''
+        self._id = int()
         self._date = int()
-        self._price = int()
+        self._price_id = int()
         self._quantity = int()
         self._section = ''
         self._row = ''
         self._seat = ''
         # WishList
         self._wish_dates = set()
-        self._wish_prices = set()
+        self._wish_price_ids = set()
         self._wish_quantities = set()
         # Status
         self._status = 1
@@ -55,8 +55,8 @@ class Ticket:
         self._category = value
 
     @property
-    def ticket_id(self):
-        return self._ticket_id
+    def id(self):
+        return self._id
 
     @property
     def date(self) -> int:
@@ -67,12 +67,12 @@ class Ticket:
         self._date = int(value)
 
     @property
-    def price(self) -> int:
-        return self._price
+    def price_id(self) -> int:
+        return self._price_id
 
-    @price.setter
-    def price(self, value: int):
-        self._price = int(value)
+    @price_id.setter
+    def price_id(self, value: int):
+        self._price_id = int(value)
 
     @property
     def quantity(self) -> int:
@@ -111,8 +111,8 @@ class Ticket:
         return sorted(set(self._wish_dates))
 
     @property
-    def wish_prices(self) -> list:
-        return sorted(set(self._wish_prices))
+    def wish_price_ids(self) -> list:
+        return sorted(set(self._wish_price_ids))
 
     @property
     def wish_quantities(self) -> list:
@@ -153,10 +153,10 @@ class Ticket:
 
     def to_dict(self):
         return dict(
+            id=self.id,
             category=self.category,
-            ticket_id=self.ticket_id,
             date=self.date,
-            price=self.price,
+            price_id=self.price_id,
             quantity=self.quantity,
             section=self.section,
             row=self.row,
@@ -165,7 +165,7 @@ class Ticket:
             source=self.source,
             remarks=self.remarks,
             wish_dates=self.wish_dates,
-            wish_prices=self.wish_prices,
+            wish_price_ids=self.wish_price_ids,
             wish_quantities=self.wish_quantities,
             user_id=self._user_id,
             username=self._username,
@@ -176,11 +176,11 @@ class Ticket:
         for key, value in ticket_dict.items():
             if isinstance(value, list):
                 self.__setattr__('_{}'.format(key), set(value))
-            elif key == 'ticket_id':
+            elif key in {'id', 'id'}:
                 if value:
-                    self._ticket_id = value
+                    self._id = value
             elif key == '_id':
-                self._ticket_id = str(value)[-6:]
+                self._id = str(value)[-6:]
             else:
                 self.__setattr__('_{}'.format(key), value)
         return self
@@ -188,9 +188,9 @@ class Ticket:
     def to_human_readable(self) -> dict:
         return dict(
             category=CATEGORY_MAPPING.get(self.category, ''),
-            ticket_id=self.ticket_id if self.ticket_id else '',
+            id=self.id if self.id else '',
             date=DATE_MAPPING.get(self.date, ''),
-            price=PRICE_MAPPING.get(self.price, ''),
+            price_id=PRICE_MAPPING.get(self.price_id, ''),
             quantity=self.quantity if self.quantity else '',
             section=self.section if self.section else '',
             row=self.row if self.row else '',
@@ -199,7 +199,7 @@ class Ticket:
             source=self.source if self.source else '',
             remarks=self.remarks if self.remarks else '',
             wish_dates=', '.join(sorted(set(map(DATE_MAPPING.get, self.wish_dates)))),
-            wish_prices=', '.join(sorted(set(map(PRICE_MAPPING.get, self.wish_prices)))),
+            wish_price_ids=', '.join(sorted(set(map(PRICE_MAPPING.get, self.wish_price_ids)))),
             wish_quantities=', '.join(sorted(map(str, self.wish_quantities))),
             username=self.username,
             created_at=datetime.fromtimestamp(self._created_at).replace(tzinfo=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S'),
@@ -231,8 +231,8 @@ class Ticket:
         if self.category == 2:
             if not self.wish_dates:
                 self._wish_dates = list(DATE_MAPPING.keys())
-            if not self.wish_prices:
-                self._wish_prices = list(PRICE_MAPPING.keys())
+            if not self.wish_price_ids:
+                self._wish_price_ids = list(PRICE_MAPPING.keys())
             if not self.wish_quantities:
                 self._wish_quantities = [x for x in range(1, 5)]
         return self

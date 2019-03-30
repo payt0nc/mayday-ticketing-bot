@@ -13,16 +13,16 @@ class Test(unittest.TestCase):
         self.assertDictEqual(
             ticket.to_dict(),
             dict(
+                id=0,
                 category=int(),
-                ticket_id='',
                 date=int(),
-                price=int(),
+                price_id=int(),
                 quantity=int(),
                 section='',
                 row='',
                 seat='',
                 wish_dates=list(),
-                wish_prices=list(),
+                wish_price_ids=list(),
                 wish_quantities=list(),
                 source='',
                 remarks='',
@@ -36,17 +36,16 @@ class Test(unittest.TestCase):
 
     def test_ticket_dict_to_obj(self):
         ticket = {
-            '_id': 'asdfgh',
+            'id': 0,
             'category': 1,
-            'ticket_id': '',
             'date': 503,
-            'price': 1,
+            'price_id': 1,
             'quantity': 1,
             'section': 'Yellow',
             'row': '32',
             'seat': '59',
             'wish_dates': list(),
-            'wish_prices': list(),
+            'wish_price_ids': list(),
             'wish_quantities': list(),
             'source': '',
             'remarks': '',
@@ -56,11 +55,11 @@ class Test(unittest.TestCase):
         }
         obj = Ticket(USER_ID, USERNAME).to_obj(ticket)
         assert obj.date == ticket['date']
-        assert obj.price == ticket['price']
+        assert obj.price_id == ticket['price_id']
         assert obj.quantity == ticket['quantity']
         assert obj.status == ticket['status']
         assert obj.category == ticket['category']
-        assert obj.ticket_id == 'asdfgh'
+        assert obj.id == 0
 
     def test_ticket_update_field(self):
         ticket = Ticket(USER_ID, USERNAME)
@@ -73,17 +72,17 @@ class Test(unittest.TestCase):
         assert isinstance(ticket.category, int)
         assert ticket.category == 0
 
-        ticket.update_field('ticket_id', 'abcdef')
-        assert isinstance(ticket.ticket_id, str)
-        assert ticket.ticket_id == 'abcdef'
+        ticket.update_field('id', 1)
+        assert isinstance(ticket.id, int)
+        assert ticket.id == 1
 
         ticket.update_field('date', 1)
         assert isinstance(ticket.date, int)
         assert ticket.date == 1
 
-        ticket.update_field('price', 1)
-        assert isinstance(ticket.price, int)
-        assert ticket.price == 1
+        ticket.update_field('price_id', 1)
+        assert isinstance(ticket.price_id, int)
+        assert ticket.price_id == 1
 
         ticket.update_field('quantity', 1)
         assert isinstance(ticket.quantity, int)
@@ -113,21 +112,21 @@ class Test(unittest.TestCase):
         assert isinstance(ticket.wish_dates, list)
         assert ticket.wish_dates == [503, 504, 505, 510, 511]
 
-        ticket.update_field('wish_prices', 1)
-        assert isinstance(ticket.wish_prices, list)
-        assert ticket.wish_prices == [1]
+        ticket.update_field('wish_price_ids', 1)
+        assert isinstance(ticket.wish_price_ids, list)
+        assert ticket.wish_price_ids == [1]
 
-        ticket.update_field('wish_prices', 2)
-        assert isinstance(ticket.wish_prices, list)
-        assert ticket.wish_prices == [1, 2]
+        ticket.update_field('wish_price_ids', 2)
+        assert isinstance(ticket.wish_price_ids, list)
+        assert ticket.wish_price_ids == [1, 2]
 
-        ticket.update_field('wish_prices', 3)
-        assert isinstance(ticket.wish_prices, list)
-        assert ticket.wish_prices == [1, 2, 3]
+        ticket.update_field('wish_price_ids', 3)
+        assert isinstance(ticket.wish_price_ids, list)
+        assert ticket.wish_price_ids == [1, 2, 3]
 
-        ticket.update_field('wish_prices', 4)
-        assert isinstance(ticket.wish_prices, list)
-        assert ticket.wish_prices == [1, 2, 3, 4]
+        ticket.update_field('wish_price_ids', 4)
+        assert isinstance(ticket.wish_price_ids, list)
+        assert ticket.wish_price_ids == [1, 2, 3, 4]
 
         ticket.update_field('wish_quantities', 1)
         assert isinstance(ticket.wish_quantities, list)
@@ -190,33 +189,33 @@ class Test(unittest.TestCase):
         assert isinstance(ticket.wish_dates, list)
         assert ticket.wish_dates == list()
 
-        ticket.update_field('wish_prices', 4, remove=True)
-        assert isinstance(ticket.wish_prices, list)
-        assert ticket.wish_prices == [1, 2, 3]
+        ticket.update_field('wish_price_ids', 4, remove=True)
+        assert isinstance(ticket.wish_price_ids, list)
+        assert ticket.wish_price_ids == [1, 2, 3]
 
-        ticket.update_field('wish_prices', 3, remove=True)
-        assert isinstance(ticket.wish_prices, list)
-        assert ticket.wish_prices == [1, 2]
+        ticket.update_field('wish_price_ids', 3, remove=True)
+        assert isinstance(ticket.wish_price_ids, list)
+        assert ticket.wish_price_ids == [1, 2]
 
-        ticket.update_field('wish_prices', 2, remove=True)
-        assert isinstance(ticket.wish_prices, list)
-        assert ticket.wish_prices == [1]
+        ticket.update_field('wish_price_ids', 2, remove=True)
+        assert isinstance(ticket.wish_price_ids, list)
+        assert ticket.wish_price_ids == [1]
 
-        ticket.update_field('wish_prices', 1, remove=True)
-        assert isinstance(ticket.wish_prices, list)
-        assert ticket.wish_prices == list()
+        ticket.update_field('wish_price_ids', 1, remove=True)
+        assert isinstance(ticket.wish_price_ids, list)
+        assert ticket.wish_price_ids == list()
 
     def test_ticket_to_human_readable(self):
         sample_ticket = dict(
             category=1,
             date=503,
-            price=1,
+            price_id=1,
             quantity=2,
             section='Yellow',
             row='32',
             seat='59',
             wish_dates=[504, 505],
-            wish_prices=[1],
+            wish_price_ids=[1],
             wish_quantities=[1, 2],
             source=1,
             remarks='',
@@ -228,13 +227,13 @@ class Test(unittest.TestCase):
         ticket_string = ticket.to_human_readable()
         assert ticket_string['category'] == '原價轉讓'
         assert ticket_string['date'] == '5.3(Fri)'
-        assert ticket_string['price'] == '$1180座位'
+        assert ticket_string['price_id'] == '$1180座位'
         assert ticket_string['quantity'] == 2
         assert ticket_string['section'] == 'Yellow'
         assert ticket_string['row'] == '32'
         assert ticket_string['seat'] == '59'
         assert ticket_string['wish_dates'] == '5.4(Sat), 5.5(Sun)'
-        assert ticket_string['wish_prices'] == '$1180座位'
+        assert ticket_string['wish_price_ids'] == '$1180座位'
         assert ticket_string['wish_quantities'] == '1, 2'
         assert ticket_string['status'] == '待交易'
         assert ticket_string['remarks'] == ''
@@ -243,13 +242,13 @@ class Test(unittest.TestCase):
         sample_ticket = dict(
             category=2,
             date=503,
-            price=1,
+            price_id=1,
             quantity=2,
             section='Yellow',
             row='32',
             seat='59',
             wish_dates=[],
-            wish_prices=[],
+            wish_price_ids=[],
             wish_quantities=[],
             source=1,
             remarks='',
@@ -265,13 +264,13 @@ class Test(unittest.TestCase):
         sample_ticket = dict(
             category=2,
             date=503,
-            price=1,
+            price_id=1,
             quantity=2,
             section='Yellow',
             row='32',
             seat='59',
             wish_dates=[],
-            wish_prices=[],
+            wish_price_ids=[],
             wish_quantities=[],
             source=1,
             remarks='',
@@ -283,5 +282,5 @@ class Test(unittest.TestCase):
         ticket.fill_full_wishlist()
 
         assert ticket.wish_dates == [503, 504, 505, 510, 511, 512]
-        assert ticket.wish_prices == [1, 2, 3, 4, 5, 6, 7]
+        assert ticket.wish_price_ids == [1, 2, 3, 4, 5, 6, 7]
         assert ticket.wish_quantities == [1, 2, 3, 4]

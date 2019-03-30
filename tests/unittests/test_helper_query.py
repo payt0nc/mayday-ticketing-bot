@@ -50,7 +50,7 @@ class Test(unittest.TestCase):
         ticket = Ticket(username=USERNAME, user_id=USER_ID)
         ticket.category = 1
         ticket.date = 503
-        ticket.price = 1
+        ticket.price_id = 1
         ticket.quantity = 2
         ticket.status = 1
         ticket.section = 'D3'
@@ -63,7 +63,7 @@ class Test(unittest.TestCase):
         result = self.helper.search_by_query(query)[0]
         assert result.category == ticket.category
         assert result.date == ticket.date
-        assert result.price == ticket.price
+        assert result.price == ticket.price_id
         assert result.quantity == ticket.quantity
         assert result.status == ticket.status
 
@@ -72,7 +72,7 @@ class Test(unittest.TestCase):
         assert result['section'] == ticket.section
         assert result['category'] == ticket.category
         assert result['date'] == ticket.date
-        assert result['price'] == ticket.price
+        assert result['price'] == ticket.price_id
         assert result['quantity'] == ticket.quantity
         assert result['status'] == ticket.status
 
@@ -81,7 +81,7 @@ class Test(unittest.TestCase):
         assert result['section'] == ticket.section
         assert result['category'] == ticket.category
         assert result['date'] == ticket.date
-        assert result['price'] == ticket.price
+        assert result['price'] == ticket.price_id
         assert result['quantity'] == ticket.quantity
         assert result['status'] == ticket.status
 

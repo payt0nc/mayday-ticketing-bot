@@ -13,7 +13,7 @@ class Test(unittest.TestCase):
         ticket = Ticket(username=USERNAME, user_id=USER_ID)
         ticket.category = 1
         ticket.date = 508
-        ticket.price = 1
+        ticket.price_id = 1
         ticket.quantity = 2
         ticket.status = 1
         result = ticket.validate()
@@ -26,7 +26,7 @@ class Test(unittest.TestCase):
     def test_validator_missing_category(self):
         ticket = Ticket(username=USERNAME, user_id=USER_ID)
         ticket.date = 508
-        ticket.price = 1
+        ticket.price_id = 1
         ticket.quantity = 2
         ticket.status = 1
         result = ticket.validate()
@@ -41,7 +41,7 @@ class Test(unittest.TestCase):
     def test_validator_missing_date(self):
         ticket = Ticket(username=USERNAME, user_id=USER_ID)
         ticket.category = 1
-        ticket.price = 1
+        ticket.price_id = 1
         ticket.quantity = 2
         ticket.status = 1
         result = ticket.validate()
@@ -72,7 +72,7 @@ class Test(unittest.TestCase):
         ticket = Ticket(username=USERNAME, user_id=USER_ID)
         ticket.category = 1
         ticket.date = 508
-        ticket.price = 1
+        ticket.price_id = 1
         ticket.status = 1
         result = ticket.validate()
         assert result['status'] is False

@@ -41,7 +41,7 @@ class ItemValidator:
         self._validation.append(result)
 
     def validate_price(self):
-        result = bool(self._ticket.get('price'))
+        result = bool(self._ticket.get('price_id'))
         if result is False:
             self._error_message.append('價錢未填喔')
         self._validation.append(result)
@@ -65,7 +65,7 @@ class ItemValidator:
         self._validation.append(result)
 
     def validate_wish_prices(self):
-        result = bool(self._ticket.get('wish_prices'))
+        result = bool(self._ticket.get('wish_price_ids'))
         if result is False:
             self._error_message.append('希望交換的價格種類未填喔')
         self._validation.append(result)

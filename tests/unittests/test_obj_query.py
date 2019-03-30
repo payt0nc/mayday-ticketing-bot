@@ -177,47 +177,6 @@ class Test(unittest.TestCase):
         assert query_string['quantities'] == '2, 3'
         assert query_string['status'] == '待交易'
 
-    def test_query_to_mongo_syntax(self):
-        sample_query = dict(
-            category=1,
-            dates=[503, 504],
-            prices=[1, 2],
-            quantities=[2, 3],
-            status=1,
-            username=USERNAME,
-            user_id=USER_ID)
-        query = Query(user_id=USER_ID, username=USERNAME, category_id=CATEGORY).to_obj(sample_query)
-        expected = dict(
-            category=1,
-            date={'$in': [503, 504]},
-            price={'$in': [1, 2]},
-            quantity={'$in': [2, 3]},
-            status=1,
-            user_id=USER_ID,
-            username=USERNAME)
-        from pprint import pprint
-        pprint(query.to_mongo_syntax())
-        self.assertDictEqual(expected, query.to_mongo_syntax())
-
-    def test_query_to_mongo_syntax_2(self):
-        sample_query = dict(
-            category=1,
-            dates=[503, 504],
-            prices=[1, 2],
-            quantities=[],
-            status=1,
-            username=USERNAME,
-            user_id=USER_ID)
-        query = Query(user_id=USER_ID, username=USERNAME, category_id=CATEGORY).to_obj(sample_query)
-        expected = dict(
-            category=1,
-            date={'$in': [503, 504]},
-            price={'$in': [1, 2]},
-            status=1,
-            user_id=USER_ID,
-            username=USERNAME)
-        self.assertDictEqual(expected, query.to_mongo_syntax())
-
     def test_query_validation(self):
         query = Query(user_id=USER_ID, username=USERNAME, category_id=1)
         assert query.validate()

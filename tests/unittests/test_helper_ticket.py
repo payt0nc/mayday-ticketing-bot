@@ -33,7 +33,7 @@ class Test(unittest.TestCase):
 
         assert ticket.category == ticket_in_db.category
         assert ticket.date == ticket_in_db.date
-        assert ticket.price == ticket_in_db.price
+        assert ticket.price_id == ticket_in_db.price_id
         assert ticket.quantity == ticket_in_db.quantity
         assert ticket.section == ticket_in_db.section
         assert ticket.row == ticket_in_db.row
@@ -41,10 +41,10 @@ class Test(unittest.TestCase):
         assert ticket.status == ticket_in_db.status
         assert ticket.remarks == ticket_in_db.remarks
         assert ticket.wish_dates == ticket_in_db.wish_dates
-        assert ticket.wish_prices == ticket_in_db.wish_prices
+        assert ticket.wish_price_ids == ticket_in_db.wish_price_ids
         assert ticket.wish_quantities == ticket_in_db.wish_quantities
         assert ticket.user_id == ticket_in_db.user_id
         assert ticket.username == ticket_in_db.username
-        assert ticket_in_db.ticket_id  # can not know the ticket if before insert
+        assert ticket_in_db.id  # can not know the ticket if before insert
         assert ticket_in_db.created_at  # can not know the created ts before create
         assert ticket_in_db.updated_at  # always change
