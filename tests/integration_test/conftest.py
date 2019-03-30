@@ -1,6 +1,5 @@
 import pytest
-from mayday import Config
-from mayday.controllers import MongoController
+from mayday.controllers.mongo import MongoController
 
 
 TICKET_1 = dict(
@@ -44,8 +43,7 @@ TICKET_2 = dict(
 
 @pytest.fixture(scope="session", autouse=True)
 def init_ticket_db():
-    config = Config()
-    mongo = MongoController(mongo_config=config.mongo_config)
+    mongo = MongoController()
     schema_config = config.schema_config
 
     # Ticket - Tickets

@@ -2,7 +2,7 @@ import unittest
 
 import pytest
 from fakeredis import FakeStrictRedis
-from mayday.controllers import RedisController
+from mayday.controllers.redis import RedisController
 from mayday.helpers.feature_helpers import FeatureHelper
 from mayday.objects.ticket import Ticket
 from mayday.objects.query import Query

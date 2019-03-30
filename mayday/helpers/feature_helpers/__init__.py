@@ -1,30 +1,33 @@
+import logging
 
 import mayday
-from mayday.controllers import RedisController
+from mayday.controllers.redis import RedisController
 from mayday.objects.query import Query
 from mayday.objects.ticket import Ticket
+
+logger = logging.getLogger()
+logger.setLevel(mayday.get_log_level())
+logger.addHandler(mayday.console_handler())
 
 
 class FeatureHelper:
 
     def __init__(self, feature: str, redis_controller: RedisController = None):
-        self.logger = mayday.get_default_logger('{}_helper'.format(feature))
+
         self._feature = feature
         if redis_controller:
             self.redis = redis_controller
         else:
-            from mayday import Config
-            config = Config().redis_config
-            self.redis = RedisController(db_name=feature, redis_config=config)
+            self.redis = RedisController()
 
     # Feature Cache
     def load_cache(self, user_id: int):
         result = self.redis.load(user_id=user_id, action='{}_cache'.format(self._feature))
-        self.logger.debug(dict(user_id=user_id, result=result))
+        logger.debug(dict(user_id=user_id, result=result))
         return result['field']
 
     def save_cache(self, user_id: int, field=None) -> bool:
-        self.logger.debug(dict(user_id=user_id, action='{}_cache'.format(self._feature), content=dict(field=field)))
+        logger.debug(dict(user_id=user_id, action='{}_cache'.format(self._feature), content=dict(field=field)))
         return self.redis.save(user_id=user_id, action='{}_cache'.format(self._feature), content=dict(field=field))
 
     def reset_cache(self, user_id: int, username: str):
@@ -36,11 +39,11 @@ class FeatureHelper:
     # Last Choice
     def load_last_choice(self, user_id: int) -> str:
         result = self.redis.load(user_id=user_id, action='{}_last_choice'.format(self._feature))
-        self.logger.debug(dict(user_id=user_id, result=result))
+        logger.debug(dict(user_id=user_id, result=result))
         return result['field']
 
     def save_last_choice(self, user_id: int, field=None) -> bool:
-        self.logger.debug(dict(user_id=user_id, action='{}_last_choice'.format(
+        logger.debug(dict(user_id=user_id, action='{}_last_choice'.format(
             self._feature), content=dict(field=field)))
         return self.redis.save(user_id=user_id, action='{}_last_choice'.format(self._feature), content=dict(field=field))
 
@@ -53,11 +56,11 @@ class FeatureHelper:
 
     def load_drafting_ticket(self, user_id: int) -> Ticket:
         result = self.redis.load(user_id=user_id, action='ticket')
-        self.logger.debug(result)
+        logger.debug(result)
         return Ticket(user_id=user_id).to_obj(result)
 
     def save_drafting_ticket(self, user_id: int, ticket: Ticket) -> bool:
-        self.logger.debug(ticket.to_dict())
+        logger.debug(ticket.to_dict())
         return self.redis.save(user_id=user_id, action='ticket', content=ticket.to_dict())
 
     def reset_drafting_ticket(self, user_id: int, username: str) -> Ticket:
@@ -69,11 +72,11 @@ class FeatureHelper:
     # Query
     def load_drafting_query(self, user_id: int) -> Query:
         result = self.redis.load(user_id=user_id, action='query')
-        self.logger.debug(result)
+        logger.debug(result)
         return Query(category_id=-1, user_id=user_id).to_obj(result)
 
     def save_drafting_query(self, user_id: int, query: Query) -> bool:
-        self.logger.debug(query.to_dict())
+        logger.debug(query.to_dict())
         return self.redis.save(user_id=user_id, action='query', content=query.to_dict())
 
     def reset_drafting_query(self, user_id: int, username: str, category: int) -> Ticket:
@@ -87,11 +90,11 @@ class FeatureHelper:
     def tickets_tostr(self, tickets: list, string_template: str) -> str:
         results = []
         for ticket in tickets:
-            self.logger.debug(type(ticket))
-            self.logger.debug(ticket)
-            self.logger.debug(type(string_template))
+            logger.debug(type(ticket))
+            logger.debug(ticket)
+            logger.debug(type(string_template))
             tmplate = string_template.format_map(ticket)
-            self.logger.debug(tmplate)
+            logger.debug(tmplate)
             results.append(tmplate)
-        self.logger.debug(results)
+        logger.debug(results)
         return '\n'.join(results)

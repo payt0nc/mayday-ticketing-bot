@@ -2,7 +2,7 @@ import unittest
 
 import mongomock
 import pytest
-from mayday.controllers import MongoController
+from mayday.controllers.mongo import MongoController
 from mayday.helpers.ticket_helper import TicketHelper
 from mayday.objects.ticket import Ticket
 

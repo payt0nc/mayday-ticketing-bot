@@ -1,51 +1,53 @@
 import json
+import logging
+import os
 
 import redis
 
 import mayday
 
-
-class NoRedisConfigException(Exception):
-    pass
+logger = logging.getLogger()
+logger.setLevel(mayday.get_log_level())
+logger.addHandler(mayday.console_handler())
 
 
 class RedisController:
 
-    def __init__(self, db_name: str = 'search', redis_client: redis.StrictRedis = None, redis_config: dict = None):
-        self.logger = mayday.get_default_logger(log_name='redis_controller')
+    def __init__(self, db_name: str = 'search', redis_client: redis.StrictRedis = None):
+
         if redis_client:
             self.client = redis_client
-        elif redis_config:
-            pool = redis.ConnectionPool(
-                host=redis_config['host'], port=redis_config['port'], db=redis_config['dbs'].index(db_name))
-            self.client = redis.StrictRedis(connection_pool=pool)
         else:
-            raise NoRedisConfigException
+            pool = redis.ConnectionPool(
+                host=os.environ.get('REDIS_HOST', 'localhost'),
+                port=os.environ.get('REDIS_PORT', 6379),
+                db=['search', 'post', 'quick_search', 'update', 'events', 'stats'].index(db_name))
+            self.client = redis.StrictRedis(connection_pool=pool)
 
     def _insert(self, key: str, value: str, expiration=3600) -> bool:
         try:
             return bool(self.client.set(key, value, ex=expiration))
         except redis.exceptions.TimeoutError as timeout:
-            self.logger.error(timeout)
+            logger.error(timeout)
         except redis.exceptions.LockError as locked:
-            self.logger.error(locked)
+            logger.error(locked)
 
     def _load(self, key: str) -> dict:
         try:
             result = self.client.get(key)
             return json.loads(result.decode()) if result else dict()
         except redis.exceptions.TimeoutError as timeout:
-            self.logger.error(timeout)
+            logger.error(timeout)
         except redis.exceptions.LockError as locked:
-            self.logger.error(locked)
+            logger.error(locked)
 
     def _delete(self, key: str) -> int:
         try:
             return self.client.delete(key)
         except redis.exceptions.TimeoutError as timeout:
-            self.logger.error(timeout)
+            logger.error(timeout)
         except redis.exceptions.LockError as locked:
-            self.logger.error(locked)
+            logger.error(locked)
 
     def save(self, user_id: int, action: str, content: dict, expiration=3600) -> bool:
         return self._insert(self.get_key(user_id, action), json.dumps(content, ensure_ascii=False), expiration=expiration)

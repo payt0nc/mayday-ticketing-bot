@@ -42,7 +42,7 @@ class Users(BaseModel):
             return User(user_profile=user_profile)
         return None
 
-    def get_auth(self, user: User) -> dict:
+    def auth(self, user: User) -> dict:
         # check isExisted and blacklist
         auth_result = self._auth(user)
         if auth_result:

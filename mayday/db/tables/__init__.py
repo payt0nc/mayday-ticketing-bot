@@ -35,7 +35,7 @@ class BaseModel:
         return self.execute(Upsert(self.table, row))
 
 
-def create_engine_and_metadata(db_conf, db_settings=None):
+def create_engine_and_metadata(host, username, passwd, db_name, port=3306, db_settings=None):
     settings = {
         'max_overflow': -1,
         'pool_size': 8,
@@ -47,13 +47,12 @@ def create_engine_and_metadata(db_conf, db_settings=None):
     if db_settings is not None:
         settings.update(db_settings)
 
-    db_connection_str = 'mysql://{}:{}@{}:{}/{}?binary_prefix=True&charset=utf8'.format(
-        db_conf['db_username'],
-        db_conf['db_passwd'],
-        db_conf['db_host'],
-        3306,
-        db_conf['db_name']
-    )
+    db_connection_str = 'mysql://{username}:{passwd}@{host}:{port}/{db_name}?binary_prefix=True&charset=utf8'.format(
+        username=username,
+        passwd=passwd,
+        host=host,
+        port=port,
+        db_name=db_name)
 
     engine = sqlalchemy.create_engine(db_connection_str, **settings)
     metadata = MetaData(bind=engine)

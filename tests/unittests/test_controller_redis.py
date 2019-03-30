@@ -2,7 +2,7 @@ import unittest
 import json
 
 from fakeredis import FakeStrictRedis
-from mayday.controllers import RedisController
+from mayday.controllers.redis import RedisController
 
 
 USER_ID = 123456789

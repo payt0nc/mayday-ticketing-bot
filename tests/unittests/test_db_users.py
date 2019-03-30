@@ -30,13 +30,13 @@ class TestCase(unittest.TestCase):
         self.db.role = 'writer'
 
     def test_get_auth(self):
-        result = self.db.get_auth(USER)
+        result = self.db.auth(USER)
         assert result
         assert result['is_blacklist'] is False
         assert result['is_admin'] is False
 
     def test_ban_user(self):
-        self.db.get_auth(USER)
+        self.db.auth(USER)
         assert self.db.ban_user(USER)
 
         user = self.db.get_user_profile(USER.user_id)
@@ -46,7 +46,7 @@ class TestCase(unittest.TestCase):
         assert user.admin_role is False
 
     def test_get_user_profile(self):
-        self.db.get_auth(USER)
+        self.db.auth(USER)
         result = self.db.get_user_profile(USER.user_id)
         assert result
         assert isinstance(result, User)

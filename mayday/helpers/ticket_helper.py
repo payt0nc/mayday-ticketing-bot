@@ -1,22 +1,23 @@
+import logging
 import mayday
-from mayday import Config
-from mayday.controllers import MongoController
+from mayday.controllers.mongo import MongoController
 from mayday.objects.ticket import Ticket
+
+logger = logging.getLogger()
+logger.setLevel(mayday.get_log_level())
+logger.addHandler(mayday.console_handler())
 
 
 class TicketHelper:
 
-    config = Config().schema_config
-
-    TICKET_DB_NAME = config['ticket_db_name']
-    TICKET_COLLECTION_NAME = config['ticket_collection_name']
+    TICKET_DB_NAME = 'ticket'
+    TICKET_COLLECTION_NAME = 'tickets'
 
     def __init__(self, mongo_controller: MongoController):
-        self.logger = mayday.get_default_logger('ticket_helper')
         if mongo_controller:
             self.mongo = mongo_controller
         else:
-            self.mongo = MongoController(mongo_config=Config().mongo_config)
+            self.mongo = MongoController()
 
     # Formal Ticket
     def save_ticket(self, ticket: Ticket) -> bool:

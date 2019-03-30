@@ -67,7 +67,7 @@ class Tickets(BaseModel):
                         conds.append('{} = {}'.format(key, value))
         return ' AND '.join(conds)
 
-    def get_ticket_by_ticket_id(self, ticket_id: int) -> dict:
+    def get_ticket_by_ticket_id(self, ticket_id: int) -> Ticket:
         stmt = select(['*']).where(and_(self.table.c.id == ticket_id))
         row = self.execute(stmt).fetchone()
         if row:
@@ -79,8 +79,20 @@ class Tickets(BaseModel):
         return Ticket().to_obj(ticket)
 
     def get_tickets_by_user_id(self, user_id: int):
-        table = self.table
-        stmt = select(['*']).where(and_(table.c.user_id == user_id)).order_by(desc(table.c.updated_at))
+        stmt = select(['*']).where(and_(self.table.c.user_id == user_id)).order_by(desc(self.table.c.updated_at))
+        cursor = self.execute(stmt)
+        row = cursor.fetchone()
+        while row:
+            ticket = dict()
+            for key, value in dict(zip([col.key for col in self.table.columns], row)).items():
+                if 'wish' in key and isinstance(value, str):
+                    value = json.loads(value)
+                ticket[key] = value
+            yield Ticket().to_obj(ticket)
+            row = cursor.fetchone()
+
+    def get_ticket_by_section(self, section: str) -> list:
+        stmt = select(['*']).where(and_(self.table.c.section == section)).order_by(desc(self.table.c.updated_at))
         cursor = self.execute(stmt)
         row = cursor.fetchone()
         while row:
