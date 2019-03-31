@@ -227,13 +227,13 @@ class Test(unittest.TestCase):
         ticket_string = ticket.to_human_readable()
         assert ticket_string['category'] == '原價轉讓'
         assert ticket_string['date'] == '5.3(Fri)'
-        assert ticket_string['price_id'] == '$1180座位'
+        assert ticket_string['price'] == '$1180座位'
         assert ticket_string['quantity'] == 2
         assert ticket_string['section'] == 'Yellow'
         assert ticket_string['row'] == '32'
         assert ticket_string['seat'] == '59'
         assert ticket_string['wish_dates'] == '5.4(Sat), 5.5(Sun)'
-        assert ticket_string['wish_price_ids'] == '$1180座位'
+        assert ticket_string['wish_prices'] == '$1180座位'
         assert ticket_string['wish_quantities'] == '1, 2'
         assert ticket_string['status'] == '待交易'
         assert ticket_string['remarks'] == ''
