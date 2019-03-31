@@ -4,7 +4,7 @@ from datetime import datetime
 import pytz
 
 from mayday.constants import (CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING,
-                              STATUS_MAPPING)
+                              STATUS_MAPPING, SOURCE_MAPPING)
 from mayday.helpers.item_validator import ItemValidator
 
 TIMEZONE = pytz.timezone('Asia/Taipei')
@@ -190,16 +190,16 @@ class Ticket:
             category=CATEGORY_MAPPING.get(self.category, ''),
             id=self.id if self.id else '',
             date=DATE_MAPPING.get(self.date, ''),
-            price_id=PRICE_MAPPING.get(self.price_id, ''),
+            price=PRICE_MAPPING.get(self.price_id, ''),
             quantity=self.quantity if self.quantity else '',
             section=self.section if self.section else '',
             row=self.row if self.row else '',
             seat=self.seat if self.seat else '',
             status=STATUS_MAPPING.get(self.status, ''),
-            source_id=self.source_id if self.source_id else 0,
+            source=SOURCE_MAPPING.get(self.source_id, ''),
             remarks=self.remarks if self.remarks else '',
             wish_dates=', '.join(sorted(set(map(DATE_MAPPING.get, self.wish_dates)))),
-            wish_price_ids=', '.join(sorted(set(map(PRICE_MAPPING.get, self.wish_price_ids)))),
+            wish_prices=', '.join(sorted(set(map(PRICE_MAPPING.get, self.wish_price_ids)))),
             wish_quantities=', '.join(sorted(map(str, self.wish_quantities))),
             username=self.username,
             created_at=datetime.fromtimestamp(self._created_at).replace(tzinfo=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S'),
@@ -207,7 +207,8 @@ class Ticket:
         )
 
     def update_field(self, field_name: str, field_value: (str, int), remove=False) -> bool:
-        field_name = '_{}'.format(field_name)
+        rename_field_name_map = dict(source='source_id', price='price_id', wish_prices='wish_price_ids')
+        field_name = '_{}'.format(rename_field_name_map.get(field_name, field_name))
         if isinstance(self.__getattribute__(field_name), set):
             source = self.__getattribute__(field_name)
             if remove:

@@ -119,6 +119,12 @@ class ReplyKeyboards:
                      InlineKeyboardButton('H2', callback_data='H2')],
                 ]),
             },
+            'source': InlineKeyboardMarkup([
+                [InlineKeyboardButton('東亞信用卡', callback_data=1),
+                 InlineKeyboardButton('特高娛樂內部認購', callback_data=2)],
+                [InlineKeyboardButton('公開發售', callback_data=3),
+                 InlineKeyboardButton('其他途徑', callback_data=4)],
+            ],  one_time_keyboard=True),
 
             'category': InlineKeyboardMarkup([
                 [InlineKeyboardButton('原價轉讓', callback_data=1),
@@ -129,7 +135,7 @@ class ReplyKeyboards:
         self._search_ticket_keyboard = [
             [
                 InlineKeyboardButton('門票類別', callback_data='category'),
-                InlineKeyboardButton('門票狀態', callback_data='status')
+                InlineKeyboardButton('門票狀態', callback_data='status'),
             ],
             [
                 InlineKeyboardButton('日期', callback_data='date'),
@@ -148,6 +154,7 @@ class ReplyKeyboards:
         self._update_ticket_keyboard = [
             [
                 InlineKeyboardButton('門票狀態', callback_data='status'),
+                InlineKeyboardButton('門票來源', callback_data='source'),
             ],
             [
                 InlineKeyboardButton('日期', callback_data='date'),
@@ -170,7 +177,8 @@ class ReplyKeyboards:
             1: InlineKeyboardMarkup(
                 [
                     [
-                        InlineKeyboardButton('門票類別', callback_data='category')
+                        InlineKeyboardButton('門票類別', callback_data='category'),
+                        InlineKeyboardButton('門票來源', callback_data='source'),
                     ],
                     [
                         InlineKeyboardButton('日期', callback_data='date'),
@@ -194,7 +202,8 @@ class ReplyKeyboards:
             2: InlineKeyboardMarkup(
                 [
                     [
-                        InlineKeyboardButton('門票類別', callback_data='category')
+                        InlineKeyboardButton('門票類別', callback_data='category'),
+                        InlineKeyboardButton('門票來源', callback_data='source'),
                     ],
                     [
                         InlineKeyboardButton('日期', callback_data='date'),

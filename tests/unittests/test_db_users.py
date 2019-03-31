@@ -10,7 +10,7 @@ from mayday.objects.user import User
 USER = User(user_profile=dict(
     user_id=123456789,
     username='test',
-    first_name='tset',
+    first_name='unittest',
     last_name='ttset'
 ))
 

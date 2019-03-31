@@ -24,7 +24,7 @@ class Test(unittest.TestCase):
             user_id=1,
             username='testcase',
             last_name='pytest',
-            first_name='test',
+            first_name='unittest',
             is_bot=False,
             language_code='ZH'
         ))
@@ -35,7 +35,7 @@ class Test(unittest.TestCase):
             user_id=2,
             username='testcase',
             last_name='pytest',
-            first_name='test',
+            first_name='unittest',
             is_bot=False,
             language_code='ZH'
         ))
@@ -47,7 +47,7 @@ class Test(unittest.TestCase):
             user_id=123456789,
             username='testcase',
             last_name='pytest',
-            first_name='test',
+            first_name='unittest',
             is_bot=False,
             language_code='ZH'
         ))

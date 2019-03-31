@@ -3,6 +3,7 @@ import time
 from mayday import engine, metadata
 from mayday.db.tables.tickets import TicketsModel
 from mayday.db.tables.users import UsersModel
+from mayday.db.tables.events import EventsModel
 
 
 TICKET_1 = dict(
@@ -44,6 +45,10 @@ TICKET_2 = dict(
 
 @pytest.fixture
 def database():
+    # Create User Table
+    event_table = EventsModel(engine, metadata, role='writer')
+    event_table.metadata.drop_all()
+    event_table.metadata.create_all()
 
     # Create User Table
     user_table = UsersModel(engine, metadata, role='writer')

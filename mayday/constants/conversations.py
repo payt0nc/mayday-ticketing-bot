@@ -9,6 +9,7 @@ TICKET = '''
 Telegram Username: @{username}
 門票狀態: {status}
 門票類型: {category}
+門票來源: {source}
 日期: {date}
 票面價格: {price}
 數量: {quantity}
@@ -33,6 +34,7 @@ NEW_TICKET = '''
 Telegram Username: @{username}
 *門票狀態: {status}*
 門票類型: {category}
+門票來源: {source}
 日期: {date}
 票面價格: {price}
 數量: {quantity}
@@ -95,6 +97,7 @@ POST_TICKET_CHECK = '''請再一次確認你的門票
 Telegram Username: @{username}
 門票類型: {category}
 門票狀態: {status}
+門票來源: {source}
 日期: {date}
 票面價格: {price}
 數量: {quantity}
@@ -116,6 +119,7 @@ POST_TICKET_START = '''如果你想放張票上來，請填寫一下內容。
 Telegram Username: @{username}
 門票狀態: {status}
 ⚠️門票類型: {category}
+⚠️門票來源: {source}
 ⚠️日期: {date}
 ⚠️票面價格: {price}
 ⚠️數量: {quantity}
@@ -214,6 +218,7 @@ UPDATE_CHECK = '''請再一次確認你的門票
 Telegram Username: @{username}
 門票類型: {category}
 門票狀態: {status}
+門票來源: {source}
 日期: {date}
 票面價格: {price}
 數量: {quantity}
@@ -230,6 +235,7 @@ UPDATE_YOURS = '''
 門票編號: {ticket_id}
 門票狀態: {status}
 門票類型: {category}
+門票來源: {source}
 日期: {date}
 票面價格: {price}
 數量: {quantity}

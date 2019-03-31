@@ -75,6 +75,7 @@ SOURCE_MAPPING = {
 TICKET_MAPPING = dict(
     category='門票類型',
     status='門票狀態',
+    source='門票來源',
     date='日期',
     price='票面價格',
     quantity='數量',
@@ -84,7 +85,6 @@ TICKET_MAPPING = dict(
     update_at='更新時間',
     wish_date='希望交換的日期',
     wish_price_id='希望交換的價格種類',
-    wish_quantity='希望交換的數量'
-)
+    wish_quantity='希望交換的數量')
 
 STAT_URL = 'https://www.google.com/'
