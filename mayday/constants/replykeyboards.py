@@ -16,7 +16,7 @@ class ReplyKeyboards:
                 InlineKeyboardButton('我的飛💎', callback_data='my_ticket'),
             ],
             [
-                InlineKeyboardButton('門票總覽📊', url=STAT_URL),
+                # InlineKeyboardButton('門票總覽📊', url=STAT_URL),
                 InlineKeyboardButton('五迷自發活動🙋', callback_data='events'),
             ],
             [
@@ -61,14 +61,14 @@ class ReplyKeyboards:
                  InlineKeyboardButton('5.12(Sun)', callback_data=512)],
             ], one_time_keyboard=True),
 
-            'wish_prices': InlineKeyboardMarkup([
+            'wish_price_ids': InlineKeyboardMarkup([
                 [InlineKeyboardButton('$1180座位', callback_data=1),
                  InlineKeyboardButton('$880座位', callback_data=2)],
                 [InlineKeyboardButton('$680座位', callback_data=3),
                  InlineKeyboardButton('$480座位', callback_data=4)],
                 [InlineKeyboardButton('$680企位', callback_data=5)],
-                [InlineKeyboardButton('$480座位', callback_data=6),
-                 InlineKeyboardButton('$480座位', callback_data=7)]
+                [InlineKeyboardButton('$1180 無障礙通道座位', callback_data=6),
+                 InlineKeyboardButton('$880 無障礙通道座位', callback_data=7)]
             ], one_time_keyboard=True),
 
             'wish_quantities': InlineKeyboardMarkup([
@@ -77,13 +77,16 @@ class ReplyKeyboards:
                 [InlineKeyboardButton('3', callback_data=3),
                  InlineKeyboardButton('4', callback_data=4)],
             ], one_time_keyboard=True),
+
             'status': InlineKeyboardMarkup([
                 [InlineKeyboardButton('待交易', callback_data=1),
                  InlineKeyboardButton('洽談中', callback_data=2)],
                 [InlineKeyboardButton('已交易', callback_data=3),
                  InlineKeyboardButton('已取消', callback_data=4)],
             ], one_time_keyboard=True),
+
             'section': {
+                # FIXME: Update Latest Seating Plan.
                 1: InlineKeyboardMarkup([
                     [InlineKeyboardButton('A1', callback_data='A1'),
                      InlineKeyboardButton('A2', callback_data='A2')],
@@ -92,32 +95,42 @@ class ReplyKeyboards:
                     [InlineKeyboardButton('B1', callback_data='B1'),
                      InlineKeyboardButton('B2', callback_data='B2')],
                     [InlineKeyboardButton('B3', callback_data='B3'),
-                     InlineKeyboardButton('B4', callback_data='B4')],
+                     InlineKeyboardButton('B4', callback_data='B4')]
                 ]),
                 2: InlineKeyboardMarkup([
-                    [InlineKeyboardButton('A5', callback_data='A5'),
-                     InlineKeyboardButton('B5', callback_data='B5')],
                     [InlineKeyboardButton('C1', callback_data='C1'),
-                     InlineKeyboardButton('C2', callback_data='C2')],
+                     InlineKeyboardButton('F1', callback_data='F1'),
+                     InlineKeyboardButton('F3', callback_data='F3')],
                     [InlineKeyboardButton('D1', callback_data='D1'),
-                     InlineKeyboardButton('D1', callback_data='D2')],
-                    [InlineKeyboardButton('E1', callback_data='E1'),
+                     InlineKeyboardButton('E1', callback_data='E1')],
+                    [InlineKeyboardButton('D2', callback_data='D2'),
                      InlineKeyboardButton('E2', callback_data='E2')],
-                    [InlineKeyboardButton('W1(輪椅區)', callback_data='W1'),
-                     InlineKeyboardButton('W2(輪椅區)', callback_data='W2')],
+                    [InlineKeyboardButton('D3', callback_data='D3'),
+                     InlineKeyboardButton('E3', callback_data='E3')],
+                    [InlineKeyboardButton('D4', callback_data='D4'),
+                     InlineKeyboardButton('E4', callback_data='E4')],
+                    [InlineKeyboardButton('C2', callback_data='C2'),
+                     InlineKeyboardButton('F2', callback_data='F2'),
+                     InlineKeyboardButton('F4', callback_data='F4')],
                 ]),
                 3: InlineKeyboardMarkup([
-                    [InlineKeyboardButton('G1', callback_data='G1'),
-                     InlineKeyboardButton('H1', callback_data='H1')],
+                    [InlineKeyboardButton('H1', callback_data='H1'),
+                     InlineKeyboardButton('K1', callback_data='K1')],
                 ]),
                 4: InlineKeyboardMarkup([
-                    [InlineKeyboardButton('F1', callback_data='F1'),
-                     InlineKeyboardButton('F2', callback_data='F2')],
+                    [InlineKeyboardButton('H1', callback_data='H1'),
+                     InlineKeyboardButton('K2', callback_data='K2')],
                 ]),
                 5: InlineKeyboardMarkup([
-                    [InlineKeyboardButton('G2', callback_data='G2'),
-                     InlineKeyboardButton('H2', callback_data='H2')],
+                    [InlineKeyboardButton('G1', callback_data='G1'),
+                     InlineKeyboardButton('G2', callback_data='G2')],
                 ]),
+                6: InlineKeyboardMarkup(
+                    [InlineKeyboardButton('W-D1(輪椅區)', callback_data='W-D1'),
+                     InlineKeyboardButton('W-D2(輪椅區)', callback_data='W-D2'),
+                     InlineKeyboardButton('W-E1(輪椅區)', callback_data='W-E1')]
+                ),
+                7: InlineKeyboardMarkup([InlineKeyboardButton('W-A4(輪椅區)', callback_data='W-A4')]),
             },
             'source': InlineKeyboardMarkup([
                 [InlineKeyboardButton('東亞信用卡', callback_data=1),
@@ -217,7 +230,7 @@ class ReplyKeyboards:
                     ],
                     [
                         InlineKeyboardButton('交換日期', callback_data='wish_dates'),
-                        InlineKeyboardButton('交換價格類別', callback_data='wish_price'),
+                        InlineKeyboardButton('交換價格類別', callback_data='wish_price_ids'),
                         InlineKeyboardButton('交換數量', callback_data='wish_quantities')
                     ],
                     [

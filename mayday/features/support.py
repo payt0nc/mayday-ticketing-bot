@@ -35,7 +35,7 @@ def list_events(bot, update, *args, **kwargs):
             text=conversations.SUPPORT_LIST_EVENTS,
             chat_id=user.user_id,
             message_id=message.message_id,
-            reply_markup=sp_events_helper.generate_keyboard(events)
+            reply_markup=event_helper.generate_keyboard(events)
         )
     else:
         bot.edit_message_text(

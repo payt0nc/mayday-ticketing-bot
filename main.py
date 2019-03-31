@@ -54,6 +54,7 @@ def main():
     dp.add_handler(CommandHandler('help', mainpanel.ask_help))
     dp.add_handler(RegexHandler('^(Done|done|完)$', mainpanel.done, pass_user_data=True, pass_chat_data=True))
     dp.add_handler(CommandHandler('done', mainpanel.done, pass_user_data=True, pass_chat_data=True))
+    dp.add_handler(CommandHandler('home', mainpanel.start, pass_user_data=True, pass_chat_data=True))
 
     # log all errors
     dp.add_error_handler(mainpanel.error)

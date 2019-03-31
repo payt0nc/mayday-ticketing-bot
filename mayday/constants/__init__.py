@@ -83,8 +83,8 @@ TICKET_MAPPING = dict(
     row='座位行數',
     remarks='備註',
     update_at='更新時間',
-    wish_date='希望交換的日期',
-    wish_price_id='希望交換的價格種類',
-    wish_quantity='希望交換的數量')
+    wish_dates='希望交換的日期',
+    wish_price_ids='希望交換的價格種類',
+    wish_quantities='希望交換的數量')
 
 STAT_URL = 'https://www.google.com/'

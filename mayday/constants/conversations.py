@@ -214,7 +214,7 @@ SUPPORT_NONE_EVENTS = '目前沒有應援活動'
 ############
 
 UPDATE_CHECK = '''請再一次確認你的門票
-門票編號: {ticket_id}
+門票編號: {id}
 Telegram Username: @{username}
 門票類型: {category}
 門票狀態: {status}
@@ -232,7 +232,7 @@ UPDATE_INTO_DB = '你張門票已經畀紀錄'
 UPDATE_RESET = '重置完成'
 UPDATE_START = '''請選擇要更新的門票'''
 UPDATE_YOURS = '''
-門票編號: {ticket_id}
+門票編號: {id}
 門票狀態: {status}
 門票類型: {category}
 門票來源: {source}

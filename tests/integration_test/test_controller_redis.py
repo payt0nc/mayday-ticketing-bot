@@ -32,3 +32,13 @@ class Test:
         user_profile = dict(test='test')
         assert redis.save(USER_ID, ACTION, user_profile)
         assert redis.direct_read(USER_ID, ACTION) == json.dumps(user_profile)
+
+    def test_clean_all_cache(self):
+        redis = RedisController()
+        redis.save(USER_ID, 'search', dict(text='test'))
+        redis.save(USER_ID, 'post', dict(text='test'))
+        redis.save(USER_ID, 'quick_search', dict(text='test'))
+
+        assert redis.count(USER_ID) == 4
+        redis.clean_all(USER_ID, 'start')
+        assert redis.count(USER_ID) == 0

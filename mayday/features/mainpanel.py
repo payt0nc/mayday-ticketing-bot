@@ -5,6 +5,7 @@ from telegram.ext.dispatcher import run_async
 from telegram.parsemode import ParseMode
 
 import mayday
+from mayday.controllers.redis import RedisController
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
 from mayday.db.tables.users import UsersModel
@@ -19,11 +20,13 @@ logger.setLevel(mayday.get_log_level())
 logger.addHandler(mayday.console_handler())
 
 auth_helper = AuthHelper(UsersModel(mayday.engine, mayday.metadata, role='writer'))
+redis = RedisController()
 
 
 @run_async
 def start(bot, update, user_data, chat_data):
     user = User(telegram_user=update.effective_user)
+    redis.clean_all(user.user_id, 'start')
     if user.is_username_blank():
         update.message.reply_text(conversations.MAIN_PANEL_USERNAME_MISSING)
         return stages.END

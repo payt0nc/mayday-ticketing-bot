@@ -176,7 +176,7 @@ class Ticket:
         for key, value in ticket_dict.items():
             if isinstance(value, list):
                 self.__setattr__('_{}'.format(key), set(value))
-            elif key in {'id', 'id'}:
+            elif key in {'id'}:
                 if value:
                     self._id = value
             elif key == '_id':
@@ -198,9 +198,10 @@ class Ticket:
             status=STATUS_MAPPING.get(self.status, ''),
             source=SOURCE_MAPPING.get(self.source_id, ''),
             remarks=self.remarks if self.remarks else '',
-            wish_dates=', '.join(sorted(set(map(DATE_MAPPING.get, self.wish_dates)))),
-            wish_prices=', '.join(sorted(set(map(PRICE_MAPPING.get, self.wish_price_ids)))),
-            wish_quantities=', '.join(sorted(map(str, self.wish_quantities))),
+            wish_dates=', '.join(sorted(set(map(DATE_MAPPING.get, self.wish_dates)))) if self.wish_dates else '',
+            wish_prices=', '.join(sorted(set(map(PRICE_MAPPING.get, self.wish_price_ids)))
+                                  ) if self.wish_price_ids else '',
+            wish_quantities=', '.join(sorted(map(str, self.wish_quantities))) if self.wish_quantities else '',
             username=self.username,
             created_at=datetime.fromtimestamp(self._created_at).replace(tzinfo=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S'),
             updated_at=datetime.fromtimestamp(self._updated_at).replace(tzinfo=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S')
@@ -212,9 +213,9 @@ class Ticket:
         if isinstance(self.__getattribute__(field_name), set):
             source = self.__getattribute__(field_name)
             if remove:
-                source.remove(field_value)
+                source.remove(int(field_value))
             else:
-                source.add(field_value)
+                source.add(int(field_value))
             self.__setattr__(field_name, source)
         elif isinstance(self.__getattribute__(field_name), int):
             self.__setattr__(field_name, int(field_value))
