@@ -19,6 +19,7 @@ jobs:
       - image: circleci/mysql:8.0.3
         environment:
           MYSQL_HOST: 127.0.0.1
+          MYSQL_ROOT_HOST: %
           MYSQL_ROOT_PASSWORD: 'test123456'
           MYSQL_DATABASE: mayday
 
@@ -37,9 +38,15 @@ jobs:
       - run:
           name: install dependencies
           command: |
+            sudo apt-get install mysql-client
             python3 -m venv venv
             . venv/bin/activate
             pip install -r requirements-dev.txt
+      
+      - run:
+          name: Wait for DB
+          # preinstalled in circleci/* docker image
+          command: dockerize -wait tcp://127.0.0.1:3306 -timeout 60s
 
       - save_cache:
           paths:
