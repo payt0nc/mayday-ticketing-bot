@@ -19,7 +19,7 @@ jobs:
       - image: circleci/mysql:8.0.3
         environment:
           MYSQL_HOST: 127.0.0.1
-          MYSQL_ROOT_HOST: %
+          MYSQL_ROOT_HOST: '%'
           MYSQL_ROOT_PASSWORD: 'test123456'
           MYSQL_DATABASE: mayday
 
