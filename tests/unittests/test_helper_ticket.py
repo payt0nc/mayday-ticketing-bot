@@ -1,8 +1,8 @@
 import unittest
 
-import mongomock
 import pytest
-from mayday.controllers.mongo import MongoController
+from sqlalchemy import create_engine, MetaData
+from mayday.db.tables.tickets import TicketsModel
 from mayday.helpers.ticket_helper import TicketHelper
 from mayday.objects.ticket import Ticket
 
@@ -16,14 +16,22 @@ class Test(unittest.TestCase):
 
     @pytest.fixture(autouse=True, scope='function')
     def before_all(self):
-        client = mongomock.MongoClient()
-        self.mongo = MongoController(mongo_client=client)
-        self.helper = TicketHelper(mongo_controller=self.mongo)
+        engine = create_engine('sqlite://')
+        metadata = MetaData(bind=engine)
+        self.db = TicketsModel(engine, metadata)
+
+        # Create Table
+        self.db.metadata.drop_all()
+        self.db.metadata.create_all()
+        self.db.role = 'writer'
+
+        self.helper = TicketHelper(self.db)
 
     def test_save_formal_ticket(self):
         ticket = Ticket(user_id=USER_ID, username=USERNAME)
         assert self.helper.save_ticket(ticket)
 
+        '''
         tickets_in_db = self.mongo.load(
             db_name=self.helper.TICKET_DB_NAME, collection_name=self.helper.TICKET_COLLECTION_NAME,
             query=dict(user_id=USER_ID, username=USERNAME))
@@ -48,3 +56,4 @@ class Test(unittest.TestCase):
         assert ticket_in_db.id  # can not know the ticket if before insert
         assert ticket_in_db.created_at  # can not know the created ts before create
         assert ticket_in_db.updated_at  # always change
+        '''

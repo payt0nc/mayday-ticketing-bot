@@ -1,11 +1,12 @@
 import unittest
 
-import mongomock
 import pytest
-from mayday.controllers.mongo import MongoController
+from sqlalchemy import MetaData, create_engine
+
 from mayday.helpers.query_helper import QueryHelper
 from mayday.objects.query import Query
 from mayday.objects.ticket import Ticket
+from mayday.db.tables.users import UsersModel
 
 USER_ID = 123456789
 USERNAME = 'pytest'
@@ -16,7 +17,16 @@ class Test(unittest.TestCase):
 
     @pytest.fixture(autouse=True, scope='function')
     def before_all(self):
-        self.helper = QueryHelper()
+        engine = create_engine('sqlite://')
+        metadata = MetaData(bind=engine)
+        self.db = UsersModel(engine, metadata)
+
+        # Create Table
+        self.db.metadata.drop_all()
+        self.db.metadata.create_all()
+        self.db.role = 'writer'
+
+        self.helper = QueryHelper(self.db)
     '''
     def test_save_and_load_quick_search_query(self):
         query = Query(user_id=USER_ID, username=USERNAME, category_id=1)

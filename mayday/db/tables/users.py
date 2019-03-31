@@ -7,7 +7,7 @@ from mayday.db.tables import BaseModel
 from mayday.objects.user import User
 
 
-class Users(BaseModel):
+class UsersModel(BaseModel):
 
     def __init__(self, engine, metadata, role='reader'):
         table = Table(
@@ -15,16 +15,16 @@ class Users(BaseModel):
             metadata,
             Column('id', INT, primary_key=True, autoincrement=True),
             Column('user_id', BIGINT, unique=True),
-            Column('username', String),
-            Column('first_name', String),
-            Column('last_name', String),
-            Column('language_code', String),
+            Column('username', String(255)),
+            Column('first_name', String(255)),
+            Column('last_name', String(255)),
+            Column('language_code', String(16)),
             Column('is_admin', BOOLEAN, default=False),
             Column('is_blacklist', BOOLEAN, default=False),
             Column('is_bot', BOOLEAN, default=False),
             Column('created_at', BIGINT),
-            Column('updated_at', BIGINT)
-        )
+            Column('updated_at', BIGINT),
+            extend_existing=True)
         super().__init__(engine, metadata, table, role)
 
     def _auth(self, user: User):

@@ -1,9 +1,6 @@
-import unittest
-
 import pytest
-import sqlalchemy
-from sqlalchemy import MetaData
 
+from mayday import engine, metadata
 from mayday.db.tables.users import UsersModel
 from mayday.objects.user import User
 
@@ -15,19 +12,12 @@ USER = User(user_profile=dict(
 ))
 
 
-@pytest.mark.usefixtures()
-class TestCase(unittest.TestCase):
+@pytest.mark.usefixtures('database')
+class Test:
 
-    @pytest.fixture(autouse=True, scope='function')
-    def before_all(self):
-        engine = sqlalchemy.create_engine('sqlite://')
-        metadata = MetaData(bind=engine)
-        self.db = UsersModel(engine, metadata)
-
-        # Create Table
-        self.db.metadata.drop_all()
-        self.db.metadata.create_all()
-        self.db.role = 'writer'
+    @pytest.fixture(autouse=True)
+    def before_all(self, database: dict):
+        self.db = database['user_table']
 
     def test_get_auth(self):
         result = self.db.auth(USER)
@@ -38,7 +28,6 @@ class TestCase(unittest.TestCase):
     def test_ban_user(self):
         self.db.auth(USER)
         assert self.db.ban_user(USER)
-
         user = self.db.get_user_profile(USER.user_id)
 
         assert user

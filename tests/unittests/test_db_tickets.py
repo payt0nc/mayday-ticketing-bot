@@ -4,7 +4,7 @@ import pytest
 import sqlalchemy
 from sqlalchemy import MetaData
 
-from mayday.db.tables.tickets import Tickets
+from mayday.db.tables.tickets import TicketsModel
 from mayday.objects.ticket import Ticket
 
 SAMPLES = [Ticket().to_obj(dict(
@@ -33,7 +33,7 @@ class TestCase(unittest.TestCase):
     def before_all(self):
         engine = sqlalchemy.create_engine('sqlite://')
         metadata = MetaData(bind=engine)
-        self.db = Tickets(engine, metadata)
+        self.db = TicketsModel(engine, metadata)
 
         # Create Table
         self.db.metadata.drop_all()

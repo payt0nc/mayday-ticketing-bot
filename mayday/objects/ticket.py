@@ -32,7 +32,7 @@ class Ticket:
         self._wish_quantities = set()
         # Status
         self._status = 1
-        self._source = ''
+        self._source_id = int()
         self._remarks = ''
         # TS
         self._created_at = int(time.time())
@@ -127,12 +127,12 @@ class Ticket:
         self._status = int(value)
 
     @property
-    def source(self) -> int:
-        return self._source
+    def source_id(self) -> int:
+        return self._source_id
 
-    @source.setter
-    def source(self, value: int):
-        self._source = int(value)
+    @source_id.setter
+    def source_id(self, value: int):
+        self._source_id = int(value)
 
     @property
     def remarks(self) -> str:
@@ -162,7 +162,7 @@ class Ticket:
             row=self.row,
             seat=self.seat,
             status=self.status,
-            source=self.source,
+            source_id=self.source_id,
             remarks=self.remarks,
             wish_dates=self.wish_dates,
             wish_price_ids=self.wish_price_ids,
@@ -196,7 +196,7 @@ class Ticket:
             row=self.row if self.row else '',
             seat=self.seat if self.seat else '',
             status=STATUS_MAPPING.get(self.status, ''),
-            source=self.source if self.source else '',
+            source_id=self.source_id if self.source_id else 0,
             remarks=self.remarks if self.remarks else '',
             wish_dates=', '.join(sorted(set(map(DATE_MAPPING.get, self.wish_dates)))),
             wish_price_ids=', '.join(sorted(set(map(PRICE_MAPPING.get, self.wish_price_ids)))),

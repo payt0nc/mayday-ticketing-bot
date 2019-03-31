@@ -1,15 +1,22 @@
 import json
+import logging
 import time
 
-from sqlalchemy import BIGINT, Boolean, INT, SMALLINT, Column, String, Table, JSON
+from sqlalchemy import (BIGINT, INT, JSON, SMALLINT, Boolean, Column, String,
+                        Table)
 from sqlalchemy.sql.expression import and_, desc, select, text
 
+# from mayday import console_handler, get_log_level
 from mayday.db import sqls as SQL
 from mayday.db.tables import BaseModel
 from mayday.objects.ticket import Ticket
 
+logger = logging.getLogger()
+# logger.setLevel(get_log_level())
+# logger.addHandler(console_handler())
 
-class Tickets(BaseModel):
+
+class TicketsModel(BaseModel):
 
     def __init__(self, engine, metadata, role='reader'):
         table = Table(
@@ -20,36 +27,22 @@ class Tickets(BaseModel):
             Column('date', INT),
             Column('price_id', SMALLINT),
             Column('quantity', SMALLINT),
-            Column('section', String),
-            Column('row', String),
-            Column('seat', String),
+            Column('section', String(64)),
+            Column('row', String(8)),
+            Column('seat', String(16)),
             Column('status', SMALLINT),
-            Column('source', String),
+            Column('source_id', SMALLINT),
             Column('wish_dates', JSON),
             Column('wish_price_ids', JSON),
             Column('wish_quantities', JSON),
-            Column('remarks', String),
+            Column('remarks', String(255)),
             Column('is_banned', Boolean, default=False),
             Column('user_id', BIGINT),
-            Column('username', String),
+            Column('username', String(255)),
             Column('created_at', INT),
-            Column('updated_at', INT))
+            Column('updated_at', INT),
+            extend_existing=True)
         super().__init__(engine, metadata, table, role)
-
-    @staticmethod
-    def _trim_ticket_tuple(ticket: dict):
-        values = []
-        for key, value in ticket.items():
-            if value:
-                if key == 'status':
-                    values.append('status = {}'.format(value))
-                elif key == 'category':
-                    values.append('category = {}'.format(value))
-                elif key in ['section', 'row', 'remarks', 'wish_dates', 'wish_price_ids', 'wish_quantities']:
-                    values.append('{} = \'{}\''.format(key, value))
-                elif key not in ['updated_at', 'user_id', 'username']:
-                    values.append('{} = {}'.format(key, value))
-        return ','.join(values)
 
     @staticmethod
     def _trim_where_stmt(conditions: dict) -> str:
@@ -60,12 +53,27 @@ class Tickets(BaseModel):
                     conds.append('status = {}'.format(value))
                 if key == 'category':
                     conds.append('category = {}'.format(value))
-                if key in ['price_id', 'date', 'quantity']:
+                if key in ['prices', 'dates', 'quantities']:
                     if isinstance(value, list):
-                        conds.append('{} in ({})'.format(key, ','.join(map(str, value))))
+                        conds.append('{} in ({})'.format(
+                            dict(prices='price_id', dates='date', quantities='quantity').get(key),
+                            ','.join(map(str, value))))
                     else:
                         conds.append('{} = {}'.format(key, value))
         return ' AND '.join(conds)
+
+    def get_tickets_by_date(self, date: int):
+        stmt = select(['*']).where(and_(self.table.c.date == date)).order_by(desc(self.table.c.updated_at))
+        cursor = self.execute(stmt)
+        row = cursor.fetchone()
+        while row:
+            ticket = dict()
+            for key, value in dict(zip([col.key for col in self.table.columns], row)).items():
+                if 'wish' in key and isinstance(value, str):
+                    value = json.loads(value)
+                ticket[key] = value
+            yield Ticket().to_obj(ticket)
+            row = cursor.fetchone()
 
     def get_ticket_by_ticket_id(self, ticket_id: int) -> Ticket:
         stmt = select(['*']).where(and_(self.table.c.id == ticket_id))
@@ -76,9 +84,10 @@ class Tickets(BaseModel):
                 if 'wish' in key and isinstance(value, str):
                     value = json.loads(value)
                 ticket[key] = value
-        return Ticket().to_obj(ticket)
+            return Ticket().to_obj(ticket)
+        return None
 
-    def get_tickets_by_user_id(self, user_id: int):
+    def get_tickets_by_user_id(self, user_id: int) -> list:
         stmt = select(['*']).where(and_(self.table.c.user_id == user_id)).order_by(desc(self.table.c.updated_at))
         cursor = self.execute(stmt)
         row = cursor.fetchone()
@@ -104,12 +113,18 @@ class Tickets(BaseModel):
             yield Ticket().to_obj(ticket)
             row = cursor.fetchone()
 
-    def get_tickets_by_conditions(self, conditions: dict):
+    def get_tickets_by_conditions(self, conditions: dict) -> list:
         stmt = text(SQL.SEARCH_BY_CONDITIONS.format(self._trim_where_stmt(conditions)))
         cursor = self.execute(stmt)
         row = cursor.fetchone()
         while row:
-            yield dict(zip(SQL.SEARCH_BY_CONDITIONS_KEYS, row))
+            ticket = dict()
+            for key, value in dict(zip(SQL.SEARCH_BY_CONDITIONS_KEYS, row)).items():
+                if 'wish' in key and isinstance(value, str):
+                    value = json.loads(value)
+                ticket[key] = value
+            print(ticket)
+            yield Ticket().to_obj(ticket)
             row = cursor.fetchone()
 
     def get_ticket_stats(self) -> dict:
@@ -129,7 +144,9 @@ class Tickets(BaseModel):
             row = cursor.fetchone()
 
     def create_ticket(self, ticket: Ticket):
-        return self.raw_insert(ticket.to_dict())
+        ticket = ticket.to_dict()
+        del ticket['id']
+        return bool(self.raw_insert(ticket).rowcount)
 
     def update_ticket(self, ticket: Ticket) -> bool:
-        return bool(self.raw_update(self.table.c.id == ticket.ticket_id, ticket.to_dict()).rowcount)
+        return bool(self.raw_update(self.table.c.id == ticket.id, ticket.to_dict()).rowcount)

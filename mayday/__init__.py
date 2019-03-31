@@ -3,26 +3,23 @@ import logging
 import os
 
 from sqlalchemy import create_engine
-from mayday.db.tables import create_engine_and_metadata
-from mayday.db.tables.tickets import Tickets as TicketsTable
-from mayday.db.tables.users import Users as UsersTable
 
+from mayday.db.tables import create_engine_and_metadata
+from mayday.db.tables.tickets import TicketsModel
+from mayday.db.tables.users import UsersModel
 
 # Application Setting
-STAGE = os.environ.get('stage', 'test').upper()
+STAGE = os.environ.get('stage', 'TEST').upper()
 TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
 SUBSCRIBE_CHANNEL_NAME = '@testHKmayday'
 
-# init mysql db connection
 engine, metadata = create_engine_and_metadata(
-    host=os.environ.get('DB_HOST', 'localhost'),
+    host=os.environ.get('DB_HOST', '10.0.1.6'),
     username=os.environ.get('DB_USERNAME', 'root'),
     passwd=os.environ.get('DB_PASSWD', 'test123456'),
     db_name=os.environ.get('DB_NAME', 'mayday'))
-if STAGE == 'TEST':
-    engine = create_engine('sqlite:///:memory:')
-TICKETS_TABLE = TicketsTable(engine, metadata, role='writer')
-USERS_TABLE = UsersTable(engine, metadata, role='writer')
+TICKETS_TABLE = TicketsModel(engine, metadata, role='writer')
+USERS_TABLE = UsersModel(engine, metadata, role='writer')
 
 
 # Log Configurate

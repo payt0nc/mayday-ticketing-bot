@@ -3,7 +3,7 @@ import time
 from datetime import datetime
 
 import sqlalchemy
-from sqlalchemy import types
+from sqlalchemy import types, create_engine
 from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.schema import MetaData
 from sqlalchemy.sql.expression import delete, insert, update
@@ -54,7 +54,7 @@ def create_engine_and_metadata(host, username, passwd, db_name, port=3306, db_se
         port=port,
         db_name=db_name)
 
-    engine = sqlalchemy.create_engine(db_connection_str, **settings)
+    engine = create_engine(db_connection_str, **settings)
     metadata = MetaData(bind=engine)
 
     return engine, metadata

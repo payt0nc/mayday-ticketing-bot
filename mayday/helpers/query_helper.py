@@ -5,6 +5,7 @@ import mayday
 from mayday.controllers.redis import RedisController
 from mayday.objects.query import Query
 from mayday.objects.ticket import Ticket
+from mayday.db.tables.tickets import TicketsModel
 
 
 logger = logging.getLogger()
@@ -14,8 +15,8 @@ logger.addHandler(mayday.console_handler())
 
 class QueryHelper:
 
-    def __init__(self):
-        self.tickets_table = mayday.TICKETS_TABLE
+    def __init__(self, table: TicketsModel):
+        self.tickets_table = table if table else mayday.TICKETS_TABLE
         self.redis = RedisController(db_name='quick_search')
 
     # Quick Search
@@ -41,6 +42,9 @@ class QueryHelper:
 
     def search_by_query(self, query: Query) -> list:
         return self.tickets_table.get_tickets_by_conditions(query.to_dict())
+
+    def search_by_date(self, date: str) -> list:
+        return self.tickets_table.get_tickets_by_date(date)
 
     # Util
     @staticmethod

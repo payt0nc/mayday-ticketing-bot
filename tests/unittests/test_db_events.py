@@ -4,7 +4,7 @@ import pytest
 import sqlalchemy
 from sqlalchemy import MetaData
 
-from mayday.db.tables.events import Events
+from mayday.db.tables.events import EventsModel
 
 SAMPLES = [
     dict(
@@ -36,7 +36,7 @@ class TestCase(unittest.TestCase):
     def before_all(self):
         engine = sqlalchemy.create_engine('sqlite://')
         metadata = MetaData(bind=engine)
-        self.db = Events(engine, metadata)
+        self.db = EventsModel(engine, metadata)
 
         # Create Table
         self.db.metadata.drop_all()

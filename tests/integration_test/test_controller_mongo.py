@@ -1,7 +1,6 @@
 import unittest
 import pytest
 
-from mayday import Config
 from mayday.controllers.mongo import MongoController
 
 
@@ -10,10 +9,10 @@ class Test(unittest.TestCase):
 
     @pytest.fixture(autouse=True, scope='function')
     def before_all(self):
-        self.config = Config().mongo_config
+        pass
 
     def test_mongo(self):
-        mongo = MongoController(mongo_config=self.config)
+        mongo = MongoController()
         doc = dict(user_id=123456789, username='pytest', test='Do you see me?', text='Yes!')
 
         # save

@@ -24,7 +24,7 @@ class Test(unittest.TestCase):
                 wish_dates=list(),
                 wish_price_ids=list(),
                 wish_quantities=list(),
-                source='',
+                source_id=0,
                 remarks='',
                 status=1,
                 username=USERNAME,
@@ -47,7 +47,7 @@ class Test(unittest.TestCase):
             'wish_dates': list(),
             'wish_price_ids': list(),
             'wish_quantities': list(),
-            'source': '',
+            'source_id': 0,
             'remarks': '',
             'status': 1,
             'username': USERNAME,
@@ -152,7 +152,7 @@ class Test(unittest.TestCase):
         assert isinstance(ticket.status, int)
         assert ticket.status == 1
 
-        ticket.update_field('source', 1)
+        ticket.update_field('source_id', 1)
         assert isinstance(ticket.status, int)
         assert ticket.status == 1
 
@@ -217,7 +217,7 @@ class Test(unittest.TestCase):
             wish_dates=[504, 505],
             wish_price_ids=[1],
             wish_quantities=[1, 2],
-            source=1,
+            source_id=1,
             remarks='',
             status=1,
             username=USERNAME,
@@ -250,7 +250,7 @@ class Test(unittest.TestCase):
             wish_dates=[],
             wish_price_ids=[],
             wish_quantities=[],
-            source=1,
+            source_id=1,
             remarks='',
             status=1,
             username=USERNAME,
@@ -272,7 +272,7 @@ class Test(unittest.TestCase):
             wish_dates=[],
             wish_price_ids=[],
             wish_quantities=[],
-            source=1,
+            source_id=1,
             remarks='',
             status=1,
             username=USERNAME,

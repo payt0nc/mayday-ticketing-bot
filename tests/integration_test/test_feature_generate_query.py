@@ -1,5 +1,7 @@
-from mayday import Config
-from mayday.controllers import MongoController, RedisController
+import mayday
+
+
+from mayday.controllers.redis import RedisController
 from mayday.helpers.feature_helpers import FeatureHelper
 from mayday.helpers.query_helper import QueryHelper
 from mayday.objects.query import Query
@@ -9,8 +11,7 @@ USERNAME = 'test_account_1'
 
 
 def test_generate_query():
-    config = Config()
-    redis = RedisController(db_name='search', redis_config=config.redis_config)
+    redis = RedisController(db_name='search')
     helper = FeatureHelper(feature='search', redis_controller=redis)
 
     query = Query(category_id=1, user_id=USER_ID, username=USERNAME)
@@ -42,12 +43,10 @@ def test_generate_query():
         quantities='',
         status='待交易',
         user_id=8081,
-        username='test_account_1'
-    )
+        username='test_account_1')
 
     # Save to Quick Search
-    mongo = MongoController(mongo_config=config.mongo_config)
-    query_helper = QueryHelper(mongo_controller=mongo)
+    query_helper = QueryHelper(mayday.TICKETS_TABLE)
 
     quick_search = helper.load_drafting_query(USER_ID)
     assert query_helper.save_quick_search(quick_search)

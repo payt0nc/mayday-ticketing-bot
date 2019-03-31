@@ -17,9 +17,9 @@ SELECT src.id, src.category, src.status, src.`date`, src.price_id, src.quantity,
 
 SEARCH_BY_CONDITIONS_KEYS = ['id', 'category', 'status', 'date', 'price_id',
                              'quantity', 'section', 'row', 'wish_dates', 'wish_price_ids',
-                             'wish_quantities', 'remarks', 'user_id', 'username',  'updated_at']
+                             'wish_quantities', 'remarks', 'source_id', 'user_id', 'username',  'updated_at']
 
-SEARCH_BY_CONDITIONS = '''SELECT id, category, status, `date`, price_id, quantity, section, row, wish_dates, wish_price_ids, wish_quantities, remarks, updated_at, user_id, username
+SEARCH_BY_CONDITIONS = '''SELECT id, category, status, `date`, price_id, quantity, section, `row`, wish_dates, wish_price_ids, wish_quantities, remarks, source_id, user_id, username, updated_at
 FROM tickets WHERE is_banned = 0 AND {} ORDER BY id ASC;
 '''
 INSERT_TICKET = '''INSERT tickets (category, date, price_id, quantity, section, row, wish_dates, wish_price_ids, wish_quantities, user_id, username, updated_at)

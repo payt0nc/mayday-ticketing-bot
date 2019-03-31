@@ -4,7 +4,7 @@ from sqlalchemy.sql.expression import desc, select
 from mayday.db.tables import BaseModel
 
 
-class Events(BaseModel):
+class EventsModel(BaseModel):
 
     def __init__(self, engine, metadata, role='reader'):
         table = Table(

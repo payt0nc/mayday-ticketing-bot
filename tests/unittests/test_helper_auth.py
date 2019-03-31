@@ -3,7 +3,7 @@ import pytest
 
 from sqlalchemy import create_engine, MetaData
 from mayday.objects.user import User
-from mayday.db.tables.users import Users
+from mayday.db.tables.users import UsersModel
 
 
 @pytest.mark.usefixtures()
@@ -13,7 +13,7 @@ class Test(unittest.TestCase):
     def before_all(self):
         engine = create_engine('sqlite://')
         metadata = MetaData(bind=engine)
-        self.db = Users(engine, metadata)
+        self.db = UsersModel(engine, metadata)
 
         # Create Table
         self.db.metadata.drop_all()
