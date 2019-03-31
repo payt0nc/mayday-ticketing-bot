@@ -30,7 +30,7 @@ pytest-cov==2.6.1
 pytest-mongodb==2.1.2
 python-telegram-bot==11.1.0
 pytz==2018.9
-PyYAML==3.13
+PyYAML==5.1
 redis==3.1.0
 requests==2.21.0
 requests-mock==1.5.2
