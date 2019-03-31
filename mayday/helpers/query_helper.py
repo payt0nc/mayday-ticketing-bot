@@ -16,7 +16,7 @@ logger.addHandler(mayday.console_handler())
 class QueryHelper:
 
     def __init__(self, table: TicketsModel):
-        self.tickets_table = table if table else mayday.TICKETS_TABLE
+        self.tickets_table = table
         self.redis = RedisController(db_name='quick_search')
 
     # Quick Search

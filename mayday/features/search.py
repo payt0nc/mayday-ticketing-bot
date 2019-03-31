@@ -1,3 +1,4 @@
+import logging
 import re
 import time
 
@@ -5,17 +6,23 @@ import telegram
 from telegram import chataction
 from telegram.ext.dispatcher import run_async
 
-from mayday import MONGO_CONTROLLER
+import mayday
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
+from mayday.db.tables.tickets import TicketsModel
+from mayday.db.tables.users import UsersModel
 from mayday.helpers.auth_helper import AuthHelper
 from mayday.helpers.feature_helpers.search_helper import SearchHelper
 from mayday.helpers.query_helper import QueryHelper
 from mayday.objects.user import User
 
-auth_helper = AuthHelper(MONGO_CONTROLLER)
-query_helper = QueryHelper(MONGO_CONTROLLER)
+auth_helper = AuthHelper(UsersModel(mayday.engine, mayday.metadata, role='writer'))
+query_helper = QueryHelper(TicketsModel(mayday.engine, mayday.metadata, role='writer'))
 search_helper = SearchHelper('search')
+
+logger = logging.getLogger()
+logger.setLevel(mayday.get_log_level())
+logger.addHandler(mayday.console_handler())
 
 
 @run_async

@@ -18,11 +18,8 @@ engine, metadata = create_engine_and_metadata(
     username=os.environ.get('DB_USERNAME', 'root'),
     passwd=os.environ.get('DB_PASSWD', 'test123456'),
     db_name=os.environ.get('DB_NAME', 'mayday'))
-TICKETS_TABLE = TicketsModel(engine, metadata, role='writer')
-USERS_TABLE = UsersModel(engine, metadata, role='writer')
-
-
 # Log Configurate
+
 
 def json_formatter() -> logging.Formatter:
     log_json_format = dict(

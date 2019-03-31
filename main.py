@@ -1,17 +1,16 @@
-from mayday import Config
-from mayday.constants import stages
-from mayday.features import mainpanel
-# from mayday.features import (mainpanel, platform_stats, post_ticket, quick_search, search, support, update_ticket)
-from mayday.features import support, post_ticket, update_ticket, search, quick_search
 from telegram.ext import (CallbackQueryHandler, CommandHandler,
                           ConversationHandler, Filters, MessageHandler,
                           RegexHandler, Updater)
 
-config = Config()
+import mayday
+from mayday.constants import stages
+# from mayday.features import (mainpanel, platform_stats, post_ticket, quick_search, search, support, update_ticket)
+from mayday.features import (mainpanel, post_ticket, quick_search, search,
+                             support, update_ticket)
 
 
 def main():
-    updater = Updater(config.telegram_token, workers=4, request_kwargs={'read_timeout': 30, 'connect_timeout': 60})
+    updater = Updater(mayday.TELEGRAM_TOKEN, workers=4, request_kwargs={'read_timeout': 30, 'connect_timeout': 60})
     dp = updater.dispatcher
 
     # Main Panel Handler

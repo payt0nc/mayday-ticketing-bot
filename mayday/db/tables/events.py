@@ -25,13 +25,12 @@ class EventsModel(BaseModel):
     def insert(self, row):
         self.raw_insert(row)
 
-    def get_events(self):
-        stmt = select(['*']) \
-            .where(self.table.c.is_deleted == 0) \
-            .order_by(desc(self.table.c.id))
-
+    def list_all_events(self) -> list:
+        stmt = select(['*']).where(self.table.c.is_deleted == 0).order_by(desc(self.table.c.id))
         cursor = self.execute(stmt)
+        events = list()
         row = cursor.fetchone()
         while row:
-            yield dict(zip([col.key for col in self.table.columns], row))
+            events.append(dict(zip([col.key for col in self.table.columns], row)))
             row = cursor.fetchone()
+        return events

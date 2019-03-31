@@ -15,7 +15,7 @@ class Test:
     def test_search_ticket_by_date(self):
         helper = QueryHelper(self.db)
 
-        ticket = helper.search_by_date(505).__next__()
+        ticket = helper.search_by_date(505)[0]
 
         assert ticket
         assert ticket.category == 1
@@ -37,7 +37,7 @@ class Test:
 
     def test_search_ticket_by_section(self):
         helper = QueryHelper(self.db)
-        ticket = helper.search_by_section('C1').__next__()
+        ticket = helper.search_by_section('C1')[0]
 
         assert ticket
         assert ticket.category == 1
@@ -60,7 +60,7 @@ class Test:
     def test_search_ticket_by_query(self):
         helper = QueryHelper(self.db)
 
-        ticket = helper.search_by_query(Query(category_id=1).to_obj(dict(prices=[2]))).__next__()
+        ticket = helper.search_by_query(Query(category_id=1).to_obj(dict(prices=[2])))[0]
         print(ticket.to_dict())
         assert ticket
         assert ticket.category == 1
@@ -82,7 +82,7 @@ class Test:
 
     def test_search_ticket_by_user_id(self):
         helper = QueryHelper(self.db)
-        ticket = helper.search_by_user_id(8082).__next__()
+        ticket = helper.search_by_user_id(8082)[0]
         assert ticket
         assert ticket.category == 2
         assert ticket.id
@@ -103,7 +103,7 @@ class Test:
 
     def test_search_ticket_by_ticket_id(self):
         helper = QueryHelper(self.db)
-        ticket = helper.search_by_user_id(8082).__next__()
+        ticket = helper.search_by_user_id(8082)[0]
         assert ticket
         assert ticket.category == 2
         assert ticket.id

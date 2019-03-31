@@ -1,8 +1,12 @@
+import logging
+
 import mayday
 from mayday.helpers.feature_helpers import FeatureHelper
 from mayday.objects.query import Query
 
-logger = mayday.get_default_logger('search_helper')
+logger = logging.getLogger()
+logger.setLevel(mayday.get_log_level())
+logger.addHandler(mayday.console_handler())
 
 
 class SearchHelper(FeatureHelper):
@@ -10,7 +14,7 @@ class SearchHelper(FeatureHelper):
     def update_cache(self, user_id: int, value: (str, int)) -> Query:
         query = self.load_drafting_query(user_id)
         last_choice = self.load_last_choice(user_id)
-        self.logger.debug(last_choice)
+        logger.debug(last_choice)
         query.update_field(last_choice, value)
         self.save_drafting_query(user_id, query)
         return query

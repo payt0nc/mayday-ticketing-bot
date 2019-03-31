@@ -35,7 +35,7 @@ class Test:
         tickets = self.db.get_tickets_by_user_id(8081)
         assert tickets
 
-        ticket = tickets.__next__()
+        ticket = tickets[0]
         ticket.update_field('status', 4)
         ticket_id = ticket.id
         assert isinstance(ticket, Ticket)

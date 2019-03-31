@@ -1,5 +1,12 @@
+import logging
+
+import mayday
 from mayday.helpers.feature_helpers import FeatureHelper
 from mayday.objects.ticket import Ticket
+
+logger = logging.getLogger()
+logger.setLevel(mayday.get_log_level())
+logger.addHandler(mayday.console_handler())
 
 
 class PostTicketHelper(FeatureHelper):

@@ -1,18 +1,27 @@
+import logging
+
 from telegram.ext.dispatcher import run_async
 
-from mayday import MONGO_CONTROLLER
+import mayday
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
+from mayday.db.tables.tickets import TicketsModel
+from mayday.db.tables.users import UsersModel
 from mayday.helpers.auth_helper import AuthHelper
+from mayday.helpers.feature_helpers.search_helper import SearchHelper
 from mayday.helpers.feature_helpers.update_helper import UpdateHelper
 from mayday.helpers.query_helper import QueryHelper
-from mayday.helpers.ticket_helper import TicketHelper
+# from mayday.helpers.ticket_helper import TicketHelper
 from mayday.objects.user import User
 
-auth_helper = AuthHelper(MONGO_CONTROLLER)
-query_helper = QueryHelper(MONGO_CONTROLLER)
-ticket_helper = TicketHelper(MONGO_CONTROLLER)
+auth_helper = AuthHelper(UsersModel(mayday.engine, mayday.metadata, role='writer'))
+query_helper = QueryHelper(TicketsModel(mayday.engine, mayday.metadata, role='writer'))
+search_helper = SearchHelper('search')
 update_helper = UpdateHelper(feature='update')
+
+logger = logging.getLogger()
+logger.setLevel(mayday.get_log_level())
+logger.addHandler(mayday.console_handler())
 
 
 @run_async

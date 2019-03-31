@@ -1,20 +1,25 @@
+import logging
+
 from telegram.ext.dispatcher import run_async
 
-from mayday import MONGO_CONTROLLER
+import mayday
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
-from mayday.helpers.feature_helpers import sp_events_helper
-from mayday.helpers.query_helper import QueryHelper
+from mayday.helpers.feature_helpers.sp_events_helper import EventHelper
 from mayday.objects.user import User
 
-query_helper = QueryHelper(MONGO_CONTROLLER)
+logger = logging.getLogger()
+logger.setLevel(mayday.get_log_level())
+logger.addHandler(mayday.console_handler())
+
+event_helper = EventHelper('events')
 
 
 @run_async
 def list_events(bot, update, *args, **kwargs):
     user = User(telegram_user=update.effective_user)
     message = update.callback_query.message
-    events = query_helper.list_all_events()
+    events = event_helper.list_all_events()
     callback_data = update.callback_query.data
     if callback_data == 'mainpanel':
         bot.edit_message_text(

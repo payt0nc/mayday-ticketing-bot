@@ -65,15 +65,15 @@ class TicketsModel(BaseModel):
     def get_tickets_by_date(self, date: int):
         stmt = select(['*']).where(and_(self.table.c.date == date)).order_by(desc(self.table.c.updated_at))
         cursor = self.execute(stmt)
-        row = cursor.fetchone()
-        while row:
+        tickets = list()
+        for row in cursor.fetchall():
             ticket = dict()
             for key, value in dict(zip([col.key for col in self.table.columns], row)).items():
                 if 'wish' in key and isinstance(value, str):
                     value = json.loads(value)
                 ticket[key] = value
-            yield Ticket().to_obj(ticket)
-            row = cursor.fetchone()
+            tickets.append(Ticket().to_obj(ticket))
+        return tickets
 
     def get_ticket_by_ticket_id(self, ticket_id: int) -> Ticket:
         stmt = select(['*']).where(and_(self.table.c.id == ticket_id))
@@ -90,42 +90,42 @@ class TicketsModel(BaseModel):
     def get_tickets_by_user_id(self, user_id: int) -> list:
         stmt = select(['*']).where(and_(self.table.c.user_id == user_id)).order_by(desc(self.table.c.updated_at))
         cursor = self.execute(stmt)
-        row = cursor.fetchone()
-        while row:
+        tickets = list()
+        for row in cursor.fetchall():
             ticket = dict()
             for key, value in dict(zip([col.key for col in self.table.columns], row)).items():
                 if 'wish' in key and isinstance(value, str):
                     value = json.loads(value)
                 ticket[key] = value
-            yield Ticket().to_obj(ticket)
-            row = cursor.fetchone()
+            print(ticket)
+            tickets.append(Ticket().to_obj(ticket))
+        return tickets
 
     def get_ticket_by_section(self, section: str) -> list:
         stmt = select(['*']).where(and_(self.table.c.section == section)).order_by(desc(self.table.c.updated_at))
         cursor = self.execute(stmt)
-        row = cursor.fetchone()
-        while row:
+        tickets = list()
+        for row in cursor.fetchall():
             ticket = dict()
             for key, value in dict(zip([col.key for col in self.table.columns], row)).items():
                 if 'wish' in key and isinstance(value, str):
                     value = json.loads(value)
                 ticket[key] = value
-            yield Ticket().to_obj(ticket)
-            row = cursor.fetchone()
+            tickets.append(Ticket().to_obj(ticket))
+        return tickets
 
     def get_tickets_by_conditions(self, conditions: dict) -> list:
         stmt = text(SQL.SEARCH_BY_CONDITIONS.format(self._trim_where_stmt(conditions)))
         cursor = self.execute(stmt)
-        row = cursor.fetchone()
-        while row:
+        tickets = list()
+        for row in cursor.fetchall():
             ticket = dict()
             for key, value in dict(zip(SQL.SEARCH_BY_CONDITIONS_KEYS, row)).items():
                 if 'wish' in key and isinstance(value, str):
                     value = json.loads(value)
                 ticket[key] = value
-            print(ticket)
-            yield Ticket().to_obj(ticket)
-            row = cursor.fetchone()
+            tickets.append(Ticket().to_obj(ticket))
+        return tickets
 
     def get_ticket_stats(self) -> dict:
         status_distribution = self.execute(text(SQL.STATUS_DISRIBUTION)).fetchall()

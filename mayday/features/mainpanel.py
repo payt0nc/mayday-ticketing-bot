@@ -1,3 +1,4 @@
+import logging
 import time
 
 from telegram.ext.dispatcher import run_async
@@ -6,14 +7,18 @@ from telegram.parsemode import ParseMode
 import mayday
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
+from mayday.db.tables.users import UsersModel
 # from mayday.features import (platform_stats, post_ticket, quick_search, search, support, update_ticket)
 from mayday.features import (post_ticket, quick_search, search, support,
                              update_ticket)
 from mayday.helpers.auth_helper import AuthHelper
 from mayday.objects.user import User
 
-AUTH_HELPER = AuthHelper(mayday.MONGO_CONTROLLER)
-logger = mayday.get_default_logger('main_panel')
+logger = logging.getLogger()
+logger.setLevel(mayday.get_log_level())
+logger.addHandler(mayday.console_handler())
+
+auth_helper = AuthHelper(UsersModel(mayday.engine, mayday.metadata, role='writer'))
 
 
 @run_async
@@ -23,7 +28,7 @@ def start(bot, update, user_data, chat_data):
         update.message.reply_text(conversations.MAIN_PANEL_USERNAME_MISSING)
         return stages.END
 
-    access_pass = AUTH_HELPER.auth(user)
+    access_pass = auth_helper.auth(user)
     if access_pass['is_admin']:
         pass
 

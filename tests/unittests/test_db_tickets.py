@@ -63,7 +63,7 @@ class TestCase(unittest.TestCase):
         assert result.remarks == ticket.remarks
 
     def test_get_tickets_by_user_id(self):
-        result = self.db.get_tickets_by_user_id(user_id=123456789).__next__()
+        result = self.db.get_tickets_by_user_id(user_id=123456789)[0]
         ticket = SAMPLES[0]
         assert result
         assert result.id == ticket.id

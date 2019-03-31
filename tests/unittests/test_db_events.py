@@ -47,6 +47,6 @@ class TestCase(unittest.TestCase):
             self.db.insert(sample)
 
     def test_get_events(self):
-        events = [x for x in self.db.get_events()]
+        events = self.db.list_all_events()
         assert len(events) == 1
         assert events[0]['name'] == 'fake event'

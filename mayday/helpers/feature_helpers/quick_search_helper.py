@@ -1,11 +1,17 @@
+import logging
+
 import mayday
-from mayday import MONGO_CONTROLLER
+from mayday import engine, metadata
+from mayday.db.tables.tickets import TicketsModel
 from mayday.helpers.feature_helpers import FeatureHelper
 from mayday.helpers.query_helper import QueryHelper
 from mayday.objects.query import Query
 
-logger = mayday.get_default_logger('search_helper')
-query_helper = QueryHelper(MONGO_CONTROLLER)
+logger = logging.getLogger()
+logger.setLevel(mayday.get_log_level())
+logger.addHandler(mayday.console_handler())
+
+query_helper = QueryHelper(TicketsModel(engine, metadata, role='writer'))
 
 
 class QuickSearchHelper(FeatureHelper):
