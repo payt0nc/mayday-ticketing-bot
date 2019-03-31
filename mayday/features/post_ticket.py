@@ -3,6 +3,7 @@ import re
 
 import telegram
 from telegram.ext.dispatcher import run_async
+from telegram.error import BadRequest
 
 import mayday
 from mayday import SUBSCRIBE_CHANNEL_NAME
@@ -30,11 +31,18 @@ def start(bot, update, *args, **kwargs):
     user = User(telegram_user=update.effective_user)
     ticket = post_helper.reset_cache(user.user_id, user.username)
     category = post_helper.get_category_id_from_cache(user.user_id)
-    bot.edit_message_text(
-        text=conversations.POST_TICKET_START.format_map(ticket.to_human_readable()),
-        chat_id=user.user_id,
-        message_id=update.callback_query.message.message_id,
-        reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category))
+    try:
+        bot.edit_message_text(
+            text=conversations.POST_TICKET_START.format_map(ticket.to_human_readable()),
+            chat_id=user.user_id,
+            message_id=update.callback_query.message.message_id,
+            reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category))
+    except BadRequest:
+        bot.send_message(
+            text=conversations.POST_TICKET_START.format_map(ticket.to_human_readable()),
+            chat_id=user.user_id,
+            message_id=update.callback_query.message.message_id,
+            reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category))
     return stages.POST_SELECT_FIELD
 
 
@@ -50,12 +58,20 @@ def select_field(bot, update, *args, **kwargs):
 
     if callback_data == 'reset':
         ticket = post_helper.reset_cache(user_id=user.user_id, username=user.username)
-        bot.edit_message_text(
-            text=conversations.POST_TICKET_START.format_map(ticket.to_human_readable()),
-            chat_id=user.user_id,
-            message_id=message.message_id,
-            reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category),
-            parse_mode=telegram.ParseMode.MARKDOWN)
+        try:
+            bot.edit_message_text(
+                text=conversations.POST_TICKET_START.format_map(ticket.to_human_readable()),
+                chat_id=user.user_id,
+                message_id=message.message_id,
+                reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category),
+                parse_mode=telegram.ParseMode.MARKDOWN)
+        except BadRequest:
+            bot.send_message(
+                text=conversations.POST_TICKET_START.format_map(ticket.to_human_readable()),
+                chat_id=user.user_id,
+                message_id=message.message_id,
+                reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category),
+                parse_mode=telegram.ParseMode.MARKDOWN)
         return stages.POST_SELECT_FIELD
 
     if callback_data == 'check':
@@ -67,11 +83,18 @@ def select_field(bot, update, *args, **kwargs):
             if check_wishlist['status'] is False:
                 ticket = ticket.fill_full_wishlist()
                 post_helper.save_drafting_ticket(user.user_id, ticket)
-            bot.edit_message_text(
-                text=conversations.POST_TICKET_CHECK.format_map(ticket.to_human_readable()),
-                chat_id=user.user_id,
-                message_id=message.message_id,
-                reply_markup=KEYBOARDS.before_submit_post_keyboard_markup)
+            try:
+                bot.edit_message_text(
+                    text=conversations.POST_TICKET_CHECK.format_map(ticket.to_human_readable()),
+                    chat_id=user.user_id,
+                    message_id=message.message_id,
+                    reply_markup=KEYBOARDS.before_submit_post_keyboard_markup)
+            except BadRequest:
+                bot.send_message(
+                    text=conversations.POST_TICKET_CHECK.format_map(ticket.to_human_readable()),
+                    chat_id=user.user_id,
+                    message_id=message.message_id,
+                    reply_markup=KEYBOARDS.before_submit_post_keyboard_markup)
             return stages.POST_BEFORE_SUBMIT
 
         bot.send_message(
@@ -88,33 +111,61 @@ def select_field(bot, update, *args, **kwargs):
     if callback_data == 'section':
         ticket = post_helper.load_drafting_ticket(user.user_id)
         category = post_helper.get_category_id_from_cache(user_id=user.user_id)
-        if ticket.price:
+        if ticket.price_id:
+            try:
+                bot.edit_message_text(
+                    text=conversations.POST_TICKET_INFO.format(message=TICKET_MAPPING.get(callback_data)),
+                    chat_id=user.user_id,
+                    message_id=message.message_id,
+                    reply_markup=KEYBOARDS.conditions_keyboard_mapping.get(callback_data)[ticket.price_id])
+            except BadRequest:
+                bot.send_message(
+                    text=conversations.POST_TICKET_INFO.format(message=TICKET_MAPPING.get(callback_data)),
+                    chat_id=user.user_id,
+                    message_id=message.message_id,
+                    reply_markup=KEYBOARDS.conditions_keyboard_mapping.get(callback_data)[ticket.price_id])
+            return stages.POST_FILL_VALUE
+        try:
             bot.edit_message_text(
-                text=conversations.POST_TICKET_INFO.format(message=TICKET_MAPPING.get(callback_data)),
+                text=conversations.POST_TICKET_SECTION,
                 chat_id=user.user_id,
                 message_id=message.message_id,
-                reply_markup=KEYBOARDS.conditions_keyboard_mapping.get(callback_data)['price'])
-            return stages.POST_FILL_VALUE
-        bot.edit_message_text(
-            text=conversations.POST_TICKET_SECTION,
-            chat_id=user.user_id,
-            message_id=message.message_id,
-            reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category))
+                reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category))
+        except BadRequest:
+            bot.send_message(
+                text=conversations.POST_TICKET_SECTION,
+                chat_id=user.user_id,
+                message_id=message.message_id,
+                reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category))
         return stages.POST_SELECT_FIELD
 
     if callback_data == 'mainpanel':
-        bot.edit_message_text(
-            chat_id=user.user_id,
-            message_id=message.message_id,
-            text=conversations.MAIN_PANEL_START.format(username=user.username),
-            reply_markup=KEYBOARDS.actions_keyboard_markup)
+        try:
+            bot.edit_message_text(
+                chat_id=user.user_id,
+                message_id=message.message_id,
+                text=conversations.MAIN_PANEL_START.format(username=user.username),
+                reply_markup=KEYBOARDS.actions_keyboard_markup)
+        except BadRequest:
+            bot.send_message(
+                chat_id=user.user_id,
+                message_id=message.message_id,
+                text=conversations.MAIN_PANEL_START.format(username=user.username),
+                reply_markup=KEYBOARDS.actions_keyboard_markup)
         return stages.MAIN_PANEL
 
-    bot.edit_message_text(
-        text=conversations.POST_TICKET_INFO.format(message=TICKET_MAPPING.get(callback_data)),
-        chat_id=user.user_id,
-        message_id=message.message_id,
-        reply_markup=KEYBOARDS.conditions_keyboard_mapping.get(callback_data))
+    try:
+        bot.edit_message_text(
+            text=conversations.POST_TICKET_INFO.format(message=TICKET_MAPPING.get(callback_data)),
+            chat_id=user.user_id,
+            message_id=message.message_id,
+            reply_markup=KEYBOARDS.conditions_keyboard_mapping.get(callback_data))
+    except BadRequest:
+        bot.send_message(
+            text=conversations.POST_TICKET_INFO.format(message=TICKET_MAPPING.get(callback_data)),
+            chat_id=user.user_id,
+            message_id=message.message_id,
+            reply_markup=KEYBOARDS.conditions_keyboard_mapping.get(callback_data))
     return stages.POST_FILL_VALUE
 
 
@@ -127,11 +178,18 @@ def fill_in_field(bot, update, *args, **kwargs):
     category = post_helper.get_category_id_from_cache(user_id=user.user_id)
     if re.match(r'\d+||^([A-Z0-9]){2}$', callback_data):
         ticket = post_helper.update_cache(user.user_id, callback_data)
-        bot.edit_message_text(
-            text=conversations.POST_TICKET_START.format_map(ticket.to_human_readable()),
-            chat_id=user.user_id,
-            message_id=message.message_id,
-            reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category))
+        try:
+            bot.edit_message_text(
+                text=conversations.POST_TICKET_START.format_map(ticket.to_human_readable()),
+                chat_id=user.user_id,
+                message_id=message.message_id,
+                reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category))
+        except BadRequest:
+            bot.send_message(
+                text=conversations.POST_TICKET_START.format_map(ticket.to_human_readable()),
+                chat_id=user.user_id,
+                message_id=message.message_id,
+                reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category))
         return stages.POST_SELECT_FIELD
 
     ticket = post_helper.load_drafting_ticket(user.user_id)
@@ -139,7 +197,10 @@ def fill_in_field(bot, update, *args, **kwargs):
     keyboard = KEYBOARDS.conditions_keyboard_mapping.get(choice)
     text = '\n\n'.join([conversations.TYPE_IN_ERROR,
                         conversations.POST_TICKET_INFO.format(message=TICKET_MAPPING.get(choice))])
-    bot.edit_message_text(text=text, chat_id=user.user_id, message_id=message.message_id, reply_markup=keyboard)
+    try:
+        bot.edit_message_text(text=text, chat_id=user.user_id, message_id=message.message_id, reply_markup=keyboard)
+    except BadRequest:
+        bot.send_message(text=text, chat_id=user.user_id, message_id=message.message_id, reply_markup=keyboard)
     # FIXME: No Return?
 
 
@@ -164,11 +225,18 @@ def submit(bot, update, *args, **kwargs):
 
     if callback_data == 'reset':
         ticket = post_helper.reset_cache(user_id=user.user_id, username=user.username)
-        bot.edit_message_text(
-            text=conversations.POST_TICKET_START.format_map(ticket.to_human_readable()),
-            chat_id=user.user_id,
-            message_id=message.message_id,
-            reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category))
+        try:
+            bot.edit_message_text(
+                text=conversations.POST_TICKET_START.format_map(ticket.to_human_readable()),
+                chat_id=user.user_id,
+                message_id=message.message_id,
+                reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category))
+        except BadRequest:
+            bot.send_message(
+                text=conversations.POST_TICKET_START.format_map(ticket.to_human_readable()),
+                chat_id=user.user_id,
+                message_id=message.message_id,
+                reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category))
         return stages.POST_SELECT_FIELD
 
     if callback_data == 'submit':
@@ -178,15 +246,27 @@ def submit(bot, update, *args, **kwargs):
             return stages.END
         ticket = post_helper.load_drafting_ticket(user.user_id)
         if ticket_helper.save_ticket(ticket):
-            bot.edit_message_text(
-                text=conversations.POST_TICKET_INTO_DB,
-                chat_id=user.user_id,
-                message_id=message.message_id)
+            try:
+                bot.edit_message_text(
+                    text=conversations.POST_TICKET_INTO_DB,
+                    chat_id=user.user_id,
+                    message_id=message.message_id)
+            except BadRequest:
+                bot.send_message(
+                    text=conversations.POST_TICKET_INTO_DB,
+                    chat_id=user.user_id,
+                    message_id=message.message_id)
         else:
-            bot.edit_message_text(
-                text=conversations.POST_TICKET_ERROR,
-                chat_id=user.user_id,
-                message_id=message.message_id)
+            try:
+                bot.edit_message_text(
+                    text=conversations.POST_TICKET_ERROR,
+                    chat_id=user.user_id,
+                    message_id=message.message_id)
+            except BadRequest:
+                bot.send_message(
+                    text=conversations.POST_TICKET_ERROR,
+                    chat_id=user.user_id,
+                    message_id=message.message_id)
 
         # Send Ticket to Channel
         bot.send_message(
