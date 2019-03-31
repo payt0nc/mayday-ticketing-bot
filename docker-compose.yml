@@ -1,0 +1,18 @@
+version: '3'
+services:
+  bot:
+    build: .
+    networks:
+      - internal
+    env_file:
+      - env.list
+  redis:
+    image: "redis:alpine"
+        networks:
+      - internal
+
+networks:
+  internal:
+    driver: mayday-internal
+  external:
+    driver: mayday-external
