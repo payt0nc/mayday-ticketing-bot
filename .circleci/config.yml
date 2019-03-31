@@ -21,7 +21,6 @@ jobs:
           MYSQL_HOST: 127.0.0.1
           MYSQL_ROOT_PASSWORD: 'test123456'
           MYSQL_DATABASE: mayday
-          MYSQL_ALLOW_EMPTY_PASSWORD: true
 
     working_directory: ~/repo
 
@@ -57,7 +56,8 @@ jobs:
           environment:
             CODECOV_TOKEN: 
           command: |
-            python3 -m pytest --cov=./mayday/ tests/* -vv
+            . venv/bin/activate
+            pytest --cov=./mayday/ tests/* -vv
             coverage xml --omit="./mayday/constants/*"
             python-codacy-coverage -r coverage.xml
 
