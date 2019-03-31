@@ -1,5 +1,7 @@
 import pytest
 
+import mayday
+from mayday.db.tables.tickets import TicketsModel
 from mayday.objects.query import Query
 from mayday.objects.ticket import Ticket
 from .conftest import TICKET_1
@@ -10,7 +12,7 @@ class Test:
 
     @pytest.fixture(autouse=True)
     def before_all(self, database: dict):
-        self.db = database['ticket_table']
+        self.db = TicketsModel(mayday.engine, mayday.metadata)
 
     def test_get_tickets_by_user_id(self):
         results = self.db.get_tickets_by_user_id(user_id=8081)
