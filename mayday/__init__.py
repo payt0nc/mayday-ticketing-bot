@@ -16,10 +16,11 @@ SUBSCRIBE_CHANNEL_NAME = '@testHKmayday'
 engine, metadata = create_engine_and_metadata(
     host=os.environ.get('DB_HOST', '10.0.1.6'),
     username=os.environ.get('DB_USERNAME', 'root'),
-    passwd=os.environ.get('DB_PASSWD', 'test123456'),
+    passwd=os.environ.get('DB_PASSWD', ''),
     db_name=os.environ.get('DB_NAME', 'mayday'))
-# Log Configurate
 
+
+# Log Configurate
 
 def json_formatter() -> logging.Formatter:
     log_json_format = dict(

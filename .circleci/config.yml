@@ -16,6 +16,12 @@ jobs:
       # - image: circleci/postgres:9.4
       - image: circleci/mongo:4.0.6
       - image: circleci/redis:5.0.2
+      - image: circleci/mysql:8.0.3
+        environment:
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_ROOT_PASSWORD: 'test123456'
+          MYSQL_DATABASE: mayday
+          MYSQL_ALLOW_EMPTY_PASSWORD: true
 
     working_directory: ~/repo
 
@@ -51,8 +57,7 @@ jobs:
           environment:
             CODECOV_TOKEN: 
           command: |
-            . venv/bin/activate
-            pytest -vv --cov=./mayday/ tests/*
+            python3 -m pytest --cov=./mayday/ tests/* -vv
             coverage xml --omit="./mayday/constants/*"
             python-codacy-coverage -r coverage.xml
 
