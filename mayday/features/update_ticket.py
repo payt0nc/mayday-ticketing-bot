@@ -2,6 +2,7 @@ import logging
 import time
 
 from telegram.ext.dispatcher import run_async
+from telegram.error import BadRequest
 
 import mayday
 from mayday.constants import TICKET_MAPPING, conversations, stages
@@ -60,11 +61,12 @@ def start(bot, update, *args, **kwargs):
 @run_async
 def select_ticket(bot, update, *args, **kwargs):
     user = User(telegram_user=update.effective_user)
+    message = update.callback_query.message
     callback_data = update.callback_query.data
     if callback_data == 'mainpanel':
         bot.edit_message_text(
             chat_id=user.user_id,
-            message_id=update.callback_query.message.message_id,
+            message_id=message.message_id,
             text=conversations.MAIN_PANEL_START.format_map(user.to_dict()),
             reply_markup=KEYBOARDS.actions_keyboard_markup)
         return stages.MAIN_PANEL
@@ -73,7 +75,7 @@ def select_ticket(bot, update, *args, **kwargs):
     bot.edit_message_text(
         text=conversations.UPDATE_YOURS.format_map(ticket.to_human_readable()),
         chat_id=user.user_id,
-        message_id=update.callback_query.message.message_id,
+        message_id=message.message_id,
         reply_markup=KEYBOARDS.update_ticket_keyboard_markup)
     return stages.UPDATE_SELECT_FIELD
 
@@ -87,7 +89,7 @@ def select_field(bot, update, *arg, **kwargs):
     if callback_data == 'mainpanel':
         bot.edit_message_text(
             chat_id=user.user_id,
-            message_id=update.callback_query.message.message_id,
+            message_id=message.message_id,
             text=conversations.MAIN_PANEL_START.format_map(user.to_dict()),
             reply_markup=KEYBOARDS.actions_keyboard_markup)
         return stages.MAIN_PANEL
@@ -138,43 +140,33 @@ def fill_type_in_field(bot, update, *args, **kwargs):
 @run_async
 def submit(bot, update, *args, **kwargs):
     callback_data = update.callback_query.data
-    message = update.callback_query.message
     user = User(telegram_user=update.effective_user)
-
-    if callback_data == 'mainpanel':
-        bot.edit_message_text(
-            chat_id=user.user_id,
-            message_id=update.callback_query.message.message_id,
-            text=conversations.MAIN_PANEL_START.format(username=user.username),
-            reply_markup=KEYBOARDS.actions_keyboard_markup)
-        return stages.MAIN_PANEL
-
-    if callback_data == 'submit':
-        # Kick banned user out!
-        if auth_helper.auth(user)['is_blacklist']:
-            update.message.reply_text(conversations.MAIN_PANEL_YELLOWCOW)
-            return stages.END
-
+    message = update.callback_query.message
+    # Kick banned user out!
+    if auth_helper.auth(user)['is_blacklist']:
         ticket = update_helper.load_drafting_ticket(user_id=user.user_id)
         ticket_helper.update_ticket(ticket)
-        bot.send_message(
-            text=conversations.AND_THEN,
-            chat_id=user.user_id,
-            message_id=message.message_id,
-            reply_markup=KEYBOARDS.after_submit_keyboard)
-        return stages.UPDATE_SUBMIT
+        try:
+            bot.edit_message_text(
+                text=conversations.MAIN_PANEL_YELLOWCOW,
+                chat_id=user.user_id,
+                message_id=message.message_id)
+        except BadRequest:
+            bot.send_message(
+                text=conversations.MAIN_PANEL_YELLOWCOW,
+                chat_id=user.user_id,
+                message_id=message.message_id)
+        return stages.END
 
-
-@run_async
-def backward(bot, update, *args, **kwargs):
-    callback_data = update.callback_query.data
-    message = update.callback_query.message
-    user = User(telegram_user=update.effective_user)
-
-    if callback_data == 'mainpanel':
-        bot.edit_message_text(
-            chat_id=user.user_id,
-            message_id=message.message_id,
-            text=conversations.MAIN_PANEL_START.format(username=user.username),
-            reply_markup=KEYBOARDS.actions_keyboard_markup)
-        return stages.MAIN_PANEL
+    if callback_data == 'submit':
+        try:
+            bot.edit_message_text(
+                text=conversations.UPDATE_INTO_DB,
+                chat_id=user.user_id,
+                message_id=message.message_id)
+        except BadRequest:
+            bot.send_message(
+                text=conversations.UPDATE_INTO_DB,
+                chat_id=user.user_id,
+                message_id=message.message_id)
+    return stages.END

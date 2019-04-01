@@ -35,7 +35,8 @@ def main():
             stages.SEARCH_SELECT_FIELD: [CallbackQueryHandler(search.select_field, pass_user_data=True)],
             stages.SEARCH_FILL_VALUE: [CallbackQueryHandler(search.fill_in_field, pass_user_data=True)],
             stages.SEARCH_BEFORE_SUBMIT: [CallbackQueryHandler(search.submit, pass_user_data=True)],
-            stages.SEARCH_SUBMIT: [CallbackQueryHandler(search.backward, pass_user_data=True)]},
+            stages.SEARCH_SUBMIT: [CallbackQueryHandler(search.backward, pass_user_data=True)]
+        },
         fallbacks=[
             CommandHandler('done', mainpanel.done, pass_user_data=True, pass_chat_data=True),
             RegexHandler('^(Done|done|完)$', mainpanel.done, pass_user_data=True, pass_chat_data=True)],
@@ -51,7 +52,8 @@ def main():
             stages.UPDATE_SELECT_FIELD: [CallbackQueryHandler(update_ticket.select_field, pass_user_data=True)],
             stages.UPDATE_FILL_VALUE: [CallbackQueryHandler(update_ticket.fill_in_field, pass_user_data=True), MessageHandler(Filters.text, update_ticket.fill_type_in_field, pass_user_data=True)],
             stages.UPDATE_BEFORE_SUBMIT: [CallbackQueryHandler(update_ticket.submit, pass_user_data=True)],
-            stages.UPDATE_SUBMIT: [CallbackQueryHandler(update_ticket.backward, pass_user_data=True)]},
+            # stages.UPDATE_SUBMIT: [CallbackQueryHandler(update_ticket.backward, pass_user_data=True)]
+        },
         fallbacks=[
             CommandHandler('done', mainpanel.done, pass_user_data=True, pass_chat_data=True),
             RegexHandler('^(Done|done|完)$', mainpanel.done, pass_user_data=True, pass_chat_data=True)],

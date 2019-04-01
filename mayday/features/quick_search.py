@@ -94,18 +94,13 @@ def select_mode(bot, update, *args, **kwargs):
                 text=conversations.SEARCH_TOO_MUCH_TICKETS,
                 chat_id=user.user_id,
                 message_id=message.message_id)
+            time.sleep(0.2)
         else:
             bot.edit_message_text(
                 text=conversations.SEARCH_WITHOUT_TICKETS,
                 chat_id=user.user_id,
                 message_id=message.message_id)
-            bot.send_message(
-                text=conversations.AND_THEN,
-                chat_id=user.user_id,
-                message_id=message.message_id,
-                reply_markup=KEYBOARDS.quick_search_start_keyboard_markup)
-            return stages.SEARCH_SUBMIT
-
+            time.sleep(0.2)
         bot.send_message(
             text=conversations.QUICK_SEARCH_START,
             chat_id=user.user_id,
