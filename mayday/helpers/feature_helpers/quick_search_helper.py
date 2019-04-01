@@ -22,7 +22,7 @@ class QuickSearchHelper(FeatureHelper):
             if ticket.category == 2:
                 for wish_date in ticket.wish_dates:
                     query.update_field('dates', wish_date)
-                for wish_price in ticket.wish_prices:
+                for wish_price in ticket.wish_price_ids:
                     query.update_field('prices', wish_price)
                 for wish_quantity in ticket.wish_quantities:
                     query.update_field('quantities', wish_quantity)

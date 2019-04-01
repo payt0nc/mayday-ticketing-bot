@@ -31,13 +31,10 @@ class Test(unittest.TestCase):
         ticket = Ticket(user_id=USER_ID, username=USERNAME)
         assert self.helper.save_ticket(ticket)
 
-        '''
-        tickets_in_db = self.mongo.load(
-            db_name=self.helper.TICKET_DB_NAME, collection_name=self.helper.TICKET_COLLECTION_NAME,
-            query=dict(user_id=USER_ID, username=USERNAME))
+        tickets_in_db = self.db.get_tickets_by_user_id(USER_ID)
+        assert tickets_in_db
 
-        assert bool(tickets_in_db)
-        ticket_in_db = Ticket(user_id=USER_ID, username=USERNAME).to_obj(tickets_in_db[0])
+        ticket_in_db = tickets_in_db[0]
 
         assert ticket.category == ticket_in_db.category
         assert ticket.date == ticket_in_db.date
@@ -52,8 +49,8 @@ class Test(unittest.TestCase):
         assert ticket.wish_price_ids == ticket_in_db.wish_price_ids
         assert ticket.wish_quantities == ticket_in_db.wish_quantities
         assert ticket.user_id == ticket_in_db.user_id
+        assert ticket.username
         assert ticket.username == ticket_in_db.username
         assert ticket_in_db.id  # can not know the ticket if before insert
         assert ticket_in_db.created_at  # can not know the created ts before create
         assert ticket_in_db.updated_at  # always change
-        '''

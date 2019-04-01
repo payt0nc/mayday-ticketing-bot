@@ -1,10 +1,12 @@
 import logging
+import time
 
 from telegram.ext.dispatcher import run_async
 
 import mayday
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
+from mayday.controllers.redis import RedisController
 from mayday.db.tables.tickets import TicketsModel
 from mayday.db.tables.users import UsersModel
 from mayday.helpers.auth_helper import AuthHelper
@@ -19,7 +21,7 @@ query_helper = QueryHelper(TicketsModel(mayday.engine, mayday.metadata, role='wr
 ticket_helper = TicketHelper(TicketsModel(mayday.engine, mayday.metadata, role='writer'))
 search_helper = SearchHelper('search')
 update_helper = UpdateHelper(feature='update')
-
+redis = RedisController(redis_conection_pool=mayday.FEATURE_REDIS_CONNECTION_POOL)
 logger = logging.getLogger()
 logger.setLevel(mayday.get_log_level())
 logger.addHandler(mayday.console_handler())
@@ -28,21 +30,31 @@ logger.addHandler(mayday.console_handler())
 @run_async
 def start(bot, update, *args, **kwargs):
     user = User(telegram_user=update.effective_user)
-    message = update.callback_query.message
+    redis.clean_all(user.user_id, 'start')
+    if user.is_username_blank():
+        update.message.reply_text(conversations.MAIN_PANEL_USERNAME_MISSING)
+        return stages.END
+
+    access_pass = auth_helper.auth(user)
+    if access_pass['is_admin']:
+        pass
+
+    elif access_pass['is_blacklist']:
+        update.message.reply_text(conversations.MAIN_PANEL_YELLOWCOW)
+        return stages.END
+
+    update.message.reply_text(conversations.MAIN_PANEL_REMINDER)
+    time.sleep(0.3)
+
     tickets = query_helper.search_by_user_id(user.user_id)
     if tickets:
-        bot.edit_message_text(
+        bot.send_message(
             text=update_helper.tickets_tostr([ticket.to_human_readable() for ticket in tickets], conversations.TICKET),
             chat_id=user.user_id,
-            message_id=message.message_id,
             reply_markup=update_helper.list_tickets_on_reply_keyboard(tickets))
         return stages.UPDATE_SELECT_TICKET
-    bot.edit_message_text(
-        chat_id=user.user_id,
-        message_id=message.message_id,
-        text=conversations.NONE_RECORD,
-        reply_markup=KEYBOARDS.return_main_panal)
-    return stages.MAIN_PANEL
+    bot.send_message(chat_id=user.user_id, text=conversations.NONE_RECORD)
+    return stages.SEARCH_SELECT_FIELD
 
 
 @run_async
