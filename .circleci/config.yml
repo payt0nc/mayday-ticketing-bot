@@ -18,10 +18,10 @@ jobs:
       - image: circleci/redis:5.0.2
       - image: circleci/mysql:8.0.3
         environment:
-          MYSQL_HOST: ${MYSQL_HOST}
-          MYSQL_ROOT_HOST: ${MYSQL_ROOT_HOST}
-          MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-          MYSQL_DATABASE: ${MYSQL_DATABASE}
+          MYSQL_HOST: 127.0.0.1
+          MYSQL_ROOT_HOST: '%'
+          MYSQL_ROOT_PASSWORD: 'test123456'
+          MYSQL_DATABASE: mayday
 
     working_directory: ~/repo
 
