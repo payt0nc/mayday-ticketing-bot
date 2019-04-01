@@ -33,12 +33,17 @@ class Test(unittest.TestCase):
         ticket.update_field('date', 503)
         self.helper.save_drafting_ticket(user_id=USER_ID, ticket=ticket)
         ticket_in_cache = self.helper.load_drafting_ticket(user_id=USER_ID)
+        assert ticket_in_cache.user_id
+        assert ticket_in_cache.user_id == ticket.user_id
+        assert ticket_in_cache.username
+        assert ticket_in_cache.username == ticket.username
         assert ticket_in_cache.to_dict() == ticket.to_dict()
 
         # Reset Ticket
         raw_ticket = Ticket(user_id=USER_ID, username=USERNAME)
         ticket_in_cache = self.helper.reset_drafting_ticket(user_id=USER_ID, username=USERNAME)
         assert ticket_in_cache.to_dict() == raw_ticket.to_dict()
+        assert ticket_in_cache.username == raw_ticket.username
 
     def test_drafting_query(self):
         query = Query(category_id=1, user_id=USER_ID, username=USERNAME)

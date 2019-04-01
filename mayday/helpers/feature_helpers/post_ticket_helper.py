@@ -14,6 +14,7 @@ class PostTicketHelper(FeatureHelper):
     def update_cache(self, user_id: int, value) -> Ticket:
         ticket = self.load_drafting_ticket(user_id)
         ticket.update_field(self.load_last_choice(user_id), value)
+        logger.info(ticket.to_dict())
         self.save_drafting_ticket(user_id, ticket)
         return ticket
 

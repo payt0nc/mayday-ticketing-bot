@@ -16,12 +16,11 @@ class ReplyKeyboards:
                 InlineKeyboardButton('我的飛💎', callback_data='my_ticket'),
             ],
             [
-                # InlineKeyboardButton('門票總覽📊', url=STAT_URL),
+                InlineKeyboardButton('門票總覽📊', url=STAT_URL),
                 InlineKeyboardButton('五迷自發活動🙋', callback_data='events'),
             ],
             [
-                InlineKeyboardButton('演唱會資訊ℹ️', callback_data='info'),
-                InlineKeyboardButton('Bye Bye👋🏻', callback_data='bye')
+                InlineKeyboardButton('演唱會資訊ℹ️', callback_data='info')
             ]
         ]
 
@@ -159,9 +158,6 @@ class ReplyKeyboards:
                 InlineKeyboardButton('重置', callback_data='reset'),
                 InlineKeyboardButton('覆核', callback_data='check')
             ],
-            [
-                InlineKeyboardButton('返主選單', callback_data='mainpanel')
-            ]
         ]
 
         self._update_ticket_keyboard = [
@@ -180,7 +176,6 @@ class ReplyKeyboards:
                 InlineKeyboardButton('備註', callback_data='remarks')
             ],
             [
-                InlineKeyboardButton('返主選單', callback_data='mainpanel'),
                 InlineKeyboardButton('覆核', callback_data='check')
             ]
         ]
@@ -207,9 +202,6 @@ class ReplyKeyboards:
                         InlineKeyboardButton('重置', callback_data='reset'),
                         InlineKeyboardButton('覆核', callback_data='check')
                     ],
-                    [
-                        InlineKeyboardButton('返主選單', callback_data='mainpanel')
-                    ]
                 ], one_time_keyboard=True),
             # 2: Exchange
             2: InlineKeyboardMarkup(
@@ -237,9 +229,6 @@ class ReplyKeyboards:
                         InlineKeyboardButton('重置', callback_data='reset'),
                         InlineKeyboardButton('覆核', callback_data='check')
                     ],
-                    [
-                        InlineKeyboardButton('返主選單', callback_data='mainpanel')
-                    ]
                 ], one_time_keyboard=True)
         }
 
@@ -247,18 +236,9 @@ class ReplyKeyboards:
             [
                 InlineKeyboardButton('用已儲存的條件搜索', callback_data='cached_condition'),
                 InlineKeyboardButton('自動匹配門票交換', callback_data='matching_my_ticket')],
-            [
-                InlineKeyboardButton('返主選單', callback_data='mainpanel')
-            ]
         ]
 
-        self._quick_search_keyboard = [
-            [
-                InlineKeyboardButton('返主選單', callback_data='mainpanel'),
-                InlineKeyboardButton('送出', callback_data='submit')
-            ]
-
-        ]
+        self._quick_search_keyboard = [[InlineKeyboardButton('送出', callback_data='submit')]]
 
         self._before_post_submit_keyboard = [
             [
@@ -279,21 +259,12 @@ class ReplyKeyboards:
 
         self._after_submit_keyboard = [
             [
-                InlineKeyboardButton('返上一層', callback_data='backward'),
-                InlineKeyboardButton('返主選單', callback_data='mainpanel')
+                InlineKeyboardButton('返上一層', callback_data='backward')
             ]
-        ]
-        self._quick_search_backward_keyboard = [
-            [InlineKeyboardButton('返主選單', callback_data='mainpanel')]
         ]
         self._support_events = [
             [InlineKeyboardButton('523上班餘興節目', callback_data='event_1')],
             [InlineKeyboardButton('《五月之約》尋回專屬HOME KONG場的感動', callback_data='event_2')],
-            [InlineKeyboardButton('返主選單', callback_data='mainpanel')]
-        ]
-
-        self._return_main_panal = [
-            [InlineKeyboardButton('返主選單', callback_data='mainpanel')]
         ]
 
     @property
@@ -339,14 +310,6 @@ class ReplyKeyboards:
     @property
     def before_submit_search_keyboard_markup(self):
         return InlineKeyboardMarkup(self._before_search_submit_keyboard, one_time_keyboard=True)
-
-    @property
-    def quick_search_backward_keyboard(self):
-        return InlineKeyboardMarkup(self._quick_search_backward_keyboard, one_time_keyboard=True)
-
-    @property
-    def return_main_panal(self):
-        return InlineKeyboardMarkup(self._return_main_panal, one_time_keyboard=True)
 
 
 KEYBOARDS = ReplyKeyboards()

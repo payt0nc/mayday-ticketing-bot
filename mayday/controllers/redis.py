@@ -13,19 +13,27 @@ logger.addHandler(mayday.console_handler())
 
 class RedisController:
 
-    db_mapping = dict(search=1, post=1, quick_search=1, update=1, events=2, stats=2)
+    db_mapping = dict(search=1, post=1, update=1, quick_search=2, events=3, stats=3)
 
-    def __init__(self, db_name: str = 'search', redis_client: redis.StrictRedis = None):
+    def __init__(self,
+                 db_name: str = 'search',
+                 redis_client: redis.StrictRedis = None,
+                 redis_conection_pool: redis.ConnectionPool = None):
 
         if redis_client:
             self.client = redis_client
+        elif redis_conection_pool:
+            self.client = redis.StrictRedis(connection_pool=redis_conection_pool)
         else:
             self.db = self.db_mapping.get(db_name, 1)
             pool = redis.ConnectionPool(
                 host=os.environ.get('REDIS_HOST', 'localhost'),
                 port=os.environ.get('REDIS_PORT', 6379),
                 db=self.db)
-            self.client = redis.StrictRedis(connection_pool=pool)
+            try:
+                self.client = redis.StrictRedis(connection_pool=pool)
+            except redis.ConnectionError:
+                raise ConnectionError()
 
     def _insert(self, key: str, value: str, expiration: int) -> bool:
         try:

@@ -13,9 +13,8 @@ class EventHelper(FeatureHelper):
 
     @staticmethod
     def generate_keyboard(events: list) -> list:
-        bottons = [InlineKeyboardButton(event['name'], url=event['url']) for event in events]
-        bottons.append([InlineKeyboardButton("返主選單", callback_data='mainpanel')])
-        return InlineKeyboardMarkup(bottons, one_time_keyboard=True)
+        return InlineKeyboardMarkup(
+            [[InlineKeyboardButton(event['name'], url=event['url'])] for event in events], one_time_keyboard=True)
 
     def list_all_events(self) -> list:
         return event_table.list_all_events()
