@@ -63,13 +63,7 @@ def select_ticket(bot, update, *args, **kwargs):
     user = User(telegram_user=update.effective_user)
     message = update.callback_query.message
     callback_data = update.callback_query.data
-    if callback_data == 'mainpanel':
-        bot.edit_message_text(
-            chat_id=user.user_id,
-            message_id=message.message_id,
-            text=conversations.MAIN_PANEL_START.format_map(user.to_dict()),
-            reply_markup=KEYBOARDS.actions_keyboard_markup)
-        return stages.MAIN_PANEL
+
     ticket = query_helper.search_by_ticket_id(ticket_id=callback_data)
     update_helper.save_drafting_ticket(user.user_id, ticket)
     bot.edit_message_text(
@@ -85,15 +79,16 @@ def select_field(bot, update, *arg, **kwargs):
     callback_data = update.callback_query.data
     message = update.callback_query.message
     user = User(telegram_user=update.effective_user)
-    update_helper.save_last_choice(user_id=user.user_id, field=callback_data)
-    if callback_data == 'mainpanel':
-        bot.edit_message_text(
+    if not update_helper.save_last_choice(user_id=user.user_id, field=callback_data):
+        ticket = query_helper.load_drafting_ticket(ticket_id=callback_data)
+        bot.send_message(
+            text=conversations.UPDATE_YOURS.format_map(ticket.to_human_readable()),
             chat_id=user.user_id,
             message_id=message.message_id,
-            text=conversations.MAIN_PANEL_START.format_map(user.to_dict()),
-            reply_markup=KEYBOARDS.actions_keyboard_markup)
-        return stages.MAIN_PANEL
-    elif callback_data == 'check':
+            reply_markup=KEYBOARDS.update_ticket_keyboard_markup)
+        return stages.UPDATE_SELECT_FIELD
+
+    if callback_data == 'check':
         ticket_in_cache = update_helper.load_drafting_ticket(user_id=user.user_id)
         bot.edit_message_text(
             text=conversations.UPDATE_CHECK.format_map(ticket_in_cache.to_human_readable()),

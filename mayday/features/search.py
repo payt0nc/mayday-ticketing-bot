@@ -76,7 +76,18 @@ def select_field(bot, update, *args, **kwargs):
     callback_data = update.callback_query.data
     message = update.callback_query.message
     user = User(telegram_user=update.effective_user)
-    search_helper.save_last_choice(user.user_id, field=callback_data)
+    if not search_helper.save_last_choice(user.user_id, field=callback_data):
+        try:
+            query = search_helper.load_drafting_query(user.user_id)
+        except Exception:
+            logger.warning("cache miss")
+            query = search_helper.reset_cache(user.user_id)
+        bot.send_message(
+            text=conversations.SEARCH_TICKET_START.format_map(query.to_human_readable()),
+            chat_id=user.user_id,
+            reply_markup=KEYBOARDS.search_ticket_keyboard_markup)
+        return stages.SEARCH_SELECT_FIELD
+
     if callback_data == 'check':
         query = search_helper.load_drafting_query(user.user_id)
         check_result = query.validate()

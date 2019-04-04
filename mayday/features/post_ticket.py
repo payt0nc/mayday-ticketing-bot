@@ -1,12 +1,10 @@
 import logging
 import re
 import time
-
-import telegram
-from telegram.ext.dispatcher import run_async
-from telegram.error import BadRequest
+import traceback
 
 import mayday
+import telegram
 from mayday import SUBSCRIBE_CHANNEL_NAME
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
@@ -17,6 +15,8 @@ from mayday.helpers.auth_helper import AuthHelper
 from mayday.helpers.feature_helpers.post_ticket_helper import PostTicketHelper
 from mayday.helpers.ticket_helper import TicketHelper
 from mayday.objects.user import User
+from telegram.error import BadRequest
+from telegram.ext.dispatcher import run_async
 
 post_helper = PostTicketHelper('post')
 auth_helper = AuthHelper(UsersModel(mayday.engine, mayday.metadata, role='writer'))
@@ -64,7 +64,20 @@ def select_field(bot, update, *args, **kwargs):
     logger.debug(callback_data)
     message = update.callback_query.message
     user = User(telegram_user=update.effective_user)
-    post_helper.save_last_choice(user_id=user.user_id, field=callback_data)
+    if not post_helper.save_last_choice(user_id=user.user_id, field=callback_data):
+        try:
+            ticket = post_helper.load_drafting_ticket(user.user_id)
+        except Exception:
+            logger.warning("cache miss")
+            ticket = post_helper.reset_cache(user.user_id, user.username)
+        category = post_helper.get_category_id_from_cache(user.user_id)
+
+        bot.send_message(
+            text=conversations.POST_TICKET_START.format_map(ticket.to_human_readable()),
+            chat_id=user.user_id,
+            reply_markup=KEYBOARDS.post_ticket_keyboard_markup.get(category))
+        return stages.POST_SELECT_FIELD
+
     category = post_helper.get_category_id_from_cache(user_id=user.user_id)
     logger.debug(category)
 
