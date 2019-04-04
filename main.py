@@ -74,12 +74,12 @@ def main():
         per_chat=True)
     dp.add_handler(quick_search_handler)
 
-    # Force Escape
+    dp.add_handler(CommandHandler('start', mainpanel.menu))
     dp.add_handler(CommandHandler('info', events.info))
     dp.add_handler(CommandHandler('events', events.list_events))
     dp.add_handler(CommandHandler('help', mainpanel.ask_help))
-    dp.add_handler(RegexHandler('^(Done|done|完)$', mainpanel.done, pass_user_data=True, pass_chat_data=True))
     dp.add_handler(CommandHandler('done', mainpanel.done, pass_user_data=True, pass_chat_data=True))
+    dp.add_handler(RegexHandler('^(Done|done|完)$', mainpanel.done, pass_user_data=True, pass_chat_data=True))
 
     # log all errors
     dp.add_error_handler(mainpanel.error)

@@ -79,11 +79,16 @@ MAIN_PANEL_REMINDER = '''
 
 MAIN_PANEL_YELLOWCOW = '''根據記錄，你被舉報為黃牛。本平台不能再為你提供服務。bye～'''
 
-MAIN_PANEL_TIMEOUT = '''
-請按順序 
-/done 
-/start
-重新開始
+MAIN_PANEL_HELP = '''
+/post_ticket - 轉讓門票🤝
+/search_tickets - 搵門票🎫
+/quick_search - 快速搜索🔍
+/my_tickets - 轉讓門票💎
+/events - 五迷自發活動🙋
+/stats - 門票總覽📊
+/info - 演唱會資訊ℹ️
+
+想獲取最新門票資訊推送, 請加入 {channel_name}
 '''
 
 
