@@ -58,15 +58,6 @@ def select_mode(bot, update, *args, **kwargs):
     callback_data = update.callback_query.data
     message = update.callback_query.message
 
-    if callback_data == 'mainpanel':
-        bot.edit_message_text(
-            chat_id=user.user_id,
-            message_id=message.message_id,
-            text=conversations.MAIN_PANEL_START.format(username=user.username),
-            reply_markup=KEYBOARDS.actions_keyboard_markup,
-            parse_mode=telegram.ParseMode.MARKDOWN)
-        return stages.MAIN_PANEL
-
     if callback_data == 'cached_condition':
         return search.quick_search_start(bot, update, *args, **kwargs)
 

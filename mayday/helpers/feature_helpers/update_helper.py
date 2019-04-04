@@ -22,9 +22,7 @@ class UpdateHelper(FeatureHelper):
 
     @staticmethod
     def list_tickets_on_reply_keyboard(tickets: list):
-        buttons = [[InlineKeyboardButton(ticket.id, callback_data=ticket.id)] for ticket in tickets]
-        buttons.append([InlineKeyboardButton("返主選單", callback_data='mainpanel')])
-        return InlineKeyboardMarkup(buttons, one_time_keyboard=True)
+        return InlineKeyboardMarkup([[InlineKeyboardButton(ticket.id, callback_data=ticket.id)] for ticket in tickets], one_time_keyboard=True)
 
     @staticmethod
     def extract_ticket_ids(tickets):
