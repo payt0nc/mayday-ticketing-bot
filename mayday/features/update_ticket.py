@@ -80,7 +80,7 @@ def select_field(bot, update, *arg, **kwargs):
     message = update.callback_query.message
     user = User(telegram_user=update.effective_user)
     if not update_helper.save_last_choice(user_id=user.user_id, field=callback_data):
-        ticket = query_helper.load_drafting_ticket(ticket_id=callback_data)
+        ticket = update_helper.load_drafting_ticket(ticket_id=callback_data)
         bot.send_message(
             text=conversations.UPDATE_YOURS.format_map(ticket.to_human_readable()),
             chat_id=user.user_id,
