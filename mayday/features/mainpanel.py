@@ -1,3 +1,4 @@
+import os
 import logging
 
 import mayday
@@ -7,6 +8,12 @@ from telegram.ext.dispatcher import run_async
 logger = logging.getLogger()
 logger.setLevel(mayday.get_log_level())
 logger.addHandler(mayday.console_handler())
+
+
+@run_async
+def ask_help(bot, update, *args, **kwargs):
+    update.message.reply_text(conversations.MAIN_PANEL_HELP)
+    return stages.END
 
 
 @run_async
@@ -26,16 +33,6 @@ def error(bot, update, error):
 
 
 @run_async
-def ask_help(bot, update, *args, **kwargs):
-    update.message.reply_text(conversations.MAIN_PANEL_TIMEOUT)
-    return stages.END
-
-
-@run_async
-def timeout(bot, update, *args, **kwargs):
-    try:
-        chat_id = update.callback_query.message.chat.id
-    except Exception:
-        chat_id = update.message.chat.id
-    update.message.reply_text(conversations.MAIN_PANEL_TIMEOUT)
+def menu(bot, update, *args, **kwargs):
+    update.message.reply_text(conversations.MAIN_PANEL_HELP.format(channel_name=mayday.SUBSCRIBE_CHANNEL_NAME))
     return stages.END
