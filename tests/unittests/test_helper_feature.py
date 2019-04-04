@@ -25,7 +25,10 @@ class Test(unittest.TestCase):
 
     def test_last_choice(self):
         field = 'post_ticket'
-        self.helper.save_last_choice(user_id=USER_ID, field=field)
+        assert self.helper.save_last_choice(user_id=USER_ID, field=field) is False
+
+        field = 'check'
+        assert self.helper.save_last_choice(user_id=USER_ID, field=field)
         assert self.helper.load_last_choice(USER_ID) == field
 
     def test_drafting_ticket(self):
