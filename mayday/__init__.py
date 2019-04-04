@@ -2,21 +2,29 @@ import json
 import logging
 import os
 
-from sqlalchemy import create_engine
-
+import redis
 from mayday.db.tables import create_engine_and_metadata
 from mayday.db.tables.tickets import TicketsModel
 from mayday.db.tables.users import UsersModel
+from sqlalchemy import create_engine
 
 # Application Setting
-STAGE = os.environ.get('stage', 'TEST').upper()
+STAGE = os.environ.get('STAGE', 'TEST').upper()
 TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
-SUBSCRIBE_CHANNEL_NAME = '@testHKmayday'
+SUBSCRIBE_CHANNEL_NAME = '@{}'.format(os.environ['CHANNEL_NAME'])
+FEATURE_REDIS_CONNECTION_POOL = redis.ConnectionPool(
+    host=os.environ.get('REDIS_HOST', 'localhost'),
+    port=os.environ.get('REDIS_PORT', 6379),
+    db=1)
+CONSTANTS_REDIS_CONNECTION_POOL = redis.ConnectionPool(
+    host=os.environ.get('REDIS_HOST', 'localhost'),
+    port=os.environ.get('REDIS_PORT', 6379),
+    db=2)
 
 engine, metadata = create_engine_and_metadata(
-    host=os.environ.get('DB_HOST', '10.0.1.6'),
-    username=os.environ.get('DB_USERNAME', 'root'),
-    passwd=os.environ.get('DB_PASSWD', ''),
+    host=os.environ['DB_HOST'],
+    username=os.environ['DB_USERNAME'],
+    passwd=os.environ['DB_PASSWD'],
     db_name=os.environ.get('DB_NAME', 'mayday'))
 
 
@@ -41,4 +49,5 @@ def console_handler() -> logging.Handler:
 
 
 def get_log_level():
+    # return logging.INFO
     return logging.INFO if STAGE == 'PRODUCTION' else logging.DEBUG

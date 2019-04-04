@@ -8,6 +8,7 @@ from telegram.ext.dispatcher import run_async
 import mayday
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
+from mayday.controllers.redis import RedisController
 from mayday.features import search
 from mayday.helpers.auth_helper import AuthHelper
 from mayday.helpers.feature_helpers.quick_search_helper import QuickSearchHelper
@@ -16,7 +17,7 @@ from mayday.db.tables.users import UsersModel
 
 auth_helper = AuthHelper(UsersModel(mayday.engine, mayday.metadata, role='writer'))
 quick_search_helper = QuickSearchHelper('quick_search')
-
+redis = RedisController(redis_conection_pool=mayday.FEATURE_REDIS_CONNECTION_POOL)
 
 logger = logging.getLogger()
 logger.setLevel(mayday.get_log_level())
@@ -26,10 +27,26 @@ logger.addHandler(mayday.console_handler())
 @run_async
 def start(bot, update, *args, **kwargs):
     user = User(telegram_user=update.effective_user)
-    bot.edit_message_text(
+    redis.clean_all(user.user_id, 'start')
+
+    if user.is_username_blank():
+        update.message.reply_text(conversations.MAIN_PANEL_USERNAME_MISSING)
+        return stages.END
+
+    access_pass = auth_helper.auth(user)
+    if access_pass['is_admin']:
+        pass
+
+    elif access_pass['is_blacklist']:
+        update.message.reply_text(conversations.MAIN_PANEL_YELLOWCOW)
+        return stages.END
+
+    update.message.reply_text(conversations.MAIN_PANEL_REMINDER)
+    time.sleep(0.3)
+
+    bot.send_message(
         text=conversations.QUICK_SEARCH_START,
         chat_id=user.user_id,
-        message_id=update.callback_query.message.message_id,
         reply_markup=KEYBOARDS.quick_search_start_keyboard_markup,
         parse_mode=telegram.ParseMode.MARKDOWN)
     return stages.QUICK_SEARCH_MODE_SELECTION
@@ -77,18 +94,13 @@ def select_mode(bot, update, *args, **kwargs):
                 text=conversations.SEARCH_TOO_MUCH_TICKETS,
                 chat_id=user.user_id,
                 message_id=message.message_id)
+            time.sleep(0.2)
         else:
             bot.edit_message_text(
                 text=conversations.SEARCH_WITHOUT_TICKETS,
                 chat_id=user.user_id,
                 message_id=message.message_id)
-            bot.send_message(
-                text=conversations.AND_THEN,
-                chat_id=user.user_id,
-                message_id=message.message_id,
-                reply_markup=KEYBOARDS.quick_search_start_keyboard_markup)
-            return stages.SEARCH_SUBMIT
-
+            time.sleep(0.2)
         bot.send_message(
             text=conversations.QUICK_SEARCH_START,
             chat_id=user.user_id,

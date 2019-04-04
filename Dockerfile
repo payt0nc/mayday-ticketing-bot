@@ -1,14 +1,16 @@
 FROM ubuntu:18.04
 
-RUN apt-get update -y && apt-get install -y \
+RUN apt-get update -y && apt-get install -y --no-install-recommends \
     software-properties-common \
     build-essential \
     python3-dev \
     python3-pip \
-    libmysqlclient-dev
+    libmysqlclient-dev \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
 
 # Copy local into docker
-ADD . /app
+COPY . /app
 
 # Install dependencies
 WORKDIR /app

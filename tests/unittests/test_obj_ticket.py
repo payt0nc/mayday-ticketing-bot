@@ -67,143 +67,178 @@ class Test(unittest.TestCase):
         ticket.update_field('category', 1)
         assert isinstance(ticket.category, int)
         assert ticket.category == 1
+        assert ticket.username == USERNAME
 
         ticket.update_field('category', 0)
         assert isinstance(ticket.category, int)
         assert ticket.category == 0
+        assert ticket.username == USERNAME
 
         ticket.update_field('id', 1)
         assert isinstance(ticket.id, int)
         assert ticket.id == 1
+        assert ticket.username == USERNAME
 
         ticket.update_field('date', 1)
         assert isinstance(ticket.date, int)
         assert ticket.date == 1
+        assert ticket.username == USERNAME
 
         ticket.update_field('price_id', 1)
         assert isinstance(ticket.price_id, int)
         assert ticket.price_id == 1
+        assert ticket.username == USERNAME
 
         ticket.update_field('quantity', 1)
         assert isinstance(ticket.quantity, int)
         assert ticket.quantity == 1
+        assert ticket.username == USERNAME
 
         ticket.update_field('status', 1)
         assert isinstance(ticket.status, int)
         assert ticket.status == 1
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_dates', 503)
         assert isinstance(ticket.wish_dates, list)
         assert ticket.wish_dates == [503]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_dates', 504)
         assert isinstance(ticket.wish_dates, list)
         assert ticket.wish_dates == [503, 504]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_dates', 505)
         assert isinstance(ticket.wish_dates, list)
         assert ticket.wish_dates == [503, 504, 505]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_dates', 510)
         assert isinstance(ticket.wish_dates, list)
         assert ticket.wish_dates == [503, 504, 505, 510]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_dates', 511)
         assert isinstance(ticket.wish_dates, list)
         assert ticket.wish_dates == [503, 504, 505, 510, 511]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_price_ids', 1)
         assert isinstance(ticket.wish_price_ids, list)
         assert ticket.wish_price_ids == [1]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_price_ids', 2)
         assert isinstance(ticket.wish_price_ids, list)
         assert ticket.wish_price_ids == [1, 2]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_price_ids', 3)
         assert isinstance(ticket.wish_price_ids, list)
         assert ticket.wish_price_ids == [1, 2, 3]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_price_ids', 4)
         assert isinstance(ticket.wish_price_ids, list)
         assert ticket.wish_price_ids == [1, 2, 3, 4]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_quantities', 1)
         assert isinstance(ticket.wish_quantities, list)
         assert ticket.wish_quantities == [1]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_quantities', 2)
         assert isinstance(ticket.wish_quantities, list)
         assert ticket.wish_quantities == [1, 2]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_quantities', 3)
         assert isinstance(ticket.wish_quantities, list)
         assert ticket.wish_quantities == [1, 2, 3]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_quantities', 4)
         assert isinstance(ticket.wish_quantities, list)
         assert ticket.wish_quantities == [1, 2, 3, 4]
+        assert ticket.username == USERNAME
 
         ticket.update_field('status', 0)
         assert isinstance(ticket.status, int)
         assert ticket.status == 0
+        assert ticket.username == USERNAME
 
         ticket.update_field('status', 1)
         assert isinstance(ticket.status, int)
         assert ticket.status == 1
+        assert ticket.username == USERNAME
 
         ticket.update_field('source_id', 1)
         assert isinstance(ticket.status, int)
         assert ticket.status == 1
+        assert ticket.username == USERNAME
 
         # Remove
         ticket.update_field('wish_quantities', 4, remove=True)
         assert isinstance(ticket.wish_quantities, list)
         assert ticket.wish_quantities == [1, 2, 3]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_quantities', 3, remove=True)
         assert isinstance(ticket.wish_quantities, list)
         assert ticket.wish_quantities == [1, 2]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_quantities', 2, remove=True)
         assert isinstance(ticket.wish_quantities, list)
         assert ticket.wish_quantities == [1]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_dates', 511, remove=True)
         assert isinstance(ticket.wish_dates, list)
         assert ticket.wish_dates == [503, 504, 505, 510]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_dates', 510, remove=True)
         assert isinstance(ticket.wish_dates, list)
         assert ticket.wish_dates == [503, 504, 505]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_dates', 505, remove=True)
         assert isinstance(ticket.wish_dates, list)
         assert ticket.wish_dates == [503, 504]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_dates', 504, remove=True)
         assert isinstance(ticket.wish_dates, list)
         assert ticket.wish_dates == [503]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_dates', 503, remove=True)
         assert isinstance(ticket.wish_dates, list)
         assert ticket.wish_dates == list()
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_price_ids', 4, remove=True)
         assert isinstance(ticket.wish_price_ids, list)
         assert ticket.wish_price_ids == [1, 2, 3]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_price_ids', 3, remove=True)
         assert isinstance(ticket.wish_price_ids, list)
         assert ticket.wish_price_ids == [1, 2]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_price_ids', 2, remove=True)
         assert isinstance(ticket.wish_price_ids, list)
         assert ticket.wish_price_ids == [1]
+        assert ticket.username == USERNAME
 
         ticket.update_field('wish_price_ids', 1, remove=True)
         assert isinstance(ticket.wish_price_ids, list)
         assert ticket.wish_price_ids == list()
+        assert ticket.username == USERNAME
 
     def test_ticket_to_human_readable(self):
         sample_ticket = dict(

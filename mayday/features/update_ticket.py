@@ -1,10 +1,13 @@
 import logging
+import time
 
 from telegram.ext.dispatcher import run_async
+from telegram.error import BadRequest
 
 import mayday
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
+from mayday.controllers.redis import RedisController
 from mayday.db.tables.tickets import TicketsModel
 from mayday.db.tables.users import UsersModel
 from mayday.helpers.auth_helper import AuthHelper
@@ -19,7 +22,7 @@ query_helper = QueryHelper(TicketsModel(mayday.engine, mayday.metadata, role='wr
 ticket_helper = TicketHelper(TicketsModel(mayday.engine, mayday.metadata, role='writer'))
 search_helper = SearchHelper('search')
 update_helper = UpdateHelper(feature='update')
-
+redis = RedisController(redis_conection_pool=mayday.FEATURE_REDIS_CONNECTION_POOL)
 logger = logging.getLogger()
 logger.setLevel(mayday.get_log_level())
 logger.addHandler(mayday.console_handler())
@@ -28,40 +31,45 @@ logger.addHandler(mayday.console_handler())
 @run_async
 def start(bot, update, *args, **kwargs):
     user = User(telegram_user=update.effective_user)
-    message = update.callback_query.message
+    redis.clean_all(user.user_id, 'start')
+    if user.is_username_blank():
+        update.message.reply_text(conversations.MAIN_PANEL_USERNAME_MISSING)
+        return stages.END
+
+    access_pass = auth_helper.auth(user)
+    if access_pass['is_admin']:
+        pass
+
+    elif access_pass['is_blacklist']:
+        update.message.reply_text(conversations.MAIN_PANEL_YELLOWCOW)
+        return stages.END
+
+    update.message.reply_text(conversations.MAIN_PANEL_REMINDER)
+    time.sleep(0.3)
+
     tickets = query_helper.search_by_user_id(user.user_id)
     if tickets:
-        bot.edit_message_text(
+        bot.send_message(
             text=update_helper.tickets_tostr([ticket.to_human_readable() for ticket in tickets], conversations.TICKET),
             chat_id=user.user_id,
-            message_id=message.message_id,
             reply_markup=update_helper.list_tickets_on_reply_keyboard(tickets))
         return stages.UPDATE_SELECT_TICKET
-    bot.edit_message_text(
-        chat_id=user.user_id,
-        message_id=message.message_id,
-        text=conversations.NONE_RECORD,
-        reply_markup=KEYBOARDS.return_main_panal)
-    return stages.MAIN_PANEL
+    bot.send_message(chat_id=user.user_id, text=conversations.NONE_RECORD)
+    return stages.SEARCH_SELECT_FIELD
 
 
 @run_async
 def select_ticket(bot, update, *args, **kwargs):
     user = User(telegram_user=update.effective_user)
+    message = update.callback_query.message
     callback_data = update.callback_query.data
-    if callback_data == 'mainpanel':
-        bot.edit_message_text(
-            chat_id=user.user_id,
-            message_id=update.callback_query.message.message_id,
-            text=conversations.MAIN_PANEL_START.format_map(user.to_dict()),
-            reply_markup=KEYBOARDS.actions_keyboard_markup)
-        return stages.MAIN_PANEL
+
     ticket = query_helper.search_by_ticket_id(ticket_id=callback_data)
     update_helper.save_drafting_ticket(user.user_id, ticket)
     bot.edit_message_text(
         text=conversations.UPDATE_YOURS.format_map(ticket.to_human_readable()),
         chat_id=user.user_id,
-        message_id=update.callback_query.message.message_id,
+        message_id=message.message_id,
         reply_markup=KEYBOARDS.update_ticket_keyboard_markup)
     return stages.UPDATE_SELECT_FIELD
 
@@ -71,15 +79,16 @@ def select_field(bot, update, *arg, **kwargs):
     callback_data = update.callback_query.data
     message = update.callback_query.message
     user = User(telegram_user=update.effective_user)
-    update_helper.save_last_choice(user_id=user.user_id, field=callback_data)
-    if callback_data == 'mainpanel':
-        bot.edit_message_text(
+    if not update_helper.save_last_choice(user_id=user.user_id, field=callback_data):
+        ticket = query_helper.load_drafting_ticket(ticket_id=callback_data)
+        bot.send_message(
+            text=conversations.UPDATE_YOURS.format_map(ticket.to_human_readable()),
             chat_id=user.user_id,
-            message_id=update.callback_query.message.message_id,
-            text=conversations.MAIN_PANEL_START.format_map(user.to_dict()),
-            reply_markup=KEYBOARDS.actions_keyboard_markup)
-        return stages.MAIN_PANEL
-    elif callback_data == 'check':
+            message_id=message.message_id,
+            reply_markup=KEYBOARDS.update_ticket_keyboard_markup)
+        return stages.UPDATE_SELECT_FIELD
+
+    if callback_data == 'check':
         ticket_in_cache = update_helper.load_drafting_ticket(user_id=user.user_id)
         bot.edit_message_text(
             text=conversations.UPDATE_CHECK.format_map(ticket_in_cache.to_human_readable()),
@@ -126,43 +135,33 @@ def fill_type_in_field(bot, update, *args, **kwargs):
 @run_async
 def submit(bot, update, *args, **kwargs):
     callback_data = update.callback_query.data
-    message = update.callback_query.message
     user = User(telegram_user=update.effective_user)
-
-    if callback_data == 'mainpanel':
-        bot.edit_message_text(
-            chat_id=user.user_id,
-            message_id=update.callback_query.message.message_id,
-            text=conversations.MAIN_PANEL_START.format(username=user.username),
-            reply_markup=KEYBOARDS.actions_keyboard_markup)
-        return stages.MAIN_PANEL
-
-    if callback_data == 'submit':
-        # Kick banned user out!
-        if auth_helper.auth(user)['is_blacklist']:
-            update.message.reply_text(conversations.MAIN_PANEL_YELLOWCOW)
-            return stages.END
-
+    message = update.callback_query.message
+    # Kick banned user out!
+    if auth_helper.auth(user)['is_blacklist']:
         ticket = update_helper.load_drafting_ticket(user_id=user.user_id)
         ticket_helper.update_ticket(ticket)
-        bot.send_message(
-            text=conversations.AND_THEN,
-            chat_id=user.user_id,
-            message_id=message.message_id,
-            reply_markup=KEYBOARDS.after_submit_keyboard)
-        return stages.UPDATE_SUBMIT
+        try:
+            bot.edit_message_text(
+                text=conversations.MAIN_PANEL_YELLOWCOW,
+                chat_id=user.user_id,
+                message_id=message.message_id)
+        except BadRequest:
+            bot.send_message(
+                text=conversations.MAIN_PANEL_YELLOWCOW,
+                chat_id=user.user_id,
+                message_id=message.message_id)
+        return stages.END
 
-
-@run_async
-def backward(bot, update, *args, **kwargs):
-    callback_data = update.callback_query.data
-    message = update.callback_query.message
-    user = User(telegram_user=update.effective_user)
-
-    if callback_data == 'mainpanel':
-        bot.edit_message_text(
-            chat_id=user.user_id,
-            message_id=message.message_id,
-            text=conversations.MAIN_PANEL_START.format(username=user.username),
-            reply_markup=KEYBOARDS.actions_keyboard_markup)
-        return stages.MAIN_PANEL
+    if callback_data == 'submit':
+        try:
+            bot.edit_message_text(
+                text=conversations.UPDATE_INTO_DB,
+                chat_id=user.user_id,
+                message_id=message.message_id)
+        except BadRequest:
+            bot.send_message(
+                text=conversations.UPDATE_INTO_DB,
+                chat_id=user.user_id,
+                message_id=message.message_id)
+    return stages.END

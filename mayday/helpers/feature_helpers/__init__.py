@@ -1,6 +1,7 @@
 import logging
 
 import mayday
+from mayday.constants.replykeyboards import KEYBOARDS
 from mayday.controllers.redis import RedisController
 from mayday.objects.query import Query
 from mayday.objects.ticket import Ticket
@@ -44,9 +45,10 @@ class FeatureHelper:
         return result['field']
 
     def save_last_choice(self, user_id: int, field=None) -> bool:
-        logger.debug(dict(user_id=user_id, action='{}_last_choice'.format(
-            self._feature), content=dict(field=field)))
-        return self.redis.save(user_id=user_id, action='{}_last_choice'.format(self._feature), content=dict(field=field))
+        if field in {'reset', 'check'} | set(KEYBOARDS.conditions_keyboard_mapping.keys()):
+            logger.debug(dict(user_id=user_id, action='{}_last_choice'.format(self._feature), content=dict(field=field)))
+            return self.redis.save(user_id=user_id, action='{}_last_choice'.format(self._feature), content=dict(field=field))
+        return False
 
     # Ticket
     def load_posting_ticket_category(self, user_id: int) -> int:
