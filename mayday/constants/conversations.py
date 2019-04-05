@@ -58,7 +58,7 @@ MAIN_PANEL_ADMIN_PANEL = '開啟Admin模式'
 MAIN_PANEL_START = '''
 Hello @{username} 有咩可以幫到你?
 若然中途不知所措/迷失方向，請使用 /home 回到主目錄
-想獲取最新門票資訊, 請加入 ''' + SUBSCRIBE_CHANNEL_NAME
+想獲取最新門票資訊, 請加入 @{channel_name}'''
 
 
 MAIN_PANEL_DONE = '''
@@ -88,7 +88,7 @@ MAIN_PANEL_HELP = '''
 /stats - 門票總覽📊
 /info - 演唱會資訊ℹ️
 
-想獲取最新門票資訊推送, 請加入 {channel_name}
+想獲取最新門票資訊推送, 請加入 @{channel_name}
 '''
 
 
