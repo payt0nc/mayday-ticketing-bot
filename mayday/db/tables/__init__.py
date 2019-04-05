@@ -47,7 +47,7 @@ def create_engine_and_metadata(host, username, passwd, db_name, port=3306, db_se
     if db_settings is not None:
         settings.update(db_settings)
 
-    db_connection_str = 'mysql://{username}:{passwd}@{host}:{port}/{db_name}?binary_prefix=True&charset=utf8'.format(
+    db_connection_str = 'mysql://{username}:{passwd}@{host}:{port}/{db_name}?binary_prefix=True&charset=utf8mb4'.format(
         username=username,
         passwd=passwd,
         host=host,
