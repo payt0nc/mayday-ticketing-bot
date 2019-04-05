@@ -233,8 +233,8 @@ def submit(bot, update, *args, **kwargs):
             bot.edit_message_text(
                 text=conversations.SEARCH_WITHOUT_TICKETS,
                 chat_id=user.user_id,
-                message_id=message.message_id,
-                reply_markup=KEYBOARDS.after_submit_keyboard)
+                message_id=message.message_id)
+            time.sleep(0.2)
             query = search_helper.load_drafting_query(user.user_id)
             bot.send_message(
                 text=conversations.SEARCH_TICKET_START.format_map(query.to_human_readable()),
