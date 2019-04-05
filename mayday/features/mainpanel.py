@@ -1,4 +1,4 @@
-import os
+
 import logging
 
 import mayday
@@ -34,5 +34,5 @@ def error(bot, update, error):
 
 @run_async
 def menu(bot, update, *args, **kwargs):
-    update.message.reply_text(conversations.MAIN_PANEL_HELP.format(channel_name=os.environ['CHANNEL_NAME']))
+    update.message.reply_text(conversations.MAIN_PANEL_HELP)
     return stages.END

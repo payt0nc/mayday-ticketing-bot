@@ -88,8 +88,7 @@ MAIN_PANEL_HELP = '''
 /stats - 門票總覽📊
 /info - 演唱會資訊ℹ️
 
-想獲取最新門票資訊推送, 請加入 @{channel_name}
-'''
+想獲取最新門票資訊推送, 請加入 {}'''.format(SUBSCRIBE_CHANNEL_NAME)
 
 
 #################
