@@ -5,10 +5,16 @@ from telegram.ext import (CallbackQueryHandler, CommandHandler,
 import mayday
 from mayday.constants import stages
 from mayday.features import (mainpanel, post_ticket, quick_search, search, events, update_ticket)
+from mayday import TELEGRAM_API_CONFIG
 
 
 def main():
-    updater = Updater(mayday.TELEGRAM_TOKEN, workers=4, request_kwargs={'read_timeout': 30, 'connect_timeout': 60})
+    updater = Updater(
+        token=TELEGRAM_API_CONFIG['token'],
+        workers=TELEGRAM_API_CONFIG['workers'],
+        request_kwargs=dict(
+            read_timeout=TELEGRAM_API_CONFIG['read_timeout'],
+            connect_timeout=TELEGRAM_API_CONFIG['connection_timeout']))
     dp = updater.dispatcher
 
     # Post Ticket Handler
@@ -85,7 +91,8 @@ def main():
     dp.add_error_handler(mainpanel.error)
 
     # Start the Bot
-    updater.start_polling(timeout=10, read_latency=1)
+    updater.start_polling(timeout=TELEGRAM_API_CONFIG['polling_timeout'],
+                          read_latency=TELEGRAM_API_CONFIG['read_latency'])
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
