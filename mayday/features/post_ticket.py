@@ -5,7 +5,7 @@ import traceback
 
 import mayday
 import telegram
-from mayday import SUBSCRIBE_CHANNEL_NAME
+from mayday import TELEGRAM_API_CONFIG
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
 from mayday.controllers.redis import RedisController
@@ -280,6 +280,6 @@ def submit(bot, update, *args, **kwargs):
         # Send Ticket to Channel
         bot.send_message(
             text=conversations.NEW_TICKET.format_map(ticket.to_human_readable()),
-            chat_id=SUBSCRIBE_CHANNEL_NAME,
+            chat_id=TELEGRAM_API_CONFIG['subscribe_channel_name'],
             parse_mode=telegram.ParseMode.MARKDOWN)
         return stages.END

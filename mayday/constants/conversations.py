@@ -1,4 +1,4 @@
-from mayday import SUBSCRIBE_CHANNEL_NAME
+from mayday import TELEGRAM_API_CONFIG
 
 AND_THEN = '之後?'
 NONE_RECORD = '''目前未有紀錄'''
@@ -88,7 +88,7 @@ MAIN_PANEL_HELP = '''
 /stats - 門票總覽📊
 /info - 演唱會資訊ℹ️
 
-想獲取最新門票資訊推送, 請加入 {}'''.format(SUBSCRIBE_CHANNEL_NAME)
+想獲取最新門票資訊推送, 請加入 {}'''.format(TELEGRAM_API_CONFIG['subscribe_channel_name'])
 
 
 #################

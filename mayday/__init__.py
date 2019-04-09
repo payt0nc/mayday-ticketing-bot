@@ -10,8 +10,15 @@ from sqlalchemy import create_engine
 
 # Application Setting
 STAGE = os.environ.get('STAGE', 'TEST').upper()
-TELEGRAM_TOKEN = os.environ['TELEGRAM_TOKEN']
-SUBSCRIBE_CHANNEL_NAME = '@{}'.format(os.environ['CHANNEL_NAME'])
+TELEGRAM_API_CONFIG = dict(
+    token=os.environ['TELEGRAM_TOKEN'],
+    workers=int(os.environ.get('TELEGRAM_WORKERS', 4)),
+    subscribe_channel_name='@{}'.format(os.environ['TELEGRAM_CHANNEL_NAME']),
+    read_timeout=int(os.environ.get('TELEGRAM_READ_TIMEOUT', 30)),
+    connection_timeout=int(os.environ.get('TELEGRAM_CONNECTION_TIMEOUT', 60)),
+    polling_timeout=int(os.environ.get('TELEGRAM_POLLING_TIMEOUT', 20)),
+    read_latency=int(os.environ.get('TELEGRAM_READ_LATENCY', 2)))
+
 FEATURE_REDIS_CONNECTION_POOL = redis.ConnectionPool(
     host=os.environ.get('REDIS_HOST', 'localhost'),
     port=os.environ.get('REDIS_PORT', 6379),
