@@ -7,7 +7,7 @@ from telegram.parsemode import ParseMode
 import mayday
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
-from mayday.helpers.feature_helpers.sp_events_helper import EventHelper
+from mayday.helpers.feature_helpers.events_helper import EventHelper
 from mayday.objects.user import User
 
 logger = logging.getLogger()
