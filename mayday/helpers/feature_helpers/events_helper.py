@@ -25,9 +25,7 @@ class EventHelper(FeatureHelper):
     def generate_charts(self) -> list:
         stats = ticket_table.transform_tickets_stats(ticket_table.get_ticket_stats())
         return dict(
-            ticket_charts=chart_helper.generate_ticket_graphs(
-                ticket_distribution=stats['ticket_distribution'],
-                updated_at=stats['updated_at']),
+            # ticket_charts=chart_helper.generate_ticket_graphs(ticket_distribution=stats['ticket_distribution'], updated_at=stats['updated_at']),
             status_distribution=stats['status_distribution'],
             updated_at=stats['updated_at'])
 
