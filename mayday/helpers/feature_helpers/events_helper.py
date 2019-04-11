@@ -1,15 +1,17 @@
-
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+from datetime import datetime
 
 import mayday
-
+import pytz
 from mayday.db.tables.events import EventsModel
 from mayday.db.tables.tickets import TicketsModel
-from mayday.helpers.feature_helpers import FeatureHelper
 from mayday.helpers import chart_helper
+from mayday.helpers.feature_helpers import FeatureHelper
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 event_table = EventsModel(mayday.engine, mayday.metadata)
 ticket_table = TicketsModel(mayday.engine, mayday.metadata)
+
+TIMEZONE = pytz.timezone('Asia/Taipei')
 
 
 class EventHelper(FeatureHelper):
@@ -27,7 +29,7 @@ class EventHelper(FeatureHelper):
         return dict(
             # ticket_charts=chart_helper.generate_ticket_graphs(ticket_distribution=stats['ticket_distribution'], updated_at=stats['updated_at']),
             status_distribution=stats['status_distribution'],
-            updated_at=stats['updated_at'])
+            updated_at=datetime.fromtimestamp(stats['updated_at']).replace(tzinfo=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S'))
 
     def reset_cache(self, user_id: int, username: str):
         pass
