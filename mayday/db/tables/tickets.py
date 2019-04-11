@@ -1,6 +1,7 @@
 import json
 import logging
 import time
+from itertools import groupby
 
 from sqlalchemy import (BIGINT, INT, JSON, SMALLINT, Boolean, Column, String,
                         Table)
@@ -150,3 +151,24 @@ class TicketsModel(BaseModel):
 
     def update_ticket(self, ticket: Ticket) -> bool:
         return bool(self.raw_update(self.table.c.id == ticket.id, ticket.to_dict()).rowcount)
+
+    @staticmethod
+    def transform_tickets_stats(ticket_stats: dict) -> dict:
+        status_distribution = dict()
+        for distribution in ticket_stats['status_distribution']:
+            status_distribution[distribution['status']] = distribution['amount']
+
+        ticket_result = dict()
+        for category, stats in groupby(ticket_stats['ticket_distribution'], key=lambda x: x['category']):
+            ticket_result[category] = dict()
+            for price_id, date_amount in groupby(stats, key=lambda x: x['price_id']):
+                for item in date_amount:
+                    if price_id not in ticket_result[category].keys():
+                        ticket_result[category][price_id] = dict()
+                    ticket_result[category][price_id].update({item['date']: item['amount']})
+
+        return dict(
+            ticket_distribution=ticket_result,
+            status_distribution=status_distribution,
+            updated_at=ticket_stats['updated_at']
+        )

@@ -277,10 +277,6 @@ STATS = '''
 更新時間: {updated_at}
 依門票狀態統計:
 {status_distribution}
-
-只顯示待交易門票:
-{ticket_distribution}
-
 '''
 STATUS_STAT = '{status} : {amount}'
 TICKET_STAT = '*{category}* {date} {price} 的門票有 {amount} 筆紀錄'

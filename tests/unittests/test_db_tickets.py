@@ -80,3 +80,41 @@ class TestCase(unittest.TestCase):
         assert result.user_id == ticket.user_id
         assert result.username == ticket.username
         assert result.remarks == ticket.remarks
+
+    def test_transform_ticket_stats(self):
+        sample = dict(
+            status_distribution=[
+                dict(status=1, amount=2),
+                dict(status=2, amount=1),
+            ],
+            ticket_distribution=[
+                dict(category=1, date=503, price_id=1, amount=1),
+                dict(category=1, date=503, price_id=2, amount=2),
+                dict(category=1, date=503, price_id=3, amount=3),
+                dict(category=1, date=504, price_id=1, amount=3),
+                dict(category=1, date=504, price_id=2, amount=2),
+                dict(category=1, date=504, price_id=3, amount=1),
+                dict(category=1, date=505, price_id=1, amount=1),
+
+                dict(category=2, date=503, price_id=1, amount=1),
+                dict(category=2, date=503, price_id=2, amount=2),
+            ],
+            updated_at=0)
+
+        expected = dict(
+            status_distribution={1: 2, 2: 1},
+            ticket_distribution={
+                # category -> price_id -> date -> amount
+                1: {
+                    1: {503: 1, 504: 3, 505: 1},
+                    2: {503: 2, 504: 2},
+                    3: {503: 3, 504: 1}
+                },
+                2: {
+                    1: {503: 1},
+                    2: {503: 2}
+                }
+            },
+            updated_at=0)
+
+        assert self.db.transform_tickets_stats(sample) == expected
