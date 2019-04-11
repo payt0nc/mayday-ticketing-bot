@@ -2,11 +2,13 @@ import os
 from collections import OrderedDict
 from datetime import datetime
 
+import pytz
 from mayday.constants import CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING
 from plotly import io as pio
 from plotly.graph_objs import Bar, Figure, Layout
 from plotly.graph_objs.layout import Title
 
+TIMEZONE = pytz.timezone('Asia/Taipei')
 # X -> Amount
 # Y -> Date
 # Color -> Prices
@@ -50,7 +52,7 @@ def generate_ticket_graphs(ticket_distribution: dict, updated_at: int) -> list:
                     title=Title(
                         text=TITLE_TEXT.format(
                             category=CATEGORY_MAPPING.get(category_id),
-                            updated_at=datetime.fromtimestamp(updated_at).strftime('%Y-%m-%d %H:%M:%S')),
+                            updated_at=datetime.fromtimestamp(updated_at).astimezone(tz=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S')),
                         xref='paper', x=0),
                 )))
         if os.path.isfile(img_path):

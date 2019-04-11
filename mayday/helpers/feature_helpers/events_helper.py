@@ -29,7 +29,7 @@ class EventHelper(FeatureHelper):
         return dict(
             # ticket_charts=chart_helper.generate_ticket_graphs(ticket_distribution=stats['ticket_distribution'], updated_at=stats['updated_at']),
             status_distribution=stats['status_distribution'],
-            updated_at=datetime.fromtimestamp(stats['updated_at']).replace(tzinfo=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S'))
+            updated_at=datetime.fromtimestamp(stats['updated_at']).astimezone(tzinfo=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S'))
 
     def reset_cache(self, user_id: int, username: str):
         pass
