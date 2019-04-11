@@ -203,10 +203,8 @@ class Ticket:
                                   ) if self.wish_price_ids else '',
             wish_quantities=', '.join(sorted(map(str, self.wish_quantities))) if self.wish_quantities else '',
             username=self.username,
-            created_at=datetime.fromtimestamp(self._created_at).astimezone(
-                tzinfo=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S'),
-            updated_at=datetime.fromtimestamp(self._updated_at).astimezone(
-                tzinfo=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S')
+            created_at=datetime.fromtimestamp(self._created_at).astimezone(TIMEZONE).strftime('%Y-%m-%d %H:%M:%S'),
+            updated_at=datetime.fromtimestamp(self._updated_at).astimezone(TIMEZONE).strftime('%Y-%m-%d %H:%M:%S')
         )
 
     def update_field(self, field_name: str, field_value: (str, int), remove=False) -> bool:

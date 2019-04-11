@@ -52,7 +52,7 @@ def generate_ticket_graphs(ticket_distribution: dict, updated_at: int) -> list:
                     title=Title(
                         text=TITLE_TEXT.format(
                             category=CATEGORY_MAPPING.get(category_id),
-                            updated_at=datetime.fromtimestamp(updated_at).astimezone(tz=TIMEZONE).strftime('%Y-%m-%d %H:%M:%S')),
+                            updated_at=datetime.fromtimestamp(updated_at).astimezone(TIMEZONE).strftime('%Y-%m-%d %H:%M:%S')),
                         xref='paper', x=0),
                 )))
         if os.path.isfile(img_path):
