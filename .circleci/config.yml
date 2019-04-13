@@ -69,7 +69,7 @@ jobs:
       - run:
           name: run test
           environment:
-            CODECOV_TOKEN: 
+            CC_TEST_REPORTER_ID: 
           command: |
             # Notify Code Climate of a pending test report using `before-build`
             ./cc-test-reporter before-build
@@ -80,7 +80,7 @@ jobs:
             coverage xml --omit="./mayday/constants/*"
 
             # Upload test report to Code Climate using `after-build`
-            ./cc-test-reporter after-build --exit-code $?
+            ./cc-test-reporter after-build -t coverage.py -r $CC_TEST_REPORTER_ID --exit-code $?
 
       - store_artifacts:
           path: test-reports
