@@ -107,3 +107,4 @@ Notes.md
 .pytest_cache/
 .DS_Store
 env.list
+.secret/stackdriver_key.json
