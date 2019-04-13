@@ -1,15 +1,11 @@
-import logging
-
 import mayday
+from mayday.config import AUTH_LOGGER as auth_logger
+from mayday.config import EVENT_LOGGER as event_logger
+from mayday.config import ROOT_LOGGER as logger
 from mayday.constants.replykeyboards import KEYBOARDS
 from mayday.controllers.redis import RedisController
 from mayday.objects.query import Query
 from mayday.objects.ticket import Ticket
-
-
-logger = logging.getLogger()
-logger.setLevel(mayday.get_log_level())
-logger.addHandler(mayday.console_handler())
 
 
 class FeatureHelper:

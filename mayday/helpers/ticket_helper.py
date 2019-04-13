@@ -1,12 +1,7 @@
-import logging
-
 import mayday
 from mayday.db.tables.tickets import TicketsModel
 from mayday.objects.ticket import Ticket
-
-logger = logging.getLogger()
-logger.setLevel(mayday.get_log_level())
-logger.addHandler(mayday.console_handler())
+from mayday.config import ROOT_LOGGER as logger
 
 
 class TicketHelper:

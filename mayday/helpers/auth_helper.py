@@ -1,12 +1,10 @@
 import logging
 
 import mayday
+from mayday.config import AUTH_LOGGER as auth_logger
+from mayday.config import ROOT_LOGGER as logger
 from mayday.db.tables.users import UsersModel
 from mayday.objects.user import User
-
-logger = logging.getLogger()
-logger.setLevel(mayday.get_log_level())
-logger.addHandler(mayday.console_handler())
 
 
 class AuthHelper:

@@ -1,14 +1,9 @@
-import logging
 import os
 
-from bson.objectid import ObjectId
-from pymongo import ASCENDING, DESCENDING, MongoClient
-
 import mayday
-
-logger = logging.getLogger()
-logger.setLevel(mayday.get_log_level())
-logger.addHandler(mayday.console_handler())
+from bson.objectid import ObjectId
+from mayday.config import ROOT_LOGGER as logger
+from pymongo import ASCENDING, DESCENDING, MongoClient
 
 
 class MongoController:

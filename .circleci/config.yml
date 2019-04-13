@@ -53,20 +53,30 @@ jobs:
             - ./venv
           key: v1-dependencies-{{ checksum "requirements.txt" }}
 
-      # run tests!
-      # this example uses Django's built-in test-runner
-      # other common Python testing frameworks include pytest and nose
-      # https://pytest.org
-      # https://nose.readthedocs.io
+      - run:
+          name: Generate Google Key
+          command: echo $GOOGLE_KEY | base64 --decode > key.json
+
+      - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            # download test reporter as a static binary
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+
       - run:
           name: run test
-          environment:
-            CODECOV_TOKEN: 
           command: |
+            # Notify Code Climate of a pending test report using `before-build`
+            ./cc-test-reporter before-build
+
+            # Pytest
             . venv/bin/activate
             pytest --cov=./mayday/ tests/* -vv
             coverage xml --omit="./mayday/constants/*"
-            python-codacy-coverage -r coverage.xml
+
+            # Upload test report to Code Climate using `after-build`
+            ./cc-test-reporter after-build -t coverage.py --exit-code $?
 
       - store_artifacts:
           path: test-reports

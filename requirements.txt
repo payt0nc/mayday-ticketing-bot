@@ -4,6 +4,7 @@ cffi==1.12.2
 chardet==3.0.4
 cryptography==2.6.1
 future==0.17.1
+google-cloud-logging==1.10.0
 idna==2.8
 mysqlclient==1.4.2.post1
 plotly==3.7.1

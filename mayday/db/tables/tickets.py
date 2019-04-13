@@ -1,20 +1,14 @@
 import json
-import logging
 import time
 from itertools import groupby
 
-from sqlalchemy import (BIGINT, INT, JSON, SMALLINT, Boolean, Column, String,
-                        Table)
-from sqlalchemy.sql.expression import and_, desc, select, text
-
-# from mayday import console_handler, get_log_level
+from mayday.config import ROOT_LOGGER as logger
 from mayday.db import sqls as SQL
 from mayday.db.tables import BaseModel
 from mayday.objects.ticket import Ticket
-
-logger = logging.getLogger()
-# logger.setLevel(get_log_level())
-# logger.addHandler(console_handler())
+from sqlalchemy import (BIGINT, INT, JSON, SMALLINT, Boolean, Column, String,
+                        Table)
+from sqlalchemy.sql.expression import and_, desc, select, text
 
 
 class TicketsModel(BaseModel):

@@ -1,27 +1,24 @@
-import logging
 import time
 
-import telegram
-from telegram import chataction
-from telegram.ext.dispatcher import run_async
-
 import mayday
+import telegram
+from mayday.config import AUTH_LOGGER as auth_logger
+from mayday.config import EVENT_LOGGER as event_logger
+from mayday.config import ROOT_LOGGER as logger
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
 from mayday.controllers.redis import RedisController
+from mayday.db.tables.users import UsersModel
 from mayday.features import search
 from mayday.helpers.auth_helper import AuthHelper
 from mayday.helpers.feature_helpers.quick_search_helper import QuickSearchHelper
 from mayday.objects.user import User
-from mayday.db.tables.users import UsersModel
+from telegram import chataction
+from telegram.ext.dispatcher import run_async
 
 auth_helper = AuthHelper(UsersModel(mayday.engine, mayday.metadata, role='writer'))
 quick_search_helper = QuickSearchHelper('quick_search')
 redis = RedisController(redis_conection_pool=mayday.FEATURE_REDIS_CONNECTION_POOL)
-
-logger = logging.getLogger()
-logger.setLevel(mayday.get_log_level())
-logger.addHandler(mayday.console_handler())
 
 
 @run_async
