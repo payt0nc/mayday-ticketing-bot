@@ -1,19 +1,16 @@
-import logging
 import time
 
-from telegram import chataction
-from telegram.ext.dispatcher import run_async
-from telegram.parsemode import ParseMode
-
 import mayday
-from mayday.constants import conversations, stages, STATUS_MAPPING
+from mayday.config import AUTH_LOGGER as auth_logger
+from mayday.config import EVENT_LOGGER as event_logger
+from mayday.config import ROOT_LOGGER as logger
+from mayday.constants import STATUS_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
 from mayday.helpers.feature_helpers.events_helper import EventHelper
 from mayday.objects.user import User
-
-logger = logging.getLogger()
-logger.setLevel(mayday.get_log_level())
-logger.addHandler(mayday.console_handler())
+from telegram import chataction
+from telegram.ext.dispatcher import run_async
+from telegram.parsemode import ParseMode
 
 event_helper = EventHelper('events')
 

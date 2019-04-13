@@ -1,14 +1,9 @@
 import json
-import logging
 import os
 
-import redis
-
 import mayday
-
-logger = logging.getLogger()
-logger.setLevel(mayday.get_log_level())
-logger.addHandler(mayday.console_handler())
+import redis
+from mayday.config import ROOT_LOGGER as logger
 
 
 class RedisController:

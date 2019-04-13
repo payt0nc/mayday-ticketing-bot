@@ -9,7 +9,6 @@ from mayday.db.tables.users import UsersModel
 from sqlalchemy import create_engine
 
 # Application Setting
-STAGE = os.environ.get('STAGE', 'TEST').upper()
 TELEGRAM_API_CONFIG = dict(
     token=os.environ['TELEGRAM_TOKEN'],
     workers=int(os.environ.get('TELEGRAM_WORKERS', 4)),
@@ -35,8 +34,6 @@ engine, metadata = create_engine_and_metadata(
     db_name=os.environ.get('DB_NAME', 'mayday'))
 
 
-# Log Configurate
-
 def json_formatter() -> logging.Formatter:
     log_json_format = dict(
         ts='%(asctime)s',
@@ -49,12 +46,11 @@ def json_formatter() -> logging.Formatter:
         datefmt='%Y-%m-%d %H:%M:%S')
 
 
+def get_log_level():
+    return logging.INFO if os.environ.get('STAGE', 'TEST').upper() == 'PRODUCTION' else logging.DEBUG
+
+
 def console_handler() -> logging.Handler:
     handler = logging.StreamHandler()
     handler.setFormatter(json_formatter())
     return handler
-
-
-def get_log_level():
-    # return logging.INFO
-    return logging.INFO if STAGE == 'PRODUCTION' else logging.DEBUG
