@@ -1,8 +1,11 @@
 import json
 import logging
-from logging.handlers import TimedRotatingFileHandler
-from logging.handlers import RotatingFileHandler
 import os
+from logging.handlers import RotatingFileHandler
+
+from google.cloud import logging as stackdriver_logging
+
+STACKDRIVER_CLIENT = stackdriver_logging.Client()
 
 
 def json_formatter() -> logging.Formatter:
@@ -41,25 +44,19 @@ def define_file_output_logger(logger_name: str, log_home='log', log_filename=Non
     return logger
 
 
+def stackdriver_logger(logger_name: str) -> logging.Logger:
+    handler = STACKDRIVER_CLIENT.get_default_handler()
+    cloud_logger = logging.getLogger(logger_name)
+    cloud_logger.setLevel(logging.INFO)
+    cloud_logger.addHandler(handler)
+    return cloud_logger
+
+
 ROOT_LOGGER = logging.getLogger()
 ROOT_LOGGER.setLevel(get_log_level())
 ROOT_LOGGER.addHandler(console_handler())
 
-# AUTH_LOGGER = stackdriver_logger('auth_log')
-AUTH_LOGGER = define_file_output_logger('auth_log', 'auth.log')
-# EVENT_LOGGER = stackdriver_logger('event_log')
-EVENT_LOGGER = define_file_output_logger('event_log', 'event.log')
-
-
-# from google.cloud import logging as stackdriver_logging
-# from google.oauth2 import service_account
-# credentials = service_account.Credentials.from_service_account_file(os.environ['GOOGLE_APPLICATION_CREDENTIALS'])
-# scoped_credentials = credentials.with_scopes(['https://www.googleapis.com/auth/cloud-platform'])
-# STACKDRIVER_CLIENT = stackdriver_logging.Client()
-#
-# def stackdriver_logger(logger_name: str) -> logging.Logger:
-#     handler = STACKDRIVER_CLIENT.get_default_handler()
-#     cloud_logger = logging.getLogger(logger_name)
-#     cloud_logger.setLevel(logging.INFO)
-#     cloud_logger.addHandler(handler)
-#     return cloud_logger
+AUTH_LOGGER = stackdriver_logger('auth_log')
+# AUTH_LOGGER = define_file_output_logger('auth_log', 'auth.log')
+EVENT_LOGGER = stackdriver_logger('event_log')
+# EVENT_LOGGER = define_file_output_logger('event_log', 'event.log')
