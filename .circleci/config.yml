@@ -59,6 +59,12 @@ jobs:
       # https://pytest.org
       # https://nose.readthedocs.io
       - run:
+          name: generate key
+          environment:
+            GOOGLE_KEY: 
+          command: echo $GOOGLE_KEY | base64 --decode > /app/.secret/stackdriver_key.json
+
+      - run:
           name: run test
           environment:
             CODECOV_TOKEN: 
