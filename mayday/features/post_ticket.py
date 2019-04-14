@@ -36,7 +36,6 @@ def start(bot, update, *args, **kwargs):
         return stages.END
 
     access_pass = auth_helper.auth(user)
-    auth_logger.info(access_pass)
     if access_pass['is_admin']:
         pass
 
