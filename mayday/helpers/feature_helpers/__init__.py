@@ -1,5 +1,4 @@
 import mayday
-from mayday.config import AUTH_LOGGER as auth_logger
 from mayday.config import EVENT_LOGGER as event_logger
 from mayday.config import ROOT_LOGGER as logger
 from mayday.constants.replykeyboards import KEYBOARDS
@@ -21,11 +20,13 @@ class FeatureHelper:
     # Feature Cache
     def load_cache(self, user_id: int):
         result = self.redis.load(user_id=user_id, action='{}_cache'.format(self._feature))
-        logger.debug(dict(user_id=user_id, result=result))
+        logger.info(dict(user_id=user_id, result=result))
+        event_logger.info(dict(user_id=user_id, result=result))
         return result['field']
 
     def save_cache(self, user_id: int, field=None) -> bool:
-        logger.debug(dict(user_id=user_id, action='{}_cache'.format(self._feature), content=dict(field=field)))
+        logger.info(dict(user_id=user_id, action='{}_cache'.format(self._feature), content=dict(field=field)))
+        event_logger.info(dict(user_id=user_id, action='{}_cache'.format(self._feature), content=dict(field=field)))
         return self.redis.save(user_id=user_id, action='{}_cache'.format(self._feature), content=dict(field=field))
 
     def reset_cache(self, user_id: int, username: str):
@@ -37,12 +38,14 @@ class FeatureHelper:
     # Last Choice
     def load_last_choice(self, user_id: int) -> str:
         result = self.redis.load(user_id=user_id, action='{}_last_choice'.format(self._feature))
-        logger.debug(dict(user_id=user_id, result=result))
+        event_logger.info(dict(user_id=user_id, result=result))
         return result['field']
 
     def save_last_choice(self, user_id: int, field=None) -> bool:
         if field in {'reset', 'check'} | set(KEYBOARDS.conditions_keyboard_mapping.keys()):
-            logger.debug(dict(user_id=user_id, action='{}_last_choice'.format(self._feature), content=dict(field=field)))
+            logger.info(dict(user_id=user_id, action='{}_last_choice'.format(self._feature), content=dict(field=field)))
+            event_logger.info(dict(user_id=user_id, action='{}_last_choice'.format(
+                self._feature), content=dict(field=field)))
             return self.redis.save(user_id=user_id, action='{}_last_choice'.format(self._feature), content=dict(field=field))
         return False
 
@@ -55,27 +58,32 @@ class FeatureHelper:
 
     def load_drafting_ticket(self, user_id: int) -> Ticket:
         result = self.redis.load(user_id=user_id, action='ticket')
-        logger.debug(result)
+        logger.info(result)
+        event_logger.info(result)
         return Ticket(user_id=user_id).to_obj(result)
 
     def save_drafting_ticket(self, user_id: int, ticket: Ticket) -> bool:
-        logger.debug(ticket.to_dict())
+        logger.info(ticket.to_dict())
+        event_logger.info(ticket.to_dict())
         return self.redis.save(user_id=user_id, action='ticket', content=ticket.to_dict())
 
     def reset_drafting_ticket(self, user_id: int, username: str) -> Ticket:
         self.redis.clean(user_id=user_id, action='ticket')
         self.redis.save(user_id=user_id, action='ticket', content=Ticket(user_id=user_id, username=username).to_dict())
         ticket = self.redis.load(user_id=user_id, action='ticket')
+        event_logger.info(ticket)
         return Ticket(user_id=user_id, username=username).to_obj(ticket)
 
     # Query
     def load_drafting_query(self, user_id: int) -> Query:
         result = self.redis.load(user_id=user_id, action='query')
-        logger.debug(result)
+        logger.info(result)
+        event_logger.info(result)
         return Query(category_id=-1, user_id=user_id).to_obj(result)
 
     def save_drafting_query(self, user_id: int, query: Query) -> bool:
-        logger.debug(query.to_dict())
+        logger.info(query.to_dict())
+        event_logger.info(query.to_dict())
         return self.redis.save(user_id=user_id, action='query', content=query.to_dict())
 
     def reset_drafting_query(self, user_id: int, username: str, category: int) -> Ticket:
@@ -83,17 +91,18 @@ class FeatureHelper:
         self.redis.save(user_id=user_id, action='query',
                         content=Query(category_id=category, user_id=user_id, username=username).to_dict())
         query = self.redis.load(user_id=user_id, action='query')
+        event_logger.info(query)
         return Query(category_id=-1, user_id=user_id, username=username).to_obj(query)
 
     # Util
     def tickets_tostr(self, tickets: list, string_template: str) -> str:
         results = []
         for ticket in tickets:
-            logger.debug(type(ticket))
-            logger.debug(ticket)
-            logger.debug(type(string_template))
+            logger.info(type(ticket))
+            logger.info(ticket)
+            logger.info(type(string_template))
             tmplate = string_template.format_map(ticket)
-            logger.debug(tmplate)
+            logger.info(tmplate)
             results.append(tmplate)
-        logger.debug(results)
+        logger.info(results)
         return '\n'.join(results)

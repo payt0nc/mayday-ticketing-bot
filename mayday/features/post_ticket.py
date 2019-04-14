@@ -5,8 +5,7 @@ import traceback
 import mayday
 import telegram
 from mayday import TELEGRAM_API_CONFIG
-from mayday.config import AUTH_LOGGER as auth_logger
-from mayday.config import EVENT_LOGGER as event_logger
+from mayday.config import EVENT_LOGGER as
 from mayday.config import ROOT_LOGGER as logger
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
@@ -38,7 +37,6 @@ def start(bot, update, *args, **kwargs):
         return stages.END
 
     access_pass = auth_helper.auth(user)
-    auth_logger.info(access_pass)
     if access_pass['is_admin']:
         pass
 

@@ -1,7 +1,6 @@
 import time
 
 import mayday
-from mayday.config import AUTH_LOGGER as auth_logger
 from mayday.config import EVENT_LOGGER as event_logger
 from mayday.config import ROOT_LOGGER as logger
 from mayday.constants import TICKET_MAPPING, conversations, stages
