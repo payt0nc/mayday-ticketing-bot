@@ -1,4 +1,12 @@
+<<<<<<< HEAD
 from mayday.config import AUTH_LOGGER as auth_logger
+=======
+import logging
+
+import mayday
+from mayday.config import AUTH_LOGGER as auth_logger
+from mayday.config import ROOT_LOGGER as logger
+>>>>>>> 589487b7c59176c1e1cd4bd9d287bafb4b3f94b3
 from mayday.db.tables.users import UsersModel
 from mayday.objects.user import User
 

@@ -1,9 +1,17 @@
 import time
 
 import mayday
+<<<<<<< HEAD
 from mayday.config import EVENT_LOGGER as event_logger
 from mayday.config import ROOT_LOGGER as logger
 from mayday.constants import STATUS_MAPPING, conversations, stages
+=======
+from mayday.config import AUTH_LOGGER as auth_logger
+from mayday.config import EVENT_LOGGER as event_logger
+from mayday.config import ROOT_LOGGER as logger
+from mayday.constants import STATUS_MAPPING, conversations, stages
+from mayday.constants.replykeyboards import KEYBOARDS
+>>>>>>> 589487b7c59176c1e1cd4bd9d287bafb4b3f94b3
 from mayday.helpers.feature_helpers.events_helper import EventHelper
 from mayday.objects.user import User
 from telegram import chataction

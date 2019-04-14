@@ -1,4 +1,8 @@
 import mayday
+<<<<<<< HEAD
+=======
+from mayday.config import AUTH_LOGGER as auth_logger
+>>>>>>> 589487b7c59176c1e1cd4bd9d287bafb4b3f94b3
 from mayday.config import EVENT_LOGGER as event_logger
 from mayday.config import ROOT_LOGGER as logger
 from mayday.controllers.redis import RedisController
