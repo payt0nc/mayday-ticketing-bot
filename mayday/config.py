@@ -1,14 +1,10 @@
-from google.cloud.logging.handlers import CloudLoggingHandler
 import json
 import logging
 import os
 from logging.handlers import RotatingFileHandler
 
 from google.cloud import logging as stackdriver_logging
-<< << << < HEAD
-
-== == == =
->>>>>> > 589487b7c59176c1e1cd4bd9d287bafb4b3f94b3
+from google.cloud.logging.handlers import CloudLoggingHandler
 
 STACKDRIVER_CLIENT = stackdriver_logging.Client()
 
@@ -26,14 +22,7 @@ def json_formatter() -> logging.Formatter:
 
 
 def get_log_level():
-
-
-<< << << < HEAD
-return logging.INFO
-# return logging.INFO if os.environ.get('STAGE', 'TEST').upper() == 'PRODUCTION' else logging.DEBUG
-== == == =
-return logging.INFO if os.environ.get('STAGE', 'TEST').upper() == 'PRODUCTION' else logging.DEBUG
->>>>>> > 589487b7c59176c1e1cd4bd9d287bafb4b3f94b3
+    return logging.INFO if os.environ.get('STAGE', 'TEST').upper() == 'PRODUCTION' else logging.DEBUG
 
 
 def console_handler() -> logging.Handler:
