@@ -5,7 +5,6 @@ import traceback
 import mayday
 import telegram
 from mayday import TELEGRAM_API_CONFIG
-from mayday.config import EVENT_LOGGER as
 from mayday.config import ROOT_LOGGER as logger
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
