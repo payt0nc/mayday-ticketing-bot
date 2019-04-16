@@ -216,12 +216,4 @@ def submit(bot, update, *args, **kwargs):
                 text=conversations.SEARCH_WITHOUT_TICKETS,
                 chat_id=user.user_id,
                 message_id=message.message_id)
-            time.sleep(0.2)
-            query = search_helper.load_drafting_query(user.user_id)
-            bot.send_message(
-                text=conversations.SEARCH_TICKET_START.format_map(query.to_human_readable()),
-                chat_id=user.user_id,
-                message_id=message.message_id,
-                reply_markup=KEYBOARDS.search_ticket_keyboard_markup,
-                parse_mode=telegram.ParseMode.MARKDOWN)
         return stages.END

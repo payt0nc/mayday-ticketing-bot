@@ -64,13 +64,37 @@ def select_mode(bot, update, *args, **kwargs):
                 message_id=message.message_id,
                 text=conversations.QUICK_SEARCH_NULL)
             return stages.END
-        search_helper.save_drafting_query(user.user_id, query)
-        bot.edit_message_text(
+        bot.send_chat_action(chat_id=user.user_id, action=chataction.ChatAction.TYPING)
+        tickets = query_helper.search_by_query(query)
+        bot.send_message(
             text=conversations.QUICK_SEARCH_LIST_QUERY.format_map(query.to_human_readable()),
             chat_id=user.user_id,
             message_id=message.message_id,
             reply_markup=KEYBOARDS.quick_search_keyboard_markup)
-        return stages.SEARCH_BEFORE_SUBMIT
+        time.sleep(0.2)
+        if (tickets and len(tickets) <= 25):
+            bot.edit_message_text(
+                text=conversations.SEARCH_WITH_RESULTS,
+                chat_id=user.user_id,
+                message_id=message.message_id)
+            time.sleep(0.2)
+            for trait in query_helper.split_tickets_traits(tickets):
+                bot.send_message(
+                    text=search_helper.tickets_tostr(trait, conversations.TICKET),
+                    chat_id=user.user_id,
+                    message_id=message.message_id)
+                time.sleep(0.2)
+        elif len(tickets) > 25:
+            bot.edit_message_text(
+                text=conversations.SEARCH_TOO_MUCH_TICKETS,
+                chat_id=user.user_id,
+                message_id=message.message_id)
+        else:
+            bot.edit_message_text(
+                text=conversations.SEARCH_WITHOUT_TICKETS,
+                chat_id=user.user_id,
+                message_id=message.message_id)
+        return stages.END
 
     if callback_data == 'matching_my_ticket':
         if auth_helper.auth(user)['is_blacklist']:
