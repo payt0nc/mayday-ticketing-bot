@@ -50,7 +50,7 @@ def send_chart(bot, update, *args, **kwargs):
     stats = event_helper.generate_charts()
 
     if not (stats.get('status_distribution') or (stats.get('ticket_charts'))):
-        bot.send_chart(chat_id=user.user_id, text=conversations.STATS_NONE)
+        bot.send_message(chat_id=user.user_id, text=conversations.STATS_NONE)
         return stages.END
 
     if stats.get('status_distribution'):
