@@ -69,8 +69,7 @@ def select_mode(bot, update, *args, **kwargs):
         bot.edit_message_text(
             text=conversations.QUICK_SEARCH_LIST_QUERY.format_map(query.to_human_readable()),
             chat_id=user.user_id,
-            message_id=message.message_id,
-            reply_markup=KEYBOARDS.quick_search_keyboard_markup)
+            message_id=message.message_id)
         time.sleep(0.2)
         if (tickets and len(tickets) <= 25):
             bot.send_message(
