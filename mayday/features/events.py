@@ -62,9 +62,11 @@ def send_chart(bot, update, *args, **kwargs):
                     [conversations.STATUS_STAT.format(status=STATUS_MAPPING.get(status_id), amount=amount)
                      for status_id, amount in stats.get('status_distribution').items()])))
         bot.send_chat_action(chat_id=user.user_id, action=chataction.ChatAction.TYPING)
+    return stages.END
 
+    '''
     if stats.get('ticket_charts'):
         for chart in stats['ticket_charts']:
             bot.send_photo(chat_id=user.user_id, photo=open(chart, 'rb'))
             time.sleep(0.2)
-    return stages.END
+    '''

@@ -7,7 +7,6 @@ future==0.17.1
 google-cloud-logging==1.10.0
 idna==2.8
 mysqlclient==1.4.2.post1
-plotly==3.7.1
 psutil==5.6.1
 pycparser==2.19
 pymongo==3.7.2
