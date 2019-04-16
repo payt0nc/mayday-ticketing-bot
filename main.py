@@ -41,7 +41,7 @@ def main():
             stages.SEARCH_SELECT_FIELD: [CallbackQueryHandler(search.select_field, pass_user_data=True)],
             stages.SEARCH_FILL_VALUE: [CallbackQueryHandler(search.fill_in_field, pass_user_data=True)],
             stages.SEARCH_BEFORE_SUBMIT: [CallbackQueryHandler(search.submit, pass_user_data=True)],
-            stages.SEARCH_SUBMIT: [CallbackQueryHandler(search.backward, pass_user_data=True)]
+            # stages.SEARCH_SUBMIT: [CallbackQueryHandler(search.backward, pass_user_data=True)]
         },
         fallbacks=[
             CommandHandler('done', mainpanel.done, pass_user_data=True, pass_chat_data=True),

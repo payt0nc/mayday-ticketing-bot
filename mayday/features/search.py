@@ -224,20 +224,4 @@ def submit(bot, update, *args, **kwargs):
                 message_id=message.message_id,
                 reply_markup=KEYBOARDS.search_ticket_keyboard_markup,
                 parse_mode=telegram.ParseMode.MARKDOWN)
-        return stages.SEARCH_SELECT_FIELD
-
-
-@run_async
-def backward(bot, update, *args, **kwargs):
-    callback_data = update.callback_query.data
-    message = update.callback_query.message
-    user = User(telegram_user=update.effective_user)
-    query = search_helper.load_drafting_query(user.user_id)
-
-    if callback_data == 'backward':
-        bot.send_message(
-            text=conversations.SEARCH_TICKET_START.format_map(query.to_human_readable()),
-            chat_id=user.user_id,
-            message_id=message.message_id,
-            reply_markup=KEYBOARDS.search_ticket_keyboard_markup)
-        return stages.SEARCH_SELECT_FIELD
+        return stages.END

@@ -22,6 +22,8 @@ class QueryHelper:
     def load_quick_search(self, user_id: int) -> Query:
         result = self.redis.load(user_id, 'quick_search')
         logger.debug(result)
+        if result:
+            return Query(category_id=result['category']).to_obj(result)
         return Query(category_id=-1).to_obj(result)
 
     # Search Ticket
