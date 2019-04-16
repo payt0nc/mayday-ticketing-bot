@@ -17,7 +17,7 @@ class QueryHelper:
     # FIXME: Implement on Redis
     def save_quick_search(self, query: Query) -> bool:
         logger.debug(query.to_dict())
-        return self.redis.save(query.user_id, 'quick_search', query.to_dict())
+        return self.redis.save(query.user_id, 'quick_search', query.to_dict(), expiration=2592000)
 
     def load_quick_search(self, user_id: int) -> Query:
         result = self.redis.load(user_id, 'quick_search')
