@@ -66,14 +66,14 @@ def select_mode(bot, update, *args, **kwargs):
             return stages.END
         bot.send_chat_action(chat_id=user.user_id, action=chataction.ChatAction.TYPING)
         tickets = query_helper.search_by_query(query)
-        bot.send_message(
+        bot.edit_message_text(
             text=conversations.QUICK_SEARCH_LIST_QUERY.format_map(query.to_human_readable()),
             chat_id=user.user_id,
             message_id=message.message_id,
             reply_markup=KEYBOARDS.quick_search_keyboard_markup)
         time.sleep(0.2)
         if (tickets and len(tickets) <= 25):
-            bot.edit_message_text(
+            bot.send_message(
                 text=conversations.SEARCH_WITH_RESULTS,
                 chat_id=user.user_id,
                 message_id=message.message_id)
@@ -85,12 +85,12 @@ def select_mode(bot, update, *args, **kwargs):
                     message_id=message.message_id)
                 time.sleep(0.2)
         elif len(tickets) > 25:
-            bot.edit_message_text(
+            bot.send_message(
                 text=conversations.SEARCH_TOO_MUCH_TICKETS,
                 chat_id=user.user_id,
                 message_id=message.message_id)
         else:
-            bot.edit_message_text(
+            bot.send_message(
                 text=conversations.SEARCH_WITHOUT_TICKETS,
                 chat_id=user.user_id,
                 message_id=message.message_id)
