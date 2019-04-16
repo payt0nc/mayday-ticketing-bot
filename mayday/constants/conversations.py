@@ -63,7 +63,7 @@ Hello @{username} 有咩可以幫到你?
 
 MAIN_PANEL_DONE = '''
 五月之約 迪士尼門口見~!
-之後你 /start 就可以再次召喚我'''
+'''
 
 MAIN_PANEL_USERNAME_MISSING = '''
 你未填Username喔...
