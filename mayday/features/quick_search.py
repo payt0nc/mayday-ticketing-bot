@@ -2,14 +2,14 @@ import time
 
 import mayday
 import telegram
-from mayday.config import EVENT_LOGGER as event_logger
-from mayday.config import ROOT_LOGGER as logger
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
 from mayday.controllers.redis import RedisController
 from mayday.db.tables.users import UsersModel
-from mayday.features import search
+from mayday.db.tables.tickets import TicketsModel
 from mayday.helpers.auth_helper import AuthHelper
+from mayday.helpers.query_helper import QueryHelper
+from mayday.helpers.feature_helpers.search_helper import SearchHelper
 from mayday.helpers.feature_helpers.quick_search_helper import QuickSearchHelper
 from mayday.objects.user import User
 from telegram import chataction
@@ -17,6 +17,8 @@ from telegram.ext.dispatcher import run_async
 
 auth_helper = AuthHelper(UsersModel(mayday.engine, mayday.metadata, role='writer'))
 quick_search_helper = QuickSearchHelper('quick_search')
+search_helper = SearchHelper('search')
+query_helper = QueryHelper(TicketsModel(mayday.engine, mayday.metadata, role='writer'))
 redis = RedisController(redis_conection_pool=mayday.FEATURE_REDIS_CONNECTION_POOL)
 
 
@@ -55,7 +57,20 @@ def select_mode(bot, update, *args, **kwargs):
     message = update.callback_query.message
 
     if callback_data == 'cached_condition':
-        return search.quick_search_start(bot, update, *args, **kwargs)
+        query = query_helper.load_quick_search(user.user_id)
+        if query.category == -1:
+            bot.send_message(
+                chat_id=user.user_id,
+                message_id=message.message_id,
+                text=conversations.QUICK_SEARCH_NULL)
+            return stages.END
+        search_helper.save_drafting_query(user.user_id, query)
+        bot.edit_message_text(
+            text=conversations.QUICK_SEARCH_LIST_QUERY.format_map(query.to_human_readable()),
+            chat_id=user.user_id,
+            message_id=message.message_id,
+            reply_markup=KEYBOARDS.quick_search_keyboard_markup)
+        return stages.SEARCH_BEFORE_SUBMIT
 
     if callback_data == 'matching_my_ticket':
         if auth_helper.auth(user)['is_blacklist']:
@@ -63,7 +78,6 @@ def select_mode(bot, update, *args, **kwargs):
             return stages.END
 
         bot.send_chat_action(chat_id=user.user_id, action=chataction.ChatAction.TYPING)
-
         tickets = quick_search_helper.match_my_tickets(user.user_id)
         if tickets and len(tickets) <= 25:
             bot.send_message(

@@ -26,23 +26,6 @@ redis = RedisController(redis_conection_pool=mayday.FEATURE_REDIS_CONNECTION_POO
 
 
 @run_async
-def quick_search_start(bot, update, *args, **kwargs):
-    user = User(telegram_user=update.effective_user)
-    message = update.callback_query.message
-    query = query_helper.load_quick_search(user.user_id)
-    if query:
-        search_helper.save_drafting_query(user.user_id, query)
-        bot.edit_message_text(
-            text=conversations.QUICK_SEARCH_LIST_QUERY.format_map(query.to_human_readable()),
-            chat_id=user.user_id,
-            message_id=message.message_id,
-            reply_markup=KEYBOARDS.quick_search_keyboard_markup)
-        return stages.SEARCH_BEFORE_SUBMIT
-    bot.edit_message_text(chat_id=user.user_id, message_id=message.message_id, text=conversations.QUICK_SEARCH_NULL)
-    return stages.SEARCH_SUBMIT
-
-
-@run_async
 def start(bot, update, *args, **kwargs):
     user = User(telegram_user=update.effective_user)
     redis.clean_all(user.user_id, 'start')
