@@ -42,7 +42,7 @@ class FeatureHelper:
         return result['field']
 
     def save_last_choice(self, user_id: int, field=None) -> bool:
-        if field in {'reset', 'check'} | set(KEYBOARDS.conditions_keyboard_mapping.keys()):
+        if field in {'row', 'remarks', 'reset', 'check'} | set(KEYBOARDS.conditions_keyboard_mapping.keys()):
             logger.info(dict(user_id=user_id, action='{}_last_choice'.format(self._feature), content=dict(field=field)))
             event_logger.info(dict(user_id=user_id, action='{}_last_choice'.format(
                 self._feature), content=dict(field=field)))
