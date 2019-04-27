@@ -1,3 +1,4 @@
+from datetime import datetime
 import time
 
 import mayday
@@ -6,11 +7,13 @@ from mayday.config import ROOT_LOGGER as logger
 from mayday.constants import STATUS_MAPPING, conversations, stages
 from mayday.helpers.feature_helpers.events_helper import EventHelper
 from mayday.objects.user import User
+import pytz
 from telegram import chataction
 from telegram.ext.dispatcher import run_async
 from telegram.parsemode import ParseMode
 
 event_helper = EventHelper('events')
+TIMEZONE = pytz.timezone('Asia/Taipei')
 
 
 @run_async
@@ -47,5 +50,8 @@ def info(bot, update, *args, **kwargs):
 def send_chart(bot, update, *args, **kwargs):
     user = User(telegram_user=update.effective_user)
     bot.send_chat_action(chat_id=user.user_id, action=chataction.ChatAction.TYPING)
-    bot.send_message(chat_id=user.user_id, text=conversations.STATS.format(updated_at=stats['updated_at']))
+    bot.send_message(
+        chat_id=user.user_id,
+        text=conversations.STATS.format(
+            updated_at=datetime.fromtimestamp(int(time.time())).astimezone(TIMEZONE).strftime('%Y-%m-%d %H:%M:%S')))
     return stages.END
