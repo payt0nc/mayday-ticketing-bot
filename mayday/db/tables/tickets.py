@@ -92,7 +92,6 @@ class TicketsModel(BaseModel):
                 if 'wish' in key and isinstance(value, str):
                     value = json.loads(value)
                 ticket[key] = value
-            print(ticket)
             tickets.append(Ticket().to_obj(ticket))
         return tickets
 
