@@ -250,6 +250,12 @@ def submit(bot, update, *args, **kwargs):
             update.message.reply_text(conversations.MAIN_PANEL_YELLOWCOW)
             return stages.END
         ticket = post_helper.load_drafting_ticket(user.user_id)
+
+        # Chekc username again. Force overwrite
+        # FIXME: Debug why username is lost.
+        if ticket.username == '':
+            ticket.username = user.username
+
         if ticket_helper.save_ticket(ticket):
             try:
                 bot.edit_message_text(

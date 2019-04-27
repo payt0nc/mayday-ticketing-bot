@@ -46,6 +46,10 @@ class Ticket:
     def username(self):
         return self._username
 
+    @username.setter
+    def username(self, value: str):
+        self._username = value
+
     @property
     def category(self) -> int:
         return self._category
@@ -167,8 +171,8 @@ class Ticket:
             wish_dates=self.wish_dates,
             wish_price_ids=self.wish_price_ids,
             wish_quantities=self.wish_quantities,
-            user_id=self._user_id,
-            username=self._username,
+            user_id=self.user_id,
+            username=self.username,
             created_at=self._created_at,
             updated_at=int(time.time()))
 
