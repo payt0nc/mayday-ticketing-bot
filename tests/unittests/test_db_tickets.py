@@ -81,6 +81,13 @@ class TestCase(unittest.TestCase):
         assert result.username == ticket.username
         assert result.remarks == ticket.remarks
 
+    def test_update_ticket(self):
+        updated_ticket = SAMPLES[0].update_field('status', 3)
+        result = self.db.update_ticket(updated_ticket)
+        assert result
+        ticket_in_db = self.db.get_tickets_by_user_id(user_id=123456789)[0]
+        assert ticket_in_db.status == updated_ticket.status
+
     def test_transform_ticket_stats(self):
         sample = dict(
             status_distribution=[

@@ -1,3 +1,4 @@
+import json
 import mayday
 from mayday.config import EVENT_LOGGER as event_logger
 from mayday.config import ROOT_LOGGER as logger
@@ -63,8 +64,8 @@ class FeatureHelper:
         return Ticket(user_id=user_id).to_obj(result)
 
     def save_drafting_ticket(self, user_id: int, ticket: Ticket) -> bool:
-        logger.info(ticket.to_dict())
-        event_logger.info(ticket.to_dict())
+        logger.info(ticket.to_str())
+        event_logger.info(ticket.to_str())
         return self.redis.save(user_id=user_id, action='ticket', content=ticket.to_dict())
 
     def reset_drafting_ticket(self, user_id: int, username: str) -> Ticket:

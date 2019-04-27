@@ -1,3 +1,4 @@
+import json
 import time
 from datetime import datetime
 
@@ -210,6 +211,8 @@ class Ticket:
             created_at=datetime.fromtimestamp(self._created_at).astimezone(TIMEZONE).strftime('%Y-%m-%d %H:%M:%S'),
             updated_at=datetime.fromtimestamp(self._updated_at).astimezone(TIMEZONE).strftime('%Y-%m-%d %H:%M:%S')
         )
+
+    def to_str(self) -> str: return json.dumps(self.to_dict(), ensure_ascii=False, sort_keys=True)
 
     def update_field(self, field_name: str, field_value: (str, int), remove=False) -> bool:
         rename_field_name_map = dict(source='source_id', price='price_id', wish_prices='wish_price_ids')
