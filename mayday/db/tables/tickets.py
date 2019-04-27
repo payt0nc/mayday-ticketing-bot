@@ -143,7 +143,7 @@ class TicketsModel(BaseModel):
         return bool(self.raw_insert(ticket).rowcount)
 
     def update_ticket(self, ticket: Ticket) -> bool:
-        return bool(self.raw_update(self.table.c.id == ticket.id, ticket.to_dict()).rowcount)
+        return bool(self.raw_update(where=and_(self.table.c.id == ticket.id), row=ticket.to_dict()).rowcount)
 
     @staticmethod
     def transform_tickets_stats(ticket_stats: dict) -> dict:
