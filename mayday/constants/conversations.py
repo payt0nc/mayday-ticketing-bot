@@ -275,8 +275,8 @@ STATS_NONE = '''目前未有門票紀錄'''
 STATS = '''
 目前的門票狀況:
 更新時間: {updated_at}
-依門票狀態統計:
-{status_distribution}
+即時門票統計:
+https://mayday.cooomma.info/public/dashboards/GSCO9AEUABuAc6NmnxBYs74lLbZNDPmvBgdbHcqQ?org_slug=default
 '''
 STATUS_STAT = '{status} : {amount}'
 TICKET_STAT = '*{category}* {date} {price} 的門票有 {amount} 筆紀錄'
