@@ -136,8 +136,6 @@ def submit(bot, update, *args, **kwargs):
     message = update.callback_query.message
     # Kick banned user out!
     if auth_helper.auth(user)['is_blacklist']:
-        ticket = update_helper.load_drafting_ticket(user_id=user.user_id)
-        ticket_helper.update_ticket(ticket)
         try:
             bot.edit_message_text(
                 text=conversations.MAIN_PANEL_YELLOWCOW,
@@ -151,6 +149,8 @@ def submit(bot, update, *args, **kwargs):
         return stages.END
 
     if callback_data == 'submit':
+        ticket = update_helper.load_drafting_ticket(user_id=user.user_id)
+        ticket_helper.update_ticket(ticket)
         try:
             bot.edit_message_text(
                 text=conversations.UPDATE_INTO_DB,
