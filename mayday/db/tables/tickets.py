@@ -1,14 +1,15 @@
+from itertools import groupby
 import json
 import time
-from itertools import groupby
+
+from sqlalchemy import (BIGINT, INT, JSON, SMALLINT, Boolean, Column, String,
+                        Table)
+from sqlalchemy.sql.expression import and_, desc, select, text
 
 from mayday.config import ROOT_LOGGER as logger
 from mayday.db import sqls as SQL
 from mayday.db.tables import BaseModel
 from mayday.objects.ticket import Ticket
-from sqlalchemy import (BIGINT, INT, JSON, SMALLINT, Boolean, Column, String,
-                        Table)
-from sqlalchemy.sql.expression import and_, desc, select, text
 
 
 class TicketsModel(BaseModel):

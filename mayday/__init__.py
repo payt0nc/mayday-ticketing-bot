@@ -3,10 +3,11 @@ import logging
 import os
 
 import redis
+from sqlalchemy import create_engine
+
 from mayday.db.tables import create_engine_and_metadata
 from mayday.db.tables.tickets import TicketsModel
 from mayday.db.tables.users import UsersModel
-from sqlalchemy import create_engine
 
 # Application Setting
 TELEGRAM_API_CONFIG = dict(

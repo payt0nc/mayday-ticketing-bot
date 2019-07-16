@@ -1,8 +1,9 @@
 import json
 import os
 
-import mayday
 import redis
+
+import mayday
 from mayday.config import ROOT_LOGGER as logger
 
 

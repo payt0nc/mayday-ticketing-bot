@@ -2,8 +2,11 @@ import re
 import time
 import traceback
 
-import mayday
 import telegram
+from telegram.error import BadRequest
+from telegram.ext.dispatcher import run_async
+
+import mayday
 from mayday import TELEGRAM_API_CONFIG
 from mayday.config import ROOT_LOGGER as logger
 from mayday.constants import TICKET_MAPPING, conversations, stages
@@ -15,8 +18,6 @@ from mayday.helpers.auth_helper import AuthHelper
 from mayday.helpers.feature_helpers.post_ticket_helper import PostTicketHelper
 from mayday.helpers.ticket_helper import TicketHelper
 from mayday.objects.user import User
-from telegram.error import BadRequest
-from telegram.ext.dispatcher import run_async
 
 post_helper = PostTicketHelper('post')
 auth_helper = AuthHelper(UsersModel(mayday.engine, mayday.metadata, role='writer'))

@@ -1,9 +1,10 @@
 import os
 
-import mayday
 from bson.objectid import ObjectId
-from mayday.config import ROOT_LOGGER as logger
 from pymongo import ASCENDING, DESCENDING, MongoClient
+
+import mayday
+from mayday.config import ROOT_LOGGER as logger
 
 
 class MongoController:

@@ -1,5 +1,8 @@
 import time
 
+from telegram.error import BadRequest
+from telegram.ext.dispatcher import run_async
+
 import mayday
 from mayday.config import EVENT_LOGGER as event_logger
 from mayday.config import ROOT_LOGGER as logger
@@ -14,8 +17,6 @@ from mayday.helpers.feature_helpers.update_helper import UpdateHelper
 from mayday.helpers.query_helper import QueryHelper
 from mayday.helpers.ticket_helper import TicketHelper
 from mayday.objects.user import User
-from telegram.error import BadRequest
-from telegram.ext.dispatcher import run_async
 
 auth_helper = AuthHelper(UsersModel(mayday.engine, mayday.metadata, role='writer'))
 query_helper = QueryHelper(TicketsModel(mayday.engine, mayday.metadata, role='writer'))

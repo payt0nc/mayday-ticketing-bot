@@ -1,9 +1,9 @@
+from datetime import datetime
 import json
 import time
-from datetime import datetime
 
 import sqlalchemy
-from sqlalchemy import types, create_engine
+from sqlalchemy import create_engine, types
 from sqlalchemy.ext.compiler import compiles
 from sqlalchemy.schema import MetaData
 from sqlalchemy.sql.expression import delete, insert, update

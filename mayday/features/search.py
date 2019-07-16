@@ -2,8 +2,12 @@ import logging
 import re
 import time
 
-import mayday
 import telegram
+from telegram import chataction
+from telegram.error import BadRequest
+from telegram.ext.dispatcher import run_async
+
+import mayday
 from mayday.config import EVENT_LOGGER as event_logger
 from mayday.config import ROOT_LOGGER as logger
 from mayday.constants import TICKET_MAPPING, conversations, stages
@@ -15,9 +19,6 @@ from mayday.helpers.auth_helper import AuthHelper
 from mayday.helpers.feature_helpers.search_helper import SearchHelper
 from mayday.helpers.query_helper import QueryHelper
 from mayday.objects.user import User
-from telegram import chataction
-from telegram.error import BadRequest
-from telegram.ext.dispatcher import run_async
 
 auth_helper = AuthHelper(UsersModel(mayday.engine, mayday.metadata, role='writer'))
 query_helper = QueryHelper(TicketsModel(mayday.engine, mayday.metadata, role='writer'))

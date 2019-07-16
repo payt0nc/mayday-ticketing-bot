@@ -1,11 +1,12 @@
 from datetime import datetime
 
-import mayday
 import pytz
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+
+import mayday
 from mayday.db.tables.events import EventsModel
 from mayday.db.tables.tickets import TicketsModel
 from mayday.helpers.feature_helpers import FeatureHelper
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 event_table = EventsModel(mayday.engine, mayday.metadata)
 ticket_table = TicketsModel(mayday.engine, mayday.metadata)

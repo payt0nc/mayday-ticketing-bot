@@ -1,7 +1,7 @@
 import json
 import logging
-import os
 from logging.handlers import RotatingFileHandler
+import os
 
 from google.cloud import logging as stackdriver_logging
 from google.cloud.logging.handlers import CloudLoggingHandler

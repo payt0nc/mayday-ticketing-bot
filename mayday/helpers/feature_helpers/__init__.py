@@ -1,4 +1,5 @@
 import json
+
 import mayday
 from mayday.config import EVENT_LOGGER as event_logger
 from mayday.config import ROOT_LOGGER as logger

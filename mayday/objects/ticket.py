@@ -1,11 +1,11 @@
+from datetime import datetime
 import json
 import time
-from datetime import datetime
 
 import pytz
 
 from mayday.constants import (CATEGORY_MAPPING, DATE_MAPPING, PRICE_MAPPING,
-                              STATUS_MAPPING, SOURCE_MAPPING)
+                              SOURCE_MAPPING, STATUS_MAPPING)
 from mayday.helpers.item_validator import ItemValidator
 
 TIMEZONE = pytz.timezone('Asia/Taipei')

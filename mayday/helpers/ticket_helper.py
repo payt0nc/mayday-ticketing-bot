@@ -1,7 +1,7 @@
 import mayday
+from mayday.config import ROOT_LOGGER as logger
 from mayday.db.tables.tickets import TicketsModel
 from mayday.objects.ticket import Ticket
-from mayday.config import ROOT_LOGGER as logger
 
 
 class TicketHelper:

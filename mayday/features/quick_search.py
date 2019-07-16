@@ -1,19 +1,21 @@
 import time
 
-import mayday
 import telegram
+from telegram import chataction
+from telegram.ext.dispatcher import run_async
+
+import mayday
 from mayday.constants import conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
 from mayday.controllers.redis import RedisController
-from mayday.db.tables.users import UsersModel
 from mayday.db.tables.tickets import TicketsModel
+from mayday.db.tables.users import UsersModel
 from mayday.helpers.auth_helper import AuthHelper
-from mayday.helpers.query_helper import QueryHelper
+from mayday.helpers.feature_helpers.quick_search_helper import \
+    QuickSearchHelper
 from mayday.helpers.feature_helpers.search_helper import SearchHelper
-from mayday.helpers.feature_helpers.quick_search_helper import QuickSearchHelper
+from mayday.helpers.query_helper import QueryHelper
 from mayday.objects.user import User
-from telegram import chataction
-from telegram.ext.dispatcher import run_async
 
 auth_helper = AuthHelper(UsersModel(mayday.engine, mayday.metadata, role='writer'))
 quick_search_helper = QuickSearchHelper('quick_search')

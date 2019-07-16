@@ -1,5 +1,6 @@
-from mayday.constants import STAT_URL
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
+
+from mayday.constants import STAT_URL
 
 
 class ReplyKeyboards:
