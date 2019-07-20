@@ -1,6 +1,7 @@
+import logging
+
 import mayday
 from mayday import engine, metadata
-from mayday.config import ROOT_LOGGER as logger
 from mayday.db.tables.tickets import TicketsModel
 from mayday.helpers.feature_helpers import FeatureHelper
 from mayday.helpers.query_helper import QueryHelper
@@ -8,6 +9,7 @@ from mayday.objects.query import Query
 
 query_helper = QueryHelper(TicketsModel(engine, metadata, role='writer'))
 
+logger: logging.Logger = logging.getLogger('')
 
 class QuickSearchHelper(FeatureHelper):
 

@@ -1,8 +1,11 @@
+import logging
+
 import mayday
-from mayday.config import EVENT_LOGGER as event_logger
-from mayday.config import ROOT_LOGGER as logger
 from mayday.helpers.feature_helpers import FeatureHelper
 from mayday.objects.query import Query
+
+event_logger: logging.Logger = logging.getLogger('event')
+logger: logging.Logger = logging.getLogger('')
 
 
 class SearchHelper(FeatureHelper):

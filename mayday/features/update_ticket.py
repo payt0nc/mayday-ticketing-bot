@@ -1,11 +1,10 @@
+import logging
 import time
 
 from telegram.error import BadRequest
 from telegram.ext.dispatcher import run_async
 
 import mayday
-from mayday.config import EVENT_LOGGER as event_logger
-from mayday.config import ROOT_LOGGER as logger
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
 from mayday.controllers.redis import RedisController
@@ -24,6 +23,8 @@ ticket_helper = TicketHelper(TicketsModel(mayday.engine, mayday.metadata, role='
 search_helper = SearchHelper('search')
 update_helper = UpdateHelper(feature='update')
 redis = RedisController(redis_conection_pool=mayday.FEATURE_REDIS_CONNECTION_POOL)
+event_logger: logging.Logger = logging.getLogger('event')
+logger: logging.Logger = logging.getLogger('')
 
 
 @run_async

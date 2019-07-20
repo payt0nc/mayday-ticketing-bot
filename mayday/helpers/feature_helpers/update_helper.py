@@ -1,9 +1,13 @@
+import logging
+
 from telegram import InlineKeyboardButton, InlineKeyboardMarkup
 
 import mayday
 from mayday.config import ROOT_LOGGER as logger
 from mayday.helpers.feature_helpers import FeatureHelper
 from mayday.objects.ticket import Ticket
+
+logger: logging.Logger = logging.getLogger('')
 
 
 class UpdateHelper(FeatureHelper):

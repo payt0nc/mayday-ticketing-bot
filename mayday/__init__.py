@@ -47,11 +47,16 @@ def json_formatter() -> logging.Formatter:
         datefmt='%Y-%m-%d %H:%M:%S')
 
 
-def get_log_level():
-    return logging.INFO if os.environ.get('STAGE', 'TEST').upper() == 'PRODUCTION' else logging.DEBUG
+log_level = logging.DEBUG if os.environ.get('DEBUG') else logging.INFO
 
+auth_logger: logging.Logger = logging.getLogger('auth')
+auth_logger.setLevel(log_level)
+auth_logger.addHandler(logging.StreamHandler())
 
-def console_handler() -> logging.Handler:
-    handler = logging.StreamHandler()
-    handler.setFormatter(json_formatter())
-    return handler
+event_logger: logging.Logger = logging.getLogger('event')
+event_logger.setLevel(log_level)
+event_logger.addHandler(logging.StreamHandler())
+
+root_logger: logging.Logger = logging.getLogger('root')
+root_logger.setLevel(log_level)
+root_logger.addHandler(logging.StreamHandler())

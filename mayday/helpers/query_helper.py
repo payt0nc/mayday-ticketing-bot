@@ -1,10 +1,13 @@
+import logging
+
 import mayday
-from mayday.config import EVENT_LOGGER as event_logger
-from mayday.config import ROOT_LOGGER as logger
 from mayday.controllers.redis import RedisController
 from mayday.db.tables.tickets import TicketsModel
 from mayday.objects.query import Query
 from mayday.objects.ticket import Ticket
+
+event_logger: logging.Logger = logging.getLogger('event')
+logger: logging.Logger = logging.getLogger('')
 
 
 class QueryHelper:

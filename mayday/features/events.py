@@ -1,4 +1,5 @@
 from datetime import datetime
+import logging
 import time
 
 import pytz
@@ -7,14 +8,13 @@ from telegram.ext.dispatcher import run_async
 from telegram.parsemode import ParseMode
 
 import mayday
-from mayday.config import EVENT_LOGGER as event_logger
-from mayday.config import ROOT_LOGGER as logger
 from mayday.constants import STATUS_MAPPING, conversations, stages
 from mayday.helpers.feature_helpers.events_helper import EventHelper
 from mayday.objects.user import User
 
-event_helper = EventHelper('events')
 TIMEZONE = pytz.timezone('Asia/Taipei')
+event_logger: logging.Logger = logging.getLogger('event')
+logger: logging.Logger = logging.getLogger('')
 
 
 @run_async

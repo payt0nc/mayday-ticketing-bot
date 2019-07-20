@@ -1,7 +1,9 @@
-from mayday.config import AUTH_LOGGER as auth_logger
+import logging
+
 from mayday.db.tables.users import UsersModel
 from mayday.objects.user import User
 
+auth_logger: logging.Logger = logging.getLogger('auth')
 
 class AuthHelper:
 

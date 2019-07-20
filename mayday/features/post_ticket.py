@@ -1,3 +1,4 @@
+import logging
 import re
 import time
 import traceback
@@ -8,7 +9,6 @@ from telegram.ext.dispatcher import run_async
 
 import mayday
 from mayday import TELEGRAM_API_CONFIG
-from mayday.config import ROOT_LOGGER as logger
 from mayday.constants import TICKET_MAPPING, conversations, stages
 from mayday.constants.replykeyboards import KEYBOARDS
 from mayday.controllers.redis import RedisController
@@ -23,6 +23,9 @@ post_helper = PostTicketHelper('post')
 auth_helper = AuthHelper(UsersModel(mayday.engine, mayday.metadata, role='writer'))
 ticket_helper = TicketHelper(TicketsModel(mayday.engine, mayday.metadata, role='writer'))
 redis = RedisController(redis_conection_pool=mayday.FEATURE_REDIS_CONNECTION_POOL)
+
+
+logger: logging.Logger = logging.getLogger('')
 
 
 @run_async
