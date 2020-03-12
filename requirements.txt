@@ -7,7 +7,7 @@ future==0.17.1
 google-cloud-logging==1.10.0
 idna==2.8
 mysqlclient==1.4.2.post1
-psutil==5.6.2
+psutil==5.6.6
 pycparser==2.19
 pymongo==3.8.0
 python-telegram-bot==11.1.0
